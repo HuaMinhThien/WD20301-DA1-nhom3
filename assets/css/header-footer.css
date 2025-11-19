@@ -31,6 +31,12 @@ header{
     width: 100%;
 }
 
+.hd-logo{
+    height: 90px;
 
+}
 
-
+.hd-logo>img{
+    height: 100%;
+    
+}
