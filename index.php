@@ -1,6 +1,6 @@
 <?php
     require 'controller/home-controller.php';
-        include_once 'includes/header.html';
+        include_once 'includes/header.php';
 
         //main
         $controller = new HomeController();
@@ -13,5 +13,5 @@
             $controller->$page();
         }
 
-        include_once 'includes/footer.html';
+        include_once 'includes/footer.php';
 ?>

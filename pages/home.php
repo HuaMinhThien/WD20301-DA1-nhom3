@@ -1,4 +1,8 @@
+<main class="container-center">
+    <div class="main-container-banner">
+        <h1>ththwheffsnf</h1>
+    </div>
 
-<br><br><br><br><br><br><br><br><br><br>
 
-<h1>home</h1>
+
+</main>
