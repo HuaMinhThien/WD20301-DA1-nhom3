@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="assets/css/header-footer.css">
+    <link rel="stylesheet" href="assets/css/home.css">
+    <link rel="stylesheet" href="assets/css/sale.css">
 
 </head>
 <body>
@@ -51,9 +53,9 @@
                         </div>
                     </a>
                     <div class="submenu">
-                        <a href="?page=ao-polo" class="submenu-item">Áo Polo</a>
-                        <a href="?page=ao-somi" class="submenu-item">Áo Sơ Mi</a>
-                        <a href="?page=ao-khoac" class="submenu-item">Áo Khoác</a>
+                        <a href="?page=ao&cate=ao-polo" class="submenu-item">Áo Polo</a>
+                        <a href="?page=ao&cate=ao-somi" class="submenu-item">Áo Sơ Mi</a>
+                        <a href="?page=ao&cate=ao-khoac" class="submenu-item">Áo Khoác</a>
                     </div>
                 </div>
 
@@ -66,9 +68,9 @@
                         </div>
                     </a>
                     <div class="submenu">
-                        <a href="?page=quan-jeans" class="submenu-item">Quần Jeans</a>
-                        <a href="?page=quan-short" class="submenu-item">Quần Short</a>
-                        <a href="?page=quan-tay" class="submenu-item">Quần Tây</a>
+                        <a href="?page=quan&cate=quan-jeans" class="submenu-item">Quần Jeans</a>
+                        <a href="?page=quan&cate=quan-short" class="submenu-item">Quần Short</a>
+                        <a href="?page=quan&cate=quan-tay" class="submenu-item">Quần Tây</a>
                     </div>
                 </div>
 
@@ -81,9 +83,9 @@
                         </div>
                     </a>
                     <div class="submenu">
-                        <a href="?page=that-lung" class="submenu-item">Thắt Lưng</a>
-                        <a href="?page=vi" class="submenu-item">Ví</a>
-                        <a href="?page=mu" class="submenu-item">Mũ</a>
+                        <a href="?page=phukien&cate=phukien-that-lung" class="submenu-item">Thắt Lưng</a>
+                        <a href="?page=phukien&cate=phukien-vi" class="submenu-item">Ví</a>
+                        <a href="?page=phukien&cate=phukien-mu" class="submenu-item">Mũ</a>
                     </div>
                 </div>
                 

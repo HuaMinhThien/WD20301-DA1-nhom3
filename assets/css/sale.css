@@ -1,0 +1,31 @@
+.sale-bannerfull {
+    width: 100%;
+    display: block;
+}
+
+.sale-bannerfull img {
+    width: 100%;
+    height: auto;
+}
+
+.container-sale{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 50px;
+}
+
+.box-sale{
+    width: 336px;
+}
+.box-sale>img{
+    width: 336px;
+}
+.sale-title{
+    font-size: 16px;
+    text-decoration: underline;
+}
+.box-sale>p{
+    margin-top: 10px;
+    
+}
