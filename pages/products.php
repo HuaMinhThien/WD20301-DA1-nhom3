@@ -59,7 +59,20 @@
             <div class="pro-sec1-box1">
                 <h2>Kích cỡ</h2>
 
-                
+                <div class="pro-sec1-box-checkbox">
+                    <div class="pro-sec1-box-check-label">
+                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="S" type="checkbox"> <label for="">S</label> 
+                    </div>
+                    <div class="pro-sec1-box-check-label">
+                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="M" type="checkbox"> <label for="">M</label>
+                    </div>  
+                    <div class="pro-sec1-box-check-label">
+                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="L" type="checkbox"> <label for="">L</label> 
+                    </div>
+                    <div class="pro-sec1-box-check-label">
+                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="XL" type="checkbox"> <label for="">XL</label>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -87,8 +100,11 @@
                     <div class="pro-sec2-boxSP-miniBox">
                         <p>299.000 ₫</p>
 
-                        <img src="assets/images/img-icon/heart.png" alt="">
-                        <img src="assets/images/img-icon/online-shopping.png" alt="">
+                        <div class="pro-sec2-boxSP-icon">
+                            <img src="assets/images/img-icon/heart.png" alt="">
+                            <img src="assets/images/img-icon/online-shopping.png" alt="">
+                        </div>
+                        
                     </div>
                     
                 </div>
@@ -100,8 +116,10 @@
                     <div class="pro-sec2-boxSP-miniBox">
                         <p>299.000 ₫</p>
 
-                        <img src="assets/images/img-icon/heart.png" alt="">
-                        <img src="assets/images/img-icon/online-shopping.png" alt="">
+                        <div class="pro-sec2-boxSP-icon">
+                            <img src="assets/images/img-icon/heart.png" alt="">
+                            <img src="assets/images/img-icon/online-shopping.png" alt="">
+                        </div>
                     </div>
                     
                 </div>
@@ -113,8 +131,10 @@
                     <div class="pro-sec2-boxSP-miniBox">
                         <p>299.000 ₫</p>
 
-                        <img src="assets/images/img-icon/heart.png" alt="">
-                        <img src="assets/images/img-icon/online-shopping.png" alt="">
+                        <div class="pro-sec2-boxSP-icon">
+                            <img src="assets/images/img-icon/heart.png" alt="">
+                            <img src="assets/images/img-icon/online-shopping.png" alt="">
+                        </div>
                     </div>
                     
                 </div>
@@ -126,8 +146,10 @@
                     <div class="pro-sec2-boxSP-miniBox">
                         <p>299.000 ₫</p>
 
-                        <img src="assets/images/img-icon/heart.png" alt="">
-                        <img src="assets/images/img-icon/online-shopping.png" alt="">
+                        <div class="pro-sec2-boxSP-icon">
+                            <img src="assets/images/img-icon/heart.png" alt="">
+                            <img src="assets/images/img-icon/online-shopping.png" alt="">
+                        </div>
                     </div>
                     
                 </div>
@@ -139,8 +161,10 @@
                     <div class="pro-sec2-boxSP-miniBox">
                         <p>299.000 ₫</p>
 
-                        <img src="assets/images/img-icon/heart.png" alt="">
-                        <img src="assets/images/img-icon/online-shopping.png" alt="">
+                        <div class="pro-sec2-boxSP-icon">
+                            <img src="assets/images/img-icon/heart.png" alt="">
+                            <img src="assets/images/img-icon/online-shopping.png" alt="">
+                        </div>
                     </div>
                     
                 </div>

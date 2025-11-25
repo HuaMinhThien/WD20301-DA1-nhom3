@@ -11,7 +11,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 28%;
+    width: 22%;
 }
 
 .pro-sec1-box1{
@@ -38,7 +38,7 @@
 .pro-section-2{
     display: flex;
     flex-direction: column;
-    width: 70%;
+    width: 76%;
 }
 
 .pro-section-2-box1{
@@ -106,12 +106,18 @@
     align-items: center;
     margin-top: 10px;
 }
-
-.pro-sec2-boxSP-miniBox img{
+.pro-sec2-boxSP-icon{
+    display: flex;
+    gap: 10px;
+}
+.pro-sec2-boxSP-icon img{
     width: 27px;
     height: 27px;
+    cursor: pointer;
 }
-
+.pro-sec2-boxSP-icon img:hover{
+    transform: scale(1.1);
+}
 .pro-sec2-boxSP-miniBox p{
     color: red;
     font-size: 16px;
