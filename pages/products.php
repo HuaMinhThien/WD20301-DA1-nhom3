@@ -93,7 +93,7 @@
 
             <div class="pro-section-2-box2">
 
-                <div class="pro-section-2-boxSP">
+                <a href="chitiet-sp.php" class="pro-section-2-boxSP">
                     <img src="assets/images/ao-nam/ao-nam-Áo Polo KS25FH47C-SCWK-hình19.jpg" alt="">
 
                     <p class="pro-sec2-boxSP-name">Áo Polo KS25FH47C-SCWK</p>
@@ -107,9 +107,9 @@
                         
                     </div>
                     
-                </div>
+                </a>
 
-                <div class="pro-section-2-boxSP">
+                <a href="chitiet-sp.php" class="pro-section-2-boxSP">
                     <img src="assets/images/ao-nam/ao-nam-Áo Polo KS25FH47C-SCWK-hình19.jpg" alt="">
 
                     <p class="pro-sec2-boxSP-name">Áo Polo KS25FH47C-SCWK</p>
@@ -122,9 +122,9 @@
                         </div>
                     </div>
                     
-                </div>
+                </a>
 
-                <div class="pro-section-2-boxSP">
+                <a href="chitiet-sp.php" class="pro-section-2-boxSP">
                     <img src="assets/images/ao-nam/ao-nam-Áo Polo KS25FH47C-SCWK-hình19.jpg" alt="">
 
                     <p class="pro-sec2-boxSP-name">Áo Polo KS25FH47C-SCWK</p>
@@ -137,9 +137,9 @@
                         </div>
                     </div>
                     
-                </div>
+                </a>
 
-                <div class="pro-section-2-boxSP">
+                <a href="chitiet-sp.php" class="pro-section-2-boxSP">
                     <img src="assets/images/ao-nam/ao-nam-Áo Polo KS25FH47C-SCWK-hình19.jpg" alt="">
 
                     <p class="pro-sec2-boxSP-name">Áo Polo KS25FH47C-SCWK</p>
@@ -152,9 +152,9 @@
                         </div>
                     </div>
                     
-                </div>
+                </a>
 
-                <div class="pro-section-2-boxSP">
+                <a href="chitiet-sp.php" class="pro-section-2-boxSP">
                     <img src="assets/images/ao-nam/ao-nam-Áo Polo KS25FH47C-SCWK-hình19.jpg" alt="">
 
                     <p class="pro-sec2-boxSP-name">Áo Polo KS25FH47C-SCWK</p>
@@ -167,7 +167,7 @@
                         </div>
                     </div>
                     
-                </div>
+                </a>
             </div>
         </div>
     </div>
