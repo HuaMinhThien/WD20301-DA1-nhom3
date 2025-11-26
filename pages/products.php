@@ -118,24 +118,67 @@
                 <h2>Giá</h2>
 
                 <div class="pro-sec1-box-checkbox">
-                    <div class="pro-sec1-box-check-label">
-                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="den" type="checkbox"> <label for="">100.000đ - 200.000đ</label> 
-                    </div>
-                    <div class="pro-sec1-box-check-label">
-                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="trang" type="checkbox"> <label for="">200.000đ - 300.000đ</label>
-                    </div>
-                    <div class="pro-sec1-box-check-label">
-                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="den" type="checkbox"> <label for="">300.000đ - 400.000đ</label> 
-                    </div>
-                    <div class="pro-sec1-box-check-label">
-                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="trang" type="checkbox"> <label for="">400.000đ - 500.000đ</label>
-                    </div> 
-                    <div class="pro-sec1-box-check-label">
-                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="den" type="checkbox"> <label for="">500.000đ - 600.000đ</label> 
-                    </div>
-                    <div class="pro-sec1-box-check-label">
-                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="trang" type="checkbox"> <label for="">600.000đ - 700.000đ</label>
-                    </div> 
+                    <?php
+                    // Lấy các tham số lọc hiện tại (đã có từ Controller)
+                    $current_category_id = $_GET['category_id'] ?? null;
+                    $current_gender_id = $_GET['gender_id'] ?? null;
+                    $current_price_range = $_GET['price_range'] ?? null; // Tham số mới
+                    
+                    // Định nghĩa các khoảng giá và giá trị (value) tương ứng
+                    // value sẽ là "min_max" (ví dụ: "100000_200000")
+                    $price_ranges = [
+                        ['min' => 0, 'max' => 200000, 'label' => 'Dưới 200.000đ', 'value' => '0_200000'],
+                        ['min' => 200000, 'max' => 300000, 'label' => '200.000đ - 300.000đ', 'value' => '200000_300000'],
+                        ['min' => 300000, 'max' => 400000, 'label' => '300.000đ - 400.000đ', 'value' => '300000_400000'],
+                        ['min' => 400000, 'max' => 500000, 'label' => '400.000đ - 500.000đ', 'value' => '400000_500000'],
+                        ['min' => 500000, 'max' => 600000, 'label' => '500.000đ - 600.000đ', 'value' => '500000_600000'],
+                        ['min' => 600000, 'max' => 700000, 'label' => '600.000đ - 700.000đ', 'value' => '600000_700000'],
+                        ['min' => 700000, 'max' => 999999999, 'label' => 'Trên 700.000đ', 'value' => '700000_999999999'],
+                    ];
+
+                    foreach ($price_ranges as $range) {
+                        // URL cơ sở: giữ lại Category và Gender nếu có
+                        $base_url_price = "?page=products";
+                        if ($current_category_id) {
+                            $base_url_price .= "&category_id=" . htmlspecialchars($current_category_id);
+                        }
+                        if ($current_gender_id) {
+                            $base_url_price .= "&gender_id=" . htmlspecialchars($current_gender_id);
+                        }
+                        
+                        // URL đích
+                        $price_url = $base_url_price . "&price_range=" . htmlspecialchars($range['value']);
+                        $is_checked = ($current_price_range === $range['value']);
+                        ?>
+                        <div class="pro-sec1-box-check-label">
+                            <input 
+                                id="price-<?php echo $range['value']; ?>" 
+                                style="width: 20px; height: 20px; border-radius: 50%;" 
+                                type="radio" 
+                                name="price_filter" 
+                                value="<?php echo htmlspecialchars($range['value']); ?>"
+                                
+                                onclick="window.location.href='<?php echo $price_url; ?>'"
+                                
+                                <?php echo $is_checked ? 'checked' : ''; ?>
+                            > 
+                            <label for="price-<?php echo $range['value']; ?>"><?php echo $range['label']; ?></label> 
+                        </div>
+                    <?php } ?>
+                    
+                    <?php if ($current_price_range): 
+                        $base_url_clear = "?page=products";
+                        if ($current_category_id) {
+                            $base_url_clear .= "&category_id=" . htmlspecialchars($current_category_id);
+                        }
+                        if ($current_gender_id) {
+                            $base_url_clear .= "&gender_id=" . htmlspecialchars($current_gender_id);
+                        }
+                    ?>
+                        <div class="pro-sec1-box-check-label">
+                            <a href="<?php echo $base_url_clear; ?>" style="color: red; margin-left: 30px; font-weight: bold; text-decoration: none;">&times; Bỏ lọc giá</a>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
 

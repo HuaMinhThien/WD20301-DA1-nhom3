@@ -5,7 +5,6 @@ require_once('models/ProductModel.php');
 class HomeController {
     private $productModel;
     
-
     public function __construct() {
         // Khởi tạo đối tượng Model
         $this->productModel = new ProductModel(); 
@@ -18,47 +17,50 @@ class HomeController {
         $categories = $this->productModel->getAllCategories();
         $genders = $this->productModel->getAllGenders();
         
-        // Lấy ID từ URL (đổi tên biến để phản ánh việc đang lấy ID)
+        // Lấy Tham số Lọc từ URL
         $category_id = $_GET['category_id'] ?? null; 
         $gender_id = $_GET['gender_id'] ?? null; 
+        $price_range = $_GET['price_range'] ?? null; // THAM SỐ LỌC GIÁ MỚI
         
         // Ép kiểu sang int nếu có
         $category_id = $category_id ? (int)$category_id : null;
         $gender_id = $gender_id ? (int)$gender_id : null;
         
+        $price_min = null;
+        $price_max = null;
+        
+        // XỬ LÝ KHOẢNG GIÁ (Tách chuỗi "min_max" thành min và max)
+        if ($price_range) {
+            $parts = explode('_', $price_range);
+            if (count($parts) === 2) {
+                $price_min = (int)$parts[0];
+                $price_max = (int)$parts[1];
+            }
+        }
+        
         // Đường dẫn ảnh mặc định
         $imagePath = 'assets/images/'; 
 
-        
+        // 1. CẬP NHẬT ĐƯỜNG DẪN ẢNH (Dựa trên logic của bạn)
         if ($category_id) {
-            
             if ($category_id == 1) {
-                 $imagePath .= 'ao/'; 
+                $imagePath .= 'ao/'; 
             } elseif ($category_id == 2) {
-                 $imagePath .= 'quan/'; 
-            } else {
-                 $imagePath = 'assets/images/'; // Mặc định nếu không tìm thấy
-            }
-            
-            // 1a. Kiểm tra nếu có thêm điều kiện Giới tính ID
-            if ($gender_id) {
-                // GỌI HÀM LỌC KÉP
-                $products = $this->productModel->getProductsByCategoryAndGender($category_id, $gender_id);
-            } else {
-                // 1b. Chỉ lọc theo Category ID
-                $products = $this->productModel->getProductsByCategory($category_id);
-            }
+                $imagePath .= 'quan/'; 
+            } // Thêm các điều kiện khác nếu cần
+        } 
         
-        // 2. Lọc chỉ theo Giới tính ID (Trường hợp không có Category ID, nhưng có Gender ID)
-        } elseif ($gender_id) {
-            
-            // Controller gọi Model để lấy dữ liệu theo Gender ID
-            $products = $this->productModel->getProductsByGender($gender_id);
-            
-        } else {
-            // 3. Trường hợp không lọc (Mặc định)
-            $products = $this->productModel->getAllProducts();
-        }
+        // 2. CHUẨN BỊ MẢNG THAM SỐ LỌC CHO MODEL
+        $filters = [
+            'category_id' => $category_id,
+            'gender_id' => $gender_id,
+            'price_min' => $price_min, // Thêm min
+            'price_max' => $price_max  // Thêm max
+        ];
+        
+        // 3. GỌI HÀM LỌC TỔNG QUÁT TRONG MODEL
+        // Hàm này sẽ xử lý kết hợp tất cả các bộ lọc (Category, Gender, Price)
+        $products = $this->productModel->getFilteredProducts($filters);
 
         // Nạp View (pages/products.php) và truyền $products, $imagePath, $categories VÀ $genders
         include_once 'pages/products.php';

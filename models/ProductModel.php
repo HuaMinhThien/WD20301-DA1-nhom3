@@ -42,7 +42,7 @@ class ProductModel {
         return $categories;
     }
     
-    // START: HÀM MỚI - Lấy tất cả giới tính
+    // Lấy tất cả giới tính
     public function getAllGenders() {
         $sql = "SELECT id, name FROM gender ORDER BY id ASC"; 
         $result = $this->conn->query($sql);
@@ -57,7 +57,6 @@ class ProductModel {
         
         return $genders;
     }
-    // END: HÀM MỚI
 
     // Hàm lấy tất cả sản phẩm
     public function getAllProducts() {
@@ -76,42 +75,58 @@ class ProductModel {
         return $products;
     }
     
-    // HÀM LỌC THEO CATEGORY (ID)
-    public function getProductsByCategory($category_id) {
-        $category_id = (int)$category_id;
-        
-        $sql = "SELECT id, name, price, description, img AS image, category_id 
-                FROM products 
-                WHERE category_id = ?";
-        
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $category_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        $products = [];
-        
-        if ($result && $result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $products[] = $row;
-            }
-        }
-        
-        $stmt->close();
-        return $products;
-    }
-    
-    // HÀM LỌC KẾT HỢP CATEGORY (ID) VÀ GENDER (ID)
-    public function getProductsByCategoryAndGender($category_id, $gender_id) {
-        $category_id = (int)$category_id;
-        $gender_id = (int)$gender_id;
-        
+    // HÀM LỌC TỔNG QUÁT MỚI: Xử lý Category, Gender và Price
+    public function getFilteredProducts($filters) {
+        // Giá trị mặc định
+        $category_id = $filters['category_id'] ?? null;
+        $gender_id = $filters['gender_id'] ?? null;
+        $price_min = $filters['price_min'] ?? null;
+        $price_max = $filters['price_max'] ?? null;
+
         $sql = "SELECT id, name, price, description, img AS image, category_id, gender_id 
                 FROM products 
-                WHERE category_id = ? AND gender_id = ?";
+                WHERE 1=1"; // Bắt đầu bằng điều kiện luôn đúng
         
+        $params = [];
+        $types = '';
+
+        // Thêm điều kiện lọc Category
+        if ($category_id !== null) {
+            $sql .= " AND category_id = ?";
+            $params[] = $category_id;
+            $types .= 'i';
+        }
+
+        // Thêm điều kiện lọc Gender
+        if ($gender_id !== null) {
+            $sql .= " AND gender_id = ?";
+            $params[] = $gender_id;
+            $types .= 'i';
+        }
+
+        // Thêm điều kiện lọc Giá
+        if ($price_min !== null && $price_max !== null) {
+            $sql .= " AND price >= ? AND price <= ?";
+            $params[] = $price_min;
+            $params[] = $price_max;
+            $types .= 'ii';
+        }
+        
+        // Thêm sắp xếp mặc định
+        $sql .= " ORDER BY id DESC";
+
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ii", $category_id, $gender_id);
+
+        // Thực hiện binding nếu có tham số (cách xử lý bind_param linh hoạt)
+        if (!empty($params)) {
+            $bind_params = array_merge([$types], $params);
+            $refs = [];
+            foreach($bind_params as $key => $value) {
+                $refs[$key] = &$bind_params[$key];
+            }
+            call_user_func_array([$stmt, 'bind_param'], $refs);
+        }
+        
         $stmt->execute();
         $result = $stmt->get_result();
         
@@ -127,29 +142,25 @@ class ProductModel {
         return $products;
     }
     
-    // HÀM LỌC CHỈ THEO GENDER (ID)
+    // HÀM LỌC THEO CATEGORY (ID) (Giữ lại nếu Controller cũ cần)
+    public function getProductsByCategory($category_id) {
+        // Có thể gọi hàm tổng quát nếu muốn loại bỏ code trùng lặp
+        $filters = ['category_id' => $category_id];
+        return $this->getFilteredProducts($filters);
+    }
+    
+    // HÀM LỌC KẾT HỢP CATEGORY (ID) VÀ GENDER (ID) (Giữ lại nếu Controller cũ cần)
+    public function getProductsByCategoryAndGender($category_id, $gender_id) {
+        // Có thể gọi hàm tổng quát nếu muốn loại bỏ code trùng lặp
+        $filters = ['category_id' => $category_id, 'gender_id' => $gender_id];
+        return $this->getFilteredProducts($filters);
+    }
+    
+    // HÀM LỌC CHỈ THEO GENDER (ID) (Giữ lại nếu Controller cũ cần)
     public function getProductsByGender($gender_id) {
-        $gender_id = (int)$gender_id;
-        
-        $sql = "SELECT id, name, price, description, img AS image, gender_id 
-                FROM products 
-                WHERE gender_id = ?"; 
-        
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $gender_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        $products = [];
-        
-        if ($result && $result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $products[] = $row;
-            }
-        }
-        
-        $stmt->close();
-        return $products;
+        // Có thể gọi hàm tổng quát nếu muốn loại bỏ code trùng lặp
+        $filters = ['gender_id' => $gender_id];
+        return $this->getFilteredProducts($filters);
     }
 
     // Đóng kết nối khi Model không còn được sử dụng
