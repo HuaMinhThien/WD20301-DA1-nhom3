@@ -112,12 +112,10 @@ class ProductModel {
             $types .= 'ii';
         }
         
-        // Thêm sắp xếp mặc định
         $sql .= " ORDER BY id DESC";
 
         $stmt = $this->conn->prepare($sql);
 
-        // Thực hiện binding nếu có tham số (cách xử lý bind_param linh hoạt)
         if (!empty($params)) {
             $bind_params = array_merge([$types], $params);
             $refs = [];
@@ -142,23 +140,18 @@ class ProductModel {
         return $products;
     }
     
-    // HÀM LỌC THEO CATEGORY (ID) (Giữ lại nếu Controller cũ cần)
     public function getProductsByCategory($category_id) {
         // Có thể gọi hàm tổng quát nếu muốn loại bỏ code trùng lặp
         $filters = ['category_id' => $category_id];
         return $this->getFilteredProducts($filters);
     }
     
-    // HÀM LỌC KẾT HỢP CATEGORY (ID) VÀ GENDER (ID) (Giữ lại nếu Controller cũ cần)
     public function getProductsByCategoryAndGender($category_id, $gender_id) {
-        // Có thể gọi hàm tổng quát nếu muốn loại bỏ code trùng lặp
         $filters = ['category_id' => $category_id, 'gender_id' => $gender_id];
         return $this->getFilteredProducts($filters);
     }
     
-    // HÀM LỌC CHỈ THEO GENDER (ID) (Giữ lại nếu Controller cũ cần)
     public function getProductsByGender($gender_id) {
-        // Có thể gọi hàm tổng quát nếu muốn loại bỏ code trùng lặp
         $filters = ['gender_id' => $gender_id];
         return $this->getFilteredProducts($filters);
     }
