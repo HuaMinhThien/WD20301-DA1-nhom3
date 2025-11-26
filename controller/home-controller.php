@@ -20,14 +20,11 @@ class HomeController {
     public function shop(){
         include_once 'pages/shop.php';
     }
-    public function ao(){
-        include_once 'pages/ao.php';
+    public function products(){
+        include_once 'pages/products.php';
     }
-    public function quan(){
-        include_once 'pages/quan.php';
-    }
-    public function phukien(){
-        include_once 'pages/phukien.php';
+    public function products_Details(){
+        include_once 'pages/products_Details.php';
     }
     
 

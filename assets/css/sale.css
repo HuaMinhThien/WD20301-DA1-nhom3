@@ -1,11 +1,22 @@
 .sale-bannerfull {
     width: 100%;
     display: block;
+    overflow: hidden; /* Ẩn phần ảnh vượt ra ngoài khung */
 }
 
 .sale-bannerfull img {
     width: 100%;
     height: auto;
+    animation: zoomEffect 1.5s ease-in-out; /* Hiệu ứng trong 1.5 giây */
+}
+
+@keyframes zoomEffect {
+    0% {
+        transform: scale(1.1); /* Phóng to 110% */
+    }
+    100% {
+        transform: scale(1); /* Về kích thước ban đầu */
+    }
 }
 
 .container-sale{
@@ -16,10 +27,10 @@
 }
 
 .box-sale{
-    width: 353px;
+    width: 420px;
 }
 .box-sale>img{
-    width: 353px;
+    width: 100%;
 }
 .sale-title{
     font-size: 16px;
@@ -27,5 +38,4 @@
 }
 .box-sale>p{
     margin-top: 10px;
-    
 }

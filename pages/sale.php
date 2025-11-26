@@ -1,6 +1,6 @@
 <main>
     <div class="sale-bannerfull">
-        <img src="assets/images/img-banner/banner-chinh-4.jpg" alt="">
+        <img src="assets/images/img-banner/banner-chinh-3.jpg" alt="">
     </div>
 
     <div class="container-sale container-center" >

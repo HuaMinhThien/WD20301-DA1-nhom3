@@ -1,0 +1,157 @@
+
+
+
+.products-container-1{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+}
+
+.pro-section-1{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 22%;
+}
+
+.pro-sec1-box1{
+    padding: 20px;
+    border: 1px solid #000000;
+
+}
+
+.pro-sec1-box-checkbox{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+.pro-sec1-box-check-label input{
+    margin-left: 30px;
+    margin-right: 5px;
+    border-radius: 50%;
+}
+
+.pro-sec1-box-check-label label{
+    font-size: 18px;
+}
+.pro-section-2{
+    display: flex;
+    flex-direction: column;
+    width: 76%;
+}
+
+.pro-section-2-box1{
+    display: flex;
+    justify-content: space-between;
+}
+
+.pro-section-2-box1>p{
+    font-size: 20px;
+    text-decoration: none;
+}
+.pro-section-2-box1>select{
+    padding: 5px 10px;
+    border: 1px solid #000000;
+    border-radius: 20px;
+    font-size: 16px;
+    height: 35px;
+    background-color: white; /* Thêm màu nền */
+    color: #000000; /* Màu chữ */
+}
+.pro-section-2-box1>select:hover{
+    cursor: pointer;
+}
+.pro-section-2-box1>select:focus{
+    outline: none;
+    border: 2px solid #000000;
+}
+.pro-section-2-box1>select option{
+    font-size: 16px;
+    background-color: white; /* Màu nền option */
+    color: #000000; /* Màu chữ option */
+    padding: 10px; /* Tăng padding cho dễ chọn */
+}
+
+.pro-section-2-box1>select option:hover{
+    background-color: #001F3E;
+    color: #FDFACF;
+}
+
+.pro-section-2-box2{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+    margin-top: 20px;
+}
+.pro-section-2-boxSP{
+    width: 230px;
+    height: 450px;
+}
+.pro-section-2-boxSP:hover{
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: 0.3s;
+    cursor: pointer;
+    
+}
+.pro-section-2-boxSP img{
+    width: 100%;
+    height: 325px;
+    object-fit: cover;
+}
+
+.pro-sec2-boxSP-name{
+    font-size: 16px;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #000000;
+    padding-left: 10px;
+}
+
+.pro-sec2-boxSP-miniBox{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding: 0 10px;
+}
+.pro-sec2-boxSP-icon{
+    display: flex;
+    gap: 10px;
+}
+.pro-sec2-boxSP-icon img{
+    width: 27px;
+    height: 27px;
+    cursor: pointer;
+}
+.pro-sec2-boxSP-icon img:hover{
+    transform: scale(1.1);
+}
+.pro-sec2-boxSP-miniBox p{
+    color: red;
+    font-size: 16px;
+    text-decoration: none;
+}
+.products-container-2{
+    background-image: url('../images/img-banner/banner footer.png');
+    background-size: cover; /* hoặc contain, 100% 100% */
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 620px; 
+    position: relative;
+    margin-top: 100px;
+}
+
+.products-container-2>img{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1100px;
+    height: auto;
+}
+
+
