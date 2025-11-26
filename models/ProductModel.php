@@ -75,7 +75,7 @@ class ProductModel {
         return $products;
     }
     
-    // HÀM LỌC TỔNG QUÁT MỚI: Xử lý Category, Gender và Price
+    // HÀM LỌC TỔNG QUÁT (Giữ nguyên)
     public function getFilteredProducts($filters) {
         // Giá trị mặc định
         $category_id = $filters['category_id'] ?? null;
@@ -90,22 +90,20 @@ class ProductModel {
         $params = [];
         $types = '';
 
-        // Thêm điều kiện lọc Category
         if ($category_id !== null) {
             $sql .= " AND category_id = ?";
             $params[] = $category_id;
             $types .= 'i';
         }
 
-        // Thêm điều kiện lọc Gender
         if ($gender_id !== null) {
             $sql .= " AND gender_id = ?";
             $params[] = $gender_id;
             $types .= 'i';
         }
 
-        // Thêm điều kiện lọc Giá
         if ($price_min !== null && $price_max !== null) {
+            // Lưu ý: Lọc giá dựa trên cột 'price' duy nhất
             $sql .= " AND price >= ? AND price <= ?";
             $params[] = $price_min;
             $params[] = $price_max;
@@ -140,8 +138,8 @@ class ProductModel {
         return $products;
     }
     
+    // Các hàm lọc cũ giờ chỉ gọi hàm tổng quát để tránh trùng lặp code
     public function getProductsByCategory($category_id) {
-        // Có thể gọi hàm tổng quát nếu muốn loại bỏ code trùng lặp
         $filters = ['category_id' => $category_id];
         return $this->getFilteredProducts($filters);
     }
@@ -155,6 +153,63 @@ class ProductModel {
         $filters = ['gender_id' => $gender_id];
         return $this->getFilteredProducts($filters);
     }
+
+    
+    // ============== HÀM SỬA LỖI CHO TRANG CHI TIẾT SẢN PHẨM ==============
+    
+    // Hàm lấy chi tiết một sản phẩm (Đã loại bỏ các cột không tồn tại)
+    public function getProductDetails($id) {
+        $sql = "SELECT id, name, price, description, 
+                       img AS image, img_child AS image_child, category_id, gender_id 
+                 FROM products 
+                 WHERE id = ?";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $product = $result->fetch_assoc();
+        $stmt->close();
+
+        // Xử lý thumbnails (sử dụng ảnh chính và ảnh con)
+        if ($product) {
+            // Giả định ảnh chính và ảnh con là 2 thumbnail
+            $product['thumbnails'] = [$product['image'], $product['image_child'], $product['image']];
+            
+            // Do DB không có sale_price, description_full, chúng ta gán giá trị mặc định để tránh lỗi ở View
+            $product['sale_price'] = $product['price']; // Tạm thời dùng giá gốc
+            $product['description_full'] = $product['description']; // Dùng description làm full description
+        }
+        
+        return $product;
+    }
+
+    // Hàm lấy sản phẩm liên quan (Giữ nguyên)
+    public function getRelatedProducts($category_id, $current_product_id) {
+        $sql = "SELECT id, name, price, img AS image 
+                 FROM products 
+                 WHERE category_id = ? AND id != ?
+                 ORDER BY id DESC
+                 LIMIT 4"; // Giới hạn 4 sản phẩm
+                
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $category_id, $current_product_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $products = [];
+        if ($result) {
+            while($row = $result->fetch_assoc()) {
+                $products[] = $row;
+            }
+        }
+        
+        $stmt->close();
+        return $products;
+    }
+    
+    // =================================================================
+    
 
     // Đóng kết nối khi Model không còn được sử dụng
     public function __destruct() {

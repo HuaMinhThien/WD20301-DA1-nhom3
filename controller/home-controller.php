@@ -85,8 +85,37 @@ class HomeController {
     public function shop() {
         include_once 'pages/shop.php';
     }
-    public function products_Details() {
-        include_once 'pages/products_Details.php';
+    // Trong class HomeController
+public function products_Details() {
+    // 1. Lấy ID sản phẩm từ URL (ví dụ: ?page=products_Details&id=123)
+    $product_id = $_GET['id'] ?? null;
+    $product = null;
+    $related_products = [];
+    $imagePath = 'assets/images/'; // Đường dẫn ảnh mặc định
+
+    if ($product_id) {
+        $product_id = (int)$product_id;
+        
+        // 2. Gọi Model để lấy chi tiết sản phẩm
+        // **BẠN CẦN THÊM HÀM getProductDetails($product_id) VÀO ProductModel**
+        $product = $this->productModel->getProductDetails($product_id);
+
+        if ($product) {
+            // Xác định thư mục ảnh (Tương tự như logic ở trang products, dựa trên category_id)
+            if ($product['category_id'] == 1) {
+                $imagePath .= 'ao/'; 
+            } elseif ($product['category_id'] == 2) {
+                $imagePath .= 'quan/'; 
+            }
+            
+            // 3. Gọi Model để lấy sản phẩm liên quan (cùng category và loại trừ chính nó)
+            // **BẠN CẦN THÊM HÀM getRelatedProducts($category_id, $product_id) VÀO ProductModel**
+            $related_products = $this->productModel->getRelatedProducts($product['category_id'], $product_id);
+        }
     }
+    
+    // Truyền dữ liệu sang View
+    include_once 'pages/products_Details.php';
+}
 }
 ?>

@@ -39,3 +39,247 @@
 .box-sale>p{
     margin-top: 10px;
 }
+
+
+
+/* ==================================== */
+/* CÁC THIẾT LẬP CHUNG CHO KHỐI NỘI DUNG */
+/* (Giữ nguyên các thiết lập container và h2) */
+/* ==================================== */
+.store-page-content {
+    padding: 40px 0;
+}
+
+/* ==================================== */
+/* BREADCRUMB */
+/* ==================================== */
+.store-breadcrumb {
+    background-color: #f9f9f9;
+    padding: 10px 0;
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* ==================================== */
+/* STORE BANNER (BANNER LỚN AURA CLOTHES) */
+/* ==================================== */
+.contact-banner {
+    background-color: #0d1a2d; /* Màu xanh đen đậm */
+    color: #fff;
+    padding: 50px 0;
+    text-align: center;
+    margin-bottom: 40px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.contact-main-title {
+    font-family: 'Playfair Display', serif; 
+    font-size: 5em; 
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.contact-company-info {
+    font-size: 1.1em;
+}
+
+.contact-company-info h3 {
+    margin-bottom: 10px;
+}
+
+.contact-company-info p {
+    margin: 5px 0;
+    color: #aaa; 
+}
+
+.contact-company-info i {
+    color: #fff;
+    margin-right: 5px;
+}
+
+/* ==================================== */
+/* PAGE BODY (NỘI DUNG CHÍNH 2 CỘT) */
+/* ==================================== */
+.contact-page-body {
+    display: flex;
+    gap: 30px;
+}
+
+.contact-left-col {
+    flex: 2; /* Chiếm 2 phần */
+}
+
+.contact-right-col {
+    flex: 1; /* Chiếm 1 phần */
+}
+
+/* Khu vực Tuyển dụng */
+.store-recruitment {
+    margin-bottom: 40px;
+}
+
+.store-job-list {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.store-job-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    flex: 1;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.store-job-card h4 {
+    margin-top: 5px;
+}
+
+.store-job-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.store-job-tags {
+    margin: 10px 0;
+}
+
+.store-job-tags .tag {
+    display: inline-block;
+    background-color: #f0f0f0;
+    padding: 3px 8px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    margin: 2px;
+}
+
+.store-btn-apply {
+    display: block;
+    background-color: #0d1a2d;
+    color: #fff;
+    padding: 8px;
+    margin-top: 15px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.store-btn-apply:hover {
+    background-color: #213045;
+}
+
+/* Khu vực Giới thiệu chung */
+.contact-section-about {
+    margin-bottom: 40px;
+}
+
+.contact-img-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.contact-img-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.contact-copyright {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 0.8em;
+    border-radius: 3px;
+}
+
+.contact-about-text {
+    text-align: justify;
+}
+
+/* Khu vực Thông tin công ty (Cột phải) */
+.contact-info-section {
+    margin-bottom: 40px;
+}
+
+.contact-info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.contact-info-item i {
+    color: #0d1a2d;
+    font-size: 1.1em;
+}
+
+.contact-map-placeholder img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+    margin-top: 15px;
+}
+
+/* Khu vực Đánh giá */
+.contact-rating-section {
+    margin-top: 30px;
+}
+
+.contact-rating-box {
+    background-color: #ffe0b2; 
+    padding: 30px 20px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-rating-section h2 {
+    border-bottom: none; 
+}
+
+.contact-rating-score {
+    font-size: 4em;
+    font-weight: bold;
+    color: #0d1a2d;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.contact-rating-stars i {
+    color: #ffc107; 
+    font-size: 1.5em;
+}
+
+/* ==================================== */
+/* RESPONSIVE */
+/* ==================================== */
+@media (max-width: 992px) {
+    .contact-page-body {
+        flex-direction: column;
+    }
+    .contact-left-col, .contact-right-col {
+        flex: none;
+        width: 100%;
+    }
+    .store-job-list {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 576px) {
+    .contact-main-title {
+        font-size: 3em;
+    }
+    .store-job-list {
+        flex-direction: column;
+    }
+}

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="assets/css/home.css">
     <link rel="stylesheet" href="assets/css/sale.css">
     <link rel="stylesheet" href="assets/css/products.css">
+    <link rel="stylesheet" href="assets/css/chitietSP.css">
 
 </head>
 <body>
