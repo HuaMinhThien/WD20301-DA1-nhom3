@@ -47,17 +47,17 @@
 
     <div class="main-container-2">
     <!-- Layout Grid 4x3 mới -->
-    <div class="main-ctn2-promo-grid-4x3">
+        <div class="main-ctn2-promo-grid-4x3">
 
-        <!-- 1. Túi xách: cột 1-2, hàng 1 -->
-        <div class="main-ctn2-grid-item main-ctn2-item-bag">
-            <img src="assets/images/img-banner/banner-con-1.png" alt="Túi xách">
-            <div class="main-ctn2-content">
-                <h3>Túi xách</h3>
-                <p>MUA 2 SẢN PHẨM GIẢM 50%</p>
-                <a href="#" class="main-ctn2-btn">Mua ngay</a>
+            <!-- 1. Túi xách: cột 1-2, hàng 1 -->
+            <div class="main-ctn2-grid-item main-ctn2-item-bag">
+                <img src="assets/images/img-banner/banner-con-1.png" alt="Túi xách">
+                <div class="main-ctn2-content">
+                    <h3>Túi xách</h3>
+                    <p>MUA 2 SẢN PHẨM GIẢM 50%</p>
+                    <a href="#" class="main-ctn2-btn">Mua ngay</a>
+                </div>
             </div>
-        </div>
 
         <!-- 2. Thời trang nam: cột 3-4, hàng 1-2 (cao gấp đôi) -->
         <div class="main-ctn2-grid-item main-ctn2-item-man">
@@ -67,7 +67,6 @@
                 <p>XU HƯỚNG MỚI NHẤT<br>MÙA HÈ NÀY</p>
                 <a href="?page=products&category_id=1&gender_id=1" class="main-ctn2-btn">Mua ngay</a>
             </div>
-        </div>
 
         <!-- 3. Thời trang nữ: cột 1-2, hàng 2-3 (cao gấp đôi) -->
         <div class="main-ctn2-grid-item main-ctn2-item-woman">
@@ -77,20 +76,23 @@
                 <p>BỘ SƯU TẬP HÈ<br>MỚI NHẤT</p>
                 <a href="?page=products&category_id=1&gender_id=2" class="main-ctn2-btn">Mua ngay</a>
             </div>
-        </div>
 
-        <!-- 4. Cho bé: cột 3-4, hàng 3 -->
-        <div class="main-ctn2-grid-item main-ctn2-item-kid">
-            <img src="assets/images/img-banner/banner-con-4.png" alt="Cho bé">
-            <div class="main-ctn2-content">
-                <h3>Cho bé</h3>
-                <p>THIẾT KẾ MỚI NHẤT<br>MÙA HÈ 2025</p>
-                <a href="#" class="main-ctn2-btn">Mua ngay</a>
+            <!-- 4. Cho bé: cột 3-4, hàng 3 -->
+            <div class="main-ctn2-grid-item main-ctn2-item-kid">
+                <img src="assets/images/img-banner/banner-con-4.png" alt="Cho bé">
+                <div class="main-ctn2-content">
+                    <h3>Cho bé</h3>
+                    <p>THIẾT KẾ MỚI NHẤT<br>MÙA HÈ 2025</p>
+                    <a href="#" class="main-ctn2-btn">Mua ngay</a>
+                </div>
             </div>
-        </div>
 
+        </div>
     </div>
-</div>
+
+    <!-- top nổi bật -->
+     <h1>hihi</h1>
+    <!-- end top nổi bật -->
 </main>
 
 <script src="assets/js/banner.js"></script>
