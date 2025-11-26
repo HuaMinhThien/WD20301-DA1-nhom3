@@ -47,47 +47,35 @@
                 
                 <!-- Áo với menu con -->
                 <div class="hd-a-cate-wrapper">
-                    <a class="hd-a-cate" href="?page=products">
+                    <a class="hd-a-cate" href="?page=products&category=ao">
                         <div class="hd-categories">
                             <p>Áo</p>
                             <img style="height: 10px; width: 10px; margin-top: 5px;" src="assets/images/img-icon/down-arrow.png" alt="">
                         </div>
                     </a>
-                    <div class="submenu">
-                        <a href="?page=products&cate=ao-polo" class="submenu-item">Áo Polo</a>
-                        <a href="?page=products&cate=ao-somi" class="submenu-item">Áo Sơ Mi</a>
-                        <a href="?page=products&cate=ao-khoac" class="submenu-item">Áo Khoác</a>
-                    </div>
+                    
                 </div>
 
                 <!-- Quần với menu con -->
                 <div class="hd-a-cate-wrapper">
-                    <a class="hd-a-cate" href="?page=products">
+                    <a class="hd-a-cate" href="?page=products&category=quan">
                         <div class="hd-categories">
                             <p>Quần</p>
                             <img style="height: 10px; width: 10px; margin-top: 5px;" src="assets/images/img-icon/down-arrow.png" alt="">
                         </div>
                     </a>
-                    <div class="submenu">
-                        <a href="?page=products&cate=quan-jeans" class="submenu-item">Quần Jeans</a>
-                        <a href="?page=products&cate=quan-short" class="submenu-item">Quần Short</a>
-                        <a href="?page=products&cate=quan-tay" class="submenu-item">Quần Tây</a>
-                    </div>
+                    
                 </div>
 
                 <!-- Phụ Kiện với menu con -->
                 <div class="hd-a-cate-wrapper">
-                    <a class="hd-a-cate" href="?page=products">
+                    <a class="hd-a-cate" href="?page=products&category=phukien">
                         <div class="hd-categories">
                             <p>Phụ Kiện</p>
                             <img style="height: 10px; width: 10px; margin-top: 5px;" src="assets/images/img-icon/down-arrow.png" alt="">
                         </div>
                     </a>
-                    <div class="submenu">
-                        <a href="?page=products&cate=phukien-that-lung" class="submenu-item">Thắt Lưng</a>
-                        <a href="?page=products&cate=phukien-vi" class="submenu-item">Ví</a>
-                        <a href="?page=products&cate=phukien-mu" class="submenu-item">Mũ</a>
-                    </div>
+                    
                 </div>
                 
                 <a class="hd-a-cate" href="?page=sale">
