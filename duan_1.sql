@@ -1,122 +1,69 @@
--- phpMyAdmin SQL Dump
--- version 5.2.2
--- https://www.phpmyadmin.net/
---
--- Host: localhost
--- Generation Time: Nov 26, 2025 at 01:03 AM
--- Server version: 8.0.30
--- PHP Version: 8.1.10
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `duan_1`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `address`
---
-
 CREATE TABLE `address` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `phone` varchar(15) NOT NULL,
-  `address` varchar(255) NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `phone` VARCHAR(15) NOT NULL,
+  `address` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `bill`
---
 
 CREATE TABLE `bill` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `voucher_id` int DEFAULT NULL,
-  `date` date NOT NULL,
-  `order_date` date NOT NULL,
-  `status` varchar(50) NOT NULL,
-  `total_pay` int NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `voucher_id` INT DEFAULT NULL,
+  `order_date` DATETIME NOT NULL, 
+  `status` VARCHAR(50) NOT NULL,
+  `total_pay` INT NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `voucher_id` (`voucher_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `billdetail`
---
 
 CREATE TABLE `billdetail` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `productVariant_id` int NOT NULL,
-  `quantity` int NOT NULL,
-  `currenPrice` int NOT NULL,
-  `bill_id` int NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `productVariant_id` INT NOT NULL,
+  `quantity` INT NOT NULL,
+  `current_price` INT NOT NULL, 
+  `bill_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   KEY `bill_id` (`bill_id`),
   KEY `productVariant_id` (`productVariant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `cart`
---
 
 CREATE TABLE `cart` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `date_create` date NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `date_create` DATETIME NOT NULL, 
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `cartdetail`
---
 
 CREATE TABLE `cartdetail` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `cart_id` int NOT NULL,
-  `productVariant_id` int NOT NULL,
-  `quantity` int NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `cart_id` INT NOT NULL,
+  `productVariant_id` INT NOT NULL,
+  `quantity` INT NOT NULL,
   PRIMARY KEY (`id`),
   KEY `cart_id` (`cart_id`),
   KEY `productVariant_id` (`productVariant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `category`
---
 
 CREATE TABLE `category` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `category`
---
 
 INSERT INTO `category` (`id`, `name`) VALUES
 (1, 'áo'),
@@ -125,22 +72,14 @@ INSERT INTO `category` (`id`, `name`) VALUES
 (4, 'bộ đồ'),
 (5, 'đồ đồ');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `color`
---
 
 CREATE TABLE `color` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `code` varchar(7) NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(50) NOT NULL,
+  `code` VARCHAR(7) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `color`
---
 
 INSERT INTO `color` (`id`, `name`, `code`) VALUES
 (1, 'Đỏ', '#FF0000'),
@@ -154,91 +93,79 @@ INSERT INTO `color` (`id`, `name`, `code`) VALUES
 (9, 'Hồng', '#FFC0CB'),
 (10, 'Tím', '#800080');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `comments`
---
 
 CREATE TABLE `comments` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `product_id` int NOT NULL,
-  `user_id` int NOT NULL,
-  `content` text NOT NULL,
-  `date` date NOT NULL,
-  `star` int NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `product_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  `content` TEXT NOT NULL,
+  `date` DATETIME NOT NULL, 
+  `star` INT NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `product_id` (`product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `payment`
---
+CREATE TABLE `gender` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+INSERT INTO `gender` (`id`, `name`) VALUES
+(1, 'Nam'),
+(2, 'Nữ'),
+(3, 'Unisex');
+
 
 CREATE TABLE `payment` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `bill_id` int NOT NULL,
-  `method` varchar(20) NOT NULL,
-  `date` date NOT NULL,
-  `price` int NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `bill_id` INT NOT NULL,
+  `method` VARCHAR(20) NOT NULL,
+  `date` DATETIME NOT NULL, 
+  `price` INT NOT NULL,
   PRIMARY KEY (`id`),
   KEY `bill_id` (`bill_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `products`
---
 
 CREATE TABLE `products` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `price` int NOT NULL,
-  `description` text NOT NULL,
-  `img` varchar(255) NOT NULL,
-  `img_child` varchar(225) NOT NULL,
-  `category_id` int NOT NULL,
-  `id_gender` int NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `price` INT NOT NULL,
+  `description` TEXT NOT NULL,
+  `img` VARCHAR(255) NOT NULL,
+  `img_child` VARCHAR(255) NOT NULL, 
+  `category_id` INT NOT NULL,
+  `id_gender` INT NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `category_id` (`category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `category_id` (`category_id`),
+  KEY `id_gender` (`id_gender`) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `products`
---
 
 INSERT INTO `products` (`id`, `name`, `price`, `description`, `img`, `img_child`, `category_id`, `id_gender`) VALUES
 (1, 'Áo Polo Nam Tay Ngắn Form Vừa KS25FH40C', 350000, 'Mẫu áo Polo nam với chất liệu vải thoáng mát, thấm hút mồ hôi tốt, thích hợp cho cả đi làm và dạo phố. Thiết kế form vừa vặn giúp tôn dáng và mang lại vẻ ngoài lịch lãm.', 'assets/images/áo nam/ao-nam-Áo Polo Nam Tay Ngắn Form Vừa KS25FH40C-SCHE-hình10.jpg', 'assets/images/áo nam/ao-nam-Áo Polo Nam Tay Ngắn Form Vừa KS25FH40C-SCHE-hình10.jpg', 1, 1),
 (2, 'Áo Polo Nam Phối Viền Cổ', 390000, 'Thiết kế phối viền trẻ trung, năng động. Màu đen nam tính dễ dàng phối với quần Jeans hoặc Kaki.', 'assets/images/áo nam/ao-nam-Áo Polo Nam Tay Ngắn Form Vừa KS25FH40C-SCHE-hình10.jpg', 'assets/images/áo nam/ao-nam-Áo Polo Nam Tay Ngắn Form Vừa KS25FH40C-SCHE-hình10.jpg', 1, 1),
 (3, 'Áo Polo Luxury Basic', 550000, 'Dòng sản phẩm cao cấp với chất liệu lụa băng siêu mát. Logo thêu nổi tinh tế khẳng định đẳng cấp.', 'assets/images/áo nam/ao-nam-Áo Polo Nam Tay Ngắn Form Vừa KS25FH40C-SCHE-hình10.jpg', 'assets/images/áo nam/ao-nam-Áo Polo Nam Tay Ngắn Form Vừa KS25FH40C-SCHE-hình10.jpg', 1, 1),
-(4, 'Áo Sơ Mi Nam Oxford', 450000, 'Vải Oxford dày dặn, đứng form, ít nhăn. Phù hợp cho môi trường công sở.', 'assets/images/áo nam/ao-nam-Áo Polo Nam Tay Ngắn Form Vừa KS25FH40C-SCHE-hình10.jpg', 'assets/images/áo nam/ao-nam-Áo Polo Nam Tay Ngắn Form Vừa KS25FH40C-SCHE-hình10.jpg', 1, 1),
+(4, 'Áo Sơ Mi Nam Oxford', 450000, 'Vải Oxford dày dặn, đứng form, ít nhăn. Phù hợp cho môi trường công sở.', 'assets/images/áo nam/ao-nam-Áo Polo Nam Tay Ngắn Form V25FH40C-SCHE-hình10.jpg', 'assets/images/áo nam/ao-nam-Áo Polo Nam Tay Ngắn Form Vừa KS25FH40C-SCHE-hình10.jpg', 1, 1),
 (5, 'Quần Jeans Nam Slimfit', 550000, 'Chất Jeans co giãn nhẹ, form ôm vừa vặn tôn dáng. Màu wash bền đẹp theo thời gian.', 'assets/images/áo nam/ao-nam-Áo Polo Nam Tay Ngắn Form Vừa KS25FH40C-SCHE-hình10.jpg', 'assets/images/áo nam/ao-nam-Áo Polo Nam Tay Ngắn Form Vừa KS25FH40C-SCHE-hình10.jpg', 2, 1);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `product_variant`
---
 
 CREATE TABLE `product_variant` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `product_id` int NOT NULL,
-  `color_id` int NOT NULL,
-  `size_id` int NOT NULL,
-  `quantity` int NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `product_id` INT NOT NULL,
+  `color_id` INT NOT NULL,
+  `size_id` INT NOT NULL,
+  `quantity` INT NOT NULL,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`),
   KEY `color_id` (`color_id`),
   KEY `size_id` (`size_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `product_variant`
---
 
 INSERT INTO `product_variant` (`id`, `product_id`, `color_id`, `size_id`, `quantity`) VALUES
 (1, 1, 4, 1, 50),
@@ -249,21 +176,13 @@ INSERT INTO `product_variant` (`id`, `product_id`, `color_id`, `size_id`, `quant
 (6, 3, 5, 3, 15),
 (7, 3, 6, 4, 10);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `size`
---
 
 CREATE TABLE `size` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(10) NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `size`
---
 
 INSERT INTO `size` (`id`, `name`) VALUES
 (1, 'S'),
@@ -272,209 +191,139 @@ INSERT INTO `size` (`id`, `name`) VALUES
 (4, 'XL'),
 (5, 'XXL');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `user`
---
 
 CREATE TABLE `user` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `phone` varchar(15) NOT NULL,
-  `login_day` date NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL, 
+  `phone` VARCHAR(15) NOT NULL,
+  `login_day` DATETIME NOT NULL, 
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `user`
---
 
 INSERT INTO `user` (`id`, `name`, `email`, `password`, `phone`, `login_day`) VALUES
-(1, 'Admin User', 'admin@example.com', '123456', '0123456789', '2025-11-26'),
-(2, 'Test User', 'test@example.com', '123456', '0987654321', '2025-11-25');
+(1, 'Admin User', 'admin@example.com', '123456', '0123456789', '2025-11-26 00:00:00'),
+(2, 'Test User', 'test@example.com', '123456', '0987654321', '2025-11-25 00:00:00');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `voucher`
---
 
 CREATE TABLE `voucher` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `code` varchar(20) NOT NULL,
-  `start` date NOT NULL,
-  `end` date NOT NULL,
-  `type` float NOT NULL,
-  `min` int NOT NULL,
-  `quantity` int NOT NULL,
-  `status` varchar(20) NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(20) NOT NULL,
+  `start` DATETIME NOT NULL, 
+  `end` DATETIME NOT NULL, 
+  `type` FLOAT NOT NULL,
+  `min` INT NOT NULL,
+  `quantity` INT NOT NULL,
+  `status` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `voucher`
---
 
 INSERT INTO `voucher` (`id`, `code`, `start`, `end`, `type`, `min`, `quantity`, `status`) VALUES
-(1, 'WELCOME10', '2025-11-01', '2025-12-01', 10, 500000, 100, 'active'),
-(2, 'SALE20', '2025-11-15', '2025-11-30', 20, 1000000, 50, 'active');
+(1, 'WELCOME10', '2025-11-01 00:00:00', '2025-12-01 23:59:59', 10, 500000, 100, 'active'),
+(2, 'SALE20', '2025-11-15 00:00:00', '2025-11-30 23:59:59', 20, 1000000, 50, 'active');
 
---
--- AUTO_INCREMENT for dumped tables
---
 
---
--- AUTO_INCREMENT for table `address`
---
 ALTER TABLE `address`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `bill`
---
+
 ALTER TABLE `bill`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `billdetail`
---
+
 ALTER TABLE `billdetail`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `cart`
---
+
 ALTER TABLE `cart`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `cartdetail`
---
+
 ALTER TABLE `cartdetail`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `category`
---
+
 ALTER TABLE `category`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
---
--- AUTO_INCREMENT for table `color`
---
+
 ALTER TABLE `color`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
---
--- AUTO_INCREMENT for table `comments`
---
+
 ALTER TABLE `comments`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `payment`
---
+
+ALTER TABLE `gender`
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+
 ALTER TABLE `payment`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `products`
---
 ALTER TABLE `products`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
---
--- AUTO_INCREMENT for table `product_variant`
---
+
 ALTER TABLE `product_variant`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
---
--- AUTO_INCREMENT for table `size`
---
+
 ALTER TABLE `size`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
---
--- AUTO_INCREMENT for table `user`
---
+
 ALTER TABLE `user`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
---
--- AUTO_INCREMENT for table `voucher`
---
+
 ALTER TABLE `voucher`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` INT NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
---
--- Constraints for dumped tables
---
 
---
--- Constraints for table `address`
---
 ALTER TABLE `address`
   ADD CONSTRAINT `fk_address_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Constraints for table `bill`
---
+
 ALTER TABLE `bill`
   ADD CONSTRAINT `fk_bill_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_bill_voucher` FOREIGN KEY (`voucher_id`) REFERENCES `voucher` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
---
--- Constraints for table `billdetail`
---
+
 ALTER TABLE `billdetail`
   ADD CONSTRAINT `fk_billdetail_bill` FOREIGN KEY (`bill_id`) REFERENCES `bill` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_billdetail_variant` FOREIGN KEY (`productVariant_id`) REFERENCES `product_variant` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_billdetail_variant` FOREIGN KEY (`productVariant_id`) REFERENCES `product_variant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
---
--- Constraints for table `cart`
---
+
 ALTER TABLE `cart`
   ADD CONSTRAINT `fk_cart_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Constraints for table `cartdetail`
---
+
 ALTER TABLE `cartdetail`
   ADD CONSTRAINT `fk_cartdetail_cart` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_cartdetail_variant` FOREIGN KEY (`productVariant_id`) REFERENCES `product_variant` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Constraints for table `comments`
---
+
 ALTER TABLE `comments`
   ADD CONSTRAINT `fk_comments_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_comments_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Constraints for table `payment`
---
+
 ALTER TABLE `payment`
   ADD CONSTRAINT `fk_payment_bill` FOREIGN KEY (`bill_id`) REFERENCES `bill` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Constraints for table `products`
---
-ALTER TABLE `products`
-  ADD CONSTRAINT `fk_products_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
---
--- Constraints for table `product_variant`
---
+ALTER TABLE `products`
+  ADD CONSTRAINT `fk_products_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_products_gender` FOREIGN KEY (`id_gender`) REFERENCES `gender` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE; 
+
+
 ALTER TABLE `product_variant`
   ADD CONSTRAINT `fk_variant_color` FOREIGN KEY (`color_id`) REFERENCES `color` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_variant_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_variant_size` FOREIGN KEY (`size_id`) REFERENCES `size` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
