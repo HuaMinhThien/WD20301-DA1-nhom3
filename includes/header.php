@@ -47,7 +47,7 @@
                 
                 <!-- Áo với menu con -->
                 <div class="hd-a-cate-wrapper">
-                    <a class="hd-a-cate" href="?page=products&category=ao">
+                    <a class="hd-a-cate" href="?page=products&category_id=1">
                         <div class="hd-categories">
                             <p>Áo</p>
                             <img style="height: 10px; width: 10px; margin-top: 5px;" src="assets/images/img-icon/down-arrow.png" alt="">
@@ -58,7 +58,7 @@
 
                 <!-- Quần với menu con -->
                 <div class="hd-a-cate-wrapper">
-                    <a class="hd-a-cate" href="?page=products&category=quan">
+                    <a class="hd-a-cate" href="?page=products&category_id=2">
                         <div class="hd-categories">
                             <p>Quần</p>
                             <img style="height: 10px; width: 10px; margin-top: 5px;" src="assets/images/img-icon/down-arrow.png" alt="">
@@ -69,7 +69,7 @@
 
                 <!-- Phụ Kiện với menu con -->
                 <div class="hd-a-cate-wrapper">
-                    <a class="hd-a-cate" href="?page=products&category=phukien">
+                    <a class="hd-a-cate" href="?page=products&category_id=3">
                         <div class="hd-categories">
                             <p>Phụ Kiện</p>
                             <img style="height: 10px; width: 10px; margin-top: 5px;" src="assets/images/img-icon/down-arrow.png" alt="">

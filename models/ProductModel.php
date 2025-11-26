@@ -26,6 +26,39 @@ class ProductModel {
         $this->conn = connect_db();
     }
 
+    // Lấy tất cả danh mục
+    public function getAllCategories() {
+        $sql = "SELECT id, name FROM category ORDER BY id ASC"; 
+        $result = $this->conn->query($sql);
+        
+        $categories = [];
+        
+        if ($result && $result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $categories[] = $row;
+            }
+        }
+        
+        return $categories;
+    }
+    
+    // START: HÀM MỚI - Lấy tất cả giới tính
+    public function getAllGenders() {
+        $sql = "SELECT id, name FROM gender ORDER BY id ASC"; 
+        $result = $this->conn->query($sql);
+        
+        $genders = [];
+        
+        if ($result && $result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $genders[] = $row;
+            }
+        }
+        
+        return $genders;
+    }
+    // END: HÀM MỚI
+
     // Hàm lấy tất cả sản phẩm
     public function getAllProducts() {
         // img AS image để khớp với $product['image'] trong View
@@ -43,20 +76,16 @@ class ProductModel {
         return $products;
     }
     
-    // HÀM LỌC THEO CATEGORY
+    // HÀM LỌC THEO CATEGORY (ID)
     public function getProductsByCategory($category_id) {
         $category_id = (int)$category_id;
         
-        // Lọc theo category_id và vẫn đổi tên cột img AS image
         $sql = "SELECT id, name, price, description, img AS image, category_id 
                 FROM products 
-                WHERE category_id = ?"; // ?: tham số đầu vào
+                WHERE category_id = ?";
         
         $stmt = $this->conn->prepare($sql);
-        
-        // Bind tham số
         $stmt->bind_param("i", $category_id);
-        
         $stmt->execute();
         $result = $stmt->get_result();
         
@@ -72,24 +101,17 @@ class ProductModel {
         return $products;
     }
     
-    // START: HÀM MỚI ĐỂ LỌC KẾT HỢP CATEGORY VÀ GENDER
-    /**
-     * Lấy sản phẩm dựa trên Category ID VÀ Gender ID.
-     */
+    // HÀM LỌC KẾT HỢP CATEGORY (ID) VÀ GENDER (ID)
     public function getProductsByCategoryAndGender($category_id, $gender_id) {
         $category_id = (int)$category_id;
         $gender_id = (int)$gender_id;
         
-        // Truy vấn lọc theo cả hai điều kiện
         $sql = "SELECT id, name, price, description, img AS image, category_id, gender_id 
                 FROM products 
-                WHERE category_id = ? AND gender_id = ?"; // ?: tham số đầu vào
+                WHERE category_id = ? AND gender_id = ?";
         
         $stmt = $this->conn->prepare($sql);
-        
-        // Bind 2 tham số (ii: 2 integer)
         $stmt->bind_param("ii", $category_id, $gender_id);
-        
         $stmt->execute();
         $result = $stmt->get_result();
         
@@ -104,8 +126,32 @@ class ProductModel {
         $stmt->close();
         return $products;
     }
-    // END: HÀM MỚI
     
+    // HÀM LỌC CHỈ THEO GENDER (ID)
+    public function getProductsByGender($gender_id) {
+        $gender_id = (int)$gender_id;
+        
+        $sql = "SELECT id, name, price, description, img AS image, gender_id 
+                FROM products 
+                WHERE gender_id = ?"; 
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $gender_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $products = [];
+        
+        if ($result && $result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $products[] = $row;
+            }
+        }
+        
+        $stmt->close();
+        return $products;
+    }
+
     // Đóng kết nối khi Model không còn được sử dụng
     public function __destruct() {
         if ($this->conn) {

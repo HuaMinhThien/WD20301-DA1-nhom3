@@ -1,81 +1,66 @@
 <?php
 
-// Đường dẫn này phải đúng, giả định models/ProductModel.php nằm ngang hàng với index.php
 require_once('models/ProductModel.php'); 
 
 class HomeController {
-    // Thuộc tính để lưu đối tượng Model
     private $productModel;
     
-    // Ánh xạ tên category trong URL thành ID và Tên thư mục ảnh
-    private $categoryMap = [
-        'ao' => [
-            'id' => 1, 
-            'folder' => 'ao' // Đường dẫn: assets/images/ao/
-        ],
-        'quan' => [
-            'id' => 2, 
-            'folder' => 'quan' // Đường dẫn: assets/images/quan/
-        ],
-        // Thêm các category khác nếu cần:
-        // 'dobo' => ['id' => 3, 'folder' => 'dobo'], 
-    ];
 
-    // Ánh xạ tên giới tính trong URL thành ID trong CSDL (1: Nam, 2: Nữ)
-    private $genderMap = [
-        'nam' => 1, 
-        'nu' => 2,
-    ];
-
-    // Hàm khởi tạo (Constructor) để tạo đối tượng Model 
     public function __construct() {
         // Khởi tạo đối tượng Model
         $this->productModel = new ProductModel(); 
     }
 
-    // Phương thức đã sửa: Lấy dữ liệu Sản phẩm theo Category + Gender, Category, Gender, hoặc tất cả
     public function products() {
         $products = [];
-        $category_name = $_GET['category'] ?? null; // Lấy 'category' từ URL
-        $gender_name = $_GET['gender'] ?? null;     // Lấy 'gender' từ URL
+        
+        // LẤY DANH MỤC VÀ GIỚI TÍNH TỪ MODEL VÀ TRUYỀN SANG VIEW
+        $categories = $this->productModel->getAllCategories();
+        $genders = $this->productModel->getAllGenders();
+        
+        // Lấy ID từ URL (đổi tên biến để phản ánh việc đang lấy ID)
+        $category_id = $_GET['category_id'] ?? null; 
+        $gender_id = $_GET['gender_id'] ?? null; 
+        
+        // Ép kiểu sang int nếu có
+        $category_id = $category_id ? (int)$category_id : null;
+        $gender_id = $gender_id ? (int)$gender_id : null;
         
         // Đường dẫn ảnh mặc định
         $imagePath = 'assets/images/'; 
 
-        // 1. Lọc theo Category (Ưu tiên kiểm tra Category trước)
-        if ($category_name && isset($this->categoryMap[$category_name])) {
-            $category_config = $this->categoryMap[$category_name];
-            $category_id = $category_config['id'];
+        
+        if ($category_id) {
             
-            // Cập nhật đường dẫn thư mục ảnh theo category
-            $imagePath .= $category_config['folder'] . '/'; 
+            if ($category_id == 1) {
+                 $imagePath .= 'ao/'; 
+            } elseif ($category_id == 2) {
+                 $imagePath .= 'quan/'; 
+            } else {
+                 $imagePath = 'assets/images/'; // Mặc định nếu không tìm thấy
+            }
             
-            // 1a. Kiểm tra nếu có thêm điều kiện Giới tính
-            if ($gender_name && isset($this->genderMap[$gender_name])) {
-                $gender_id = $this->genderMap[$gender_name];
-                
-                // GỌI HÀM LỌC KÉP MỚI
+            // 1a. Kiểm tra nếu có thêm điều kiện Giới tính ID
+            if ($gender_id) {
+                // GỌI HÀM LỌC KÉP
                 $products = $this->productModel->getProductsByCategoryAndGender($category_id, $gender_id);
             } else {
-                // 1b. Chỉ lọc theo Category
+                // 1b. Chỉ lọc theo Category ID
                 $products = $this->productModel->getProductsByCategory($category_id);
             }
         
-        // 2. Lọc chỉ theo Giới tính (Trường hợp không có Category trong URL, nhưng có Gender)
-        } elseif ($gender_name && isset($this->genderMap[$gender_name])) {
-            $gender_id = $this->genderMap[$gender_name];
+        // 2. Lọc chỉ theo Giới tính ID (Trường hợp không có Category ID, nhưng có Gender ID)
+        } elseif ($gender_id) {
             
             // Controller gọi Model để lấy dữ liệu theo Gender ID
             $products = $this->productModel->getProductsByGender($gender_id);
-            
-            // $imagePath vẫn là 'assets/images/'
             
         } else {
             // 3. Trường hợp không lọc (Mặc định)
             $products = $this->productModel->getAllProducts();
         }
 
-        // Nạp View (pages/products.php) và truyền cả $products và $imagePath
+        // Nạp View (pages/products.php) và truyền $products, $imagePath, $categories VÀ $genders
         include_once 'pages/products.php';
     }
 

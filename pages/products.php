@@ -11,47 +11,95 @@
                 <div class="pro-sec1-box-checkbox">
                     
                     <?php 
-                    // Lấy category hiện tại để giữ lại trong URL
-                    $current_category = $_GET['category'] ?? ''; 
-                    // Xây dựng tiền tố URL cơ bản: ?page=products&category=ao
-                    $base_url = "?page=products" . (!empty($current_category) ? "&category=" . htmlspecialchars($current_category) : "");
+                    // Lấy ID hiện tại từ URL (đã được Controller truyền từ $_GET)
+                    $current_category_id = $_GET['category_id'] ?? null; 
+                    $current_gender_id = $_GET['gender_id'] ?? null;
+                    
+                    // --- PHẦN LỌC THEO GIỚI TÍNH (SỬ DỤNG ID) ---
+                    
+                    // URL cơ bản cho lọc Giới tính (giữ lại category ID nếu có)
+                    $base_url_gender = "?page=products";
+                    if ($current_category_id) {
+                        $base_url_gender .= "&category_id=" . htmlspecialchars($current_category_id);
+                    }
+                    
                     ?>
                     
-                    <div class="pro-sec1-box-check-label">
-                        
-                        <input 
-                            id="gender-nam" 
-                            style="width: 20px; height: 20px; border-radius: 50%;" 
-                            type="radio" 
-                            name="gender_filter" 
-                            value="nam"
+                    <h3>Giới tính</h3>
+                    <?php 
+                    // Lặp qua danh sách $genders được truyền từ Controller
+                    if (isset($genders) && is_array($genders)) {
+                        foreach ($genders as $gender) {
+                            $gender_id = (int)$gender['id'];
+                            $gender_name = htmlspecialchars($gender['name']);
                             
-                            onclick="window.location.href='<?php echo $base_url; ?>&gender=nam'"
+                            // URL đích: ?page=products[&category_id=X]&gender_id=Y
+                            $gender_url = $base_url_gender . "&gender_id=" . $gender_id;
                             
-                            <?php echo (isset($_GET['gender']) && $_GET['gender'] === 'nam') ? 'checked' : ''; ?>
-                        > 
-                        <label for="gender-nam">Nam</label> 
-                        
-                    </div>
+                            // Kiểm tra trạng thái checked
+                            $is_checked = ($current_gender_id == $gender_id);
+                            ?>
+                            <div class="pro-sec1-box-check-label">
+                                <input 
+                                    id="gender-<?php echo $gender_id; ?>" 
+                                    style="width: 20px; height: 20px; border-radius: 50%;" 
+                                    type="radio" 
+                                    name="gender_filter" 
+                                    value="<?php echo $gender_id; ?>"
+                                    
+                                    onclick="window.location.href='<?php echo $gender_url; ?>'"
+                                    
+                                    <?php echo $is_checked ? 'checked' : ''; ?>
+                                > 
+                                <label for="gender-<?php echo $gender_id; ?>"><?php echo $gender_name; ?></label> 
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
                     
-                    <div class="pro-sec1-box-check-label">
-                        
-                        <input 
-                            id="gender-nu" 
-                            style="width: 20px; height: 20px; border-radius: 50%;" 
-                            type="radio" 
-                            name="gender_filter" 
-                            value="nu"
-                            
-                            onclick="window.location.href='<?php echo $base_url; ?>&gender=nu'"
-                            
-                            <?php echo (isset($_GET['gender']) && $_GET['gender'] === 'nu') ? 'checked' : ''; ?>
-                        >
-                        <label for="gender-nu">Nữ</label>
-                        
-                    </div>
+                    <hr>
+
+                    <h3>Loại sản phẩm</h3>
+                    <?php 
+                    // URL cơ bản cho lọc Category (giữ lại gender ID nếu có)
+                    $base_url_category = "?page=products";
+                    if ($current_gender_id) {
+                        $base_url_category .= "&gender_id=" . htmlspecialchars($current_gender_id);
+                    }
                     
-                </div>
+                    // Lặp qua danh sách $categories được truyền từ Controller
+                    if (isset($categories) && is_array($categories)) {
+                        foreach ($categories as $category) {
+                            $category_id = (int)$category['id'];
+                            $category_name = htmlspecialchars($category['name']);
+                            
+                            // URL đích: ?page=products[&gender_id=Y]&category_id=X
+                            $category_url = $base_url_category . "&category_id=" . $category_id;
+                            
+                            // Kiểm tra trạng thái checked
+                            $is_checked = ($current_category_id == $category_id);
+                            
+                            ?>
+                            <div class="pro-sec1-box-check-label">
+                                <input 
+                                    id="category-<?php echo $category_id; ?>" 
+                                    style="width: 20px; height: 20px; border-radius: 50%;" 
+                                    type="radio" 
+                                    name="category_filter" 
+                                    value="<?php echo $category_id; ?>"
+                                    
+                                    onclick="window.location.href='<?php echo $category_url; ?>'"
+                                    
+                                    <?php echo $is_checked ? 'checked' : ''; ?>
+                                > 
+                                <label for="category-<?php echo $category_id; ?>"><?php echo $category_name; ?></label> 
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                    </div>
             </div>
 
             <div class="pro-sec1-box1">
