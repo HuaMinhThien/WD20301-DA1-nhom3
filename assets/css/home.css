@@ -2,9 +2,6 @@ main{
     padding-top: 100px;
 }
 
-
-
-
 .main-container-banner{
     width: 100%;
     height: 400px;
@@ -14,11 +11,9 @@ main{
     justify-content: center;
 }
 
-
-
 .main-container-banner {
     width: 100%;
-    height: 500px;                  /* Bạn có thể chỉnh chiều cao */
+    height: 500px;       
     position: relative;
     overflow: hidden;
 }
@@ -229,6 +224,11 @@ main{
     color: #000;
 }
 
+h6{
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
 /* Vị trí chính xác theo yêu cầu */
 .main-ctn2-item-bag   { grid-column: 1 / 3; grid-row: 1 / 2; }
 .main-ctn2-item-man   { grid-column: 3 / 5; grid-row: 1 / 3; }

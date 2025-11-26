@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="assets/css/chitietSP.css">
+
 <?php
 if (empty($product)) {
     echo "<div style='text-align: center; padding: 50px;'>Không tìm thấy sản phẩm.</div>";

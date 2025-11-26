@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="assets/css/sale.css">
 <div class="store-breadcrumb">
     <div class="container">
         <span>Trang chủ / Cửa hàng</span>
