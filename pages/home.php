@@ -65,7 +65,7 @@
             <div class="main-ctn2-content">
                 <h3>Thời trang nam</h3>
                 <p>XU HƯỚNG MỚI NHẤT<br>MÙA HÈ NÀY</p>
-                <a href="#" class="main-ctn2-btn">Mua ngay</a>
+                <a href="?page=products&category_id=1&gender_id=1" class="main-ctn2-btn">Mua ngay</a>
             </div>
         </div>
 
@@ -75,7 +75,7 @@
             <div class="main-ctn2-content">
                 <h3>Thời trang nữ</h3>
                 <p>BỘ SƯU TẬP HÈ<br>MỚI NHẤT</p>
-                <a href="#" class="main-ctn2-btn">Mua ngay</a>
+                <a href="?page=products&category_id=1&gender_id=2" class="main-ctn2-btn">Mua ngay</a>
             </div>
         </div>
 
