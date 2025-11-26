@@ -72,36 +72,6 @@ class ProductModel {
         return $products;
     }
     
-    // HÀM MỚI ĐỂ LỌC THEO GIỚI TÍNH (gender_id)
-    public function getProductsByGender($gender_id) {
-        $gender_id = (int)$gender_id;
-        
-        // Lọc theo gender_id và vẫn đổi tên cột img AS image
-        // LƯU Ý: Đây là nơi gây ra lỗi nếu cột 'gender_id' không tồn tại
-        $sql = "SELECT id, name, price, description, img AS image, gender_id 
-                FROM products 
-                WHERE gender_id = ?"; 
-        
-        $stmt = $this->conn->prepare($sql);
-        
-        // Bind tham số
-        $stmt->bind_param("i", $gender_id);
-        
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        $products = [];
-        
-        if ($result && $result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $products[] = $row;
-            }
-        }
-        
-        $stmt->close();
-        return $products;
-    }
-    
     // START: HÀM MỚI ĐỂ LỌC KẾT HỢP CATEGORY VÀ GENDER
     /**
      * Lấy sản phẩm dựa trên Category ID VÀ Gender ID.
