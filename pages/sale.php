@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="assets/css/sale.css">
 <main>
     <div class="sale-bannerfull">
         <img src="assets/images/img-banner/banner-chinh-3.jpg" alt="">
