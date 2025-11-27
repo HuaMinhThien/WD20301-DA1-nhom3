@@ -1,96 +1,96 @@
 main{
-    padding-top: 100px;
+  padding-top: 100px;
 }
 
 .main-container-banner{
-    width: 100%;
-    height: 400px;
-    background-color: #D9D9D9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 100%;
+  height: 400px;
+  background-color: #D9D9D9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .main-container-banner {
-    width: 100%;
-    height: 500px;       
-    position: relative;
-    overflow: hidden;
+  width: 100%;
+  height: 500px;    
+  position: relative;
+  overflow: hidden;
 }
 
 .slides {
-    width: 100%;
-    height: 100%;
-    position: relative;
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 .slide {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-align: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
 }
 
 .slide.active {
-    opacity: 1;
+  opacity: 1;
 }
 
 .slide-content {
-    background: rgba(0, 0, 0, 0.45);
-    padding: 40px 60px;
-    backdrop-filter: blur(5px);
-    max-width: 80%;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 40px 60px;
+  backdrop-filter: blur(5px);
+  max-width: 80%;
 }
 
 
 .btn {
-    display: inline-block;
-    padding: 14px 40px;
-    background: #ff6b6b;
-    color: white;
-    text-decoration: none;
-    border-radius: 50px;
-    font-weight: bold;
-    transition: all 0.3s;
+  display: inline-block;
+  padding: 14px 40px;
+  background: #ff6b6b;
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: bold;
+  transition: all 0.3s;
 }
 
 .btn:hover {
-    background: #ff5252;
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(255,107,107,0.4);
+  background: #ff5252;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(255,107,107,0.4);
 }
 
 /* Nút prev/next */
 .prev, .next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.5);
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    cursor: pointer;
-    z-index: 10;
-    transition: all 0.3s;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s;
 }
 
 .prev:hover, .next:hover {
-    background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.8);
 }
 
 .prev { left: 30px; }
@@ -98,159 +98,314 @@ main{
 
 /* Dots */
 .dots {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 12px;
-    z-index: 10;
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 10;
 }
 
 .dot {
-    width: 14px;
-    height: 14px;
-    background: rgba(255,255,255,0.5);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.3s;
+  width: 14px;
+  height: 14px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
 .dot.active {
-    background: #fff;
-    transform: scale(1.3);
+  background: #fff;
+  transform: scale(1.3);
 }
 .main-container-1{
-    width: 100%;
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .main-ctn1{
-    width: 33%;
-    height: 50px;
-    display: flex;
-    gap: 20px;
+  width: 33%;
+  height: 50px;
+  display: flex;
+  gap: 20px;
 }
 
 .main-ctn1>img{
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
 }
 
 .main-ctn1-box1{
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .main-ctn1-box1>h2{
-    font-size: 16px;
+  font-size: 16px;
 }
 .main-ctn1-box1>p{
-    font-size: 14px;
-    margin-top: 10px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+.main-container-2 {
+    margin: 40px auto;
 }
 .main-ctn2-promo-grid-4x3 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(3, auto);
-    gap: 20px;
-    max-width: 1400px;
-    margin: 40px auto;
-    padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, auto);
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .main-ctn2-grid-item {
-    position: relative;
-    overflow: hidden;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
 .main-ctn2-grid-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
 }
 
 .main-ctn2-grid-item:hover img {
-    transform: scale(1.08);
+  transform: scale(1.08);
 }
 
 .main-ctn2-content {
-    position: absolute;
-    bottom: 30px;
-    left: 30px;
-    color: #fff;
-    z-index: 2;
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  color: #fff;
+  z-index: 2;
 }
 
 .main-ctn2-content h3 {
-    font-family: 'Be Vietnam Pro', 'Montserrat', sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    letter-spacing: 1px;
+  font-family: 'Be Vietnam Pro', 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
 }
 
 .main-ctn2-content p {
-    font-family: 'Be Vietnam Pro', sans-serif;
-    font-size: 26px;
-    font-weight: 700;
-    line-height: 1.2;
-    margin: 0 0 20px;
-    text-shadow: 0 2px 15px rgba(0,0,0,0.6);
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 20px;
+  text-shadow: 0 2px 15px rgba(0,0,0,0.6);
 }
 
 .main-ctn2-btn {
-    display: inline-block;
-    background: #000;
-    color: #fff;
-    padding: 12px 30px;
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s;
+  display: inline-block;
+  background: #000;
+  color: #fff;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s;
 }
 
 .main-ctn2-btn:hover {
-    background: #fff;
-    color: #000;
+  background: #fff;
+  color: #000;
 }
 
 h6{
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
 }
 /* Vị trí chính xác theo yêu cầu */
-.main-ctn2-item-bag   { grid-column: 1 / 3; grid-row: 1 / 2; }
-.main-ctn2-item-man   { grid-column: 3 / 5; grid-row: 1 / 3; }
+.main-ctn2-item-bag  { grid-column: 1 / 3; grid-row: 1 / 2; }
+.main-ctn2-item-man  { grid-column: 3 / 5; grid-row: 1 / 3; }
 .main-ctn2-item-woman { grid-column: 1 / 3; grid-row: 2 / 4; }
-.main-ctn2-item-kid   { grid-column: 3 / 5; grid-row: 3 / 4; }
+.main-ctn2-item-kid  { grid-column: 3 / 5; grid-row: 3 / 4; }
 
 /* Responsive */
 @media (max-width: 1024px) {
-    .main-ctn2-promo-grid-4x3 {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto;
-        gap: 15px;
-    }
-    .main-ctn2-item-bag   { grid-column: 1 / 3; grid-row: auto; }
-    .main-ctn2-item-man   { grid-column: 1 / 3; grid-row: auto; }
-    .main-ctn2-item-woman { grid-column: 1 / 3; grid-row: auto; }
-    .main-ctn2-item-kid   { grid-column: 1 / 3; grid-row: auto; }
+  .main-ctn2-promo-grid-4x3 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 15px;
+  }
+  .main-ctn2-item-bag  { grid-column: 1 / 3; grid-row: auto; }
+  .main-ctn2-item-man  { grid-column: 1 / 3; grid-row: auto; }
+  .main-ctn2-item-woman { grid-column: 1 / 3; grid-row: auto; }
+  .main-ctn2-item-kid  { grid-column: 1 / 3; grid-row: auto; }
 }
 
 @media (max-width: 640px) {
-    .main-ctn2-promo-grid-4x3 { grid-template-columns: 1fr; }
-    .main-ctn2-grid-item { grid-column: 1 / -1; }
-    .main-ctn2-content { bottom: 20px; left: 20px; }
-    .main-ctn2-content p { font-size: 22px; }
+  .main-ctn2-promo-grid-4x3 { grid-template-columns: 1fr; }
+  .main-ctn2-grid-item { grid-column: 1 / -1; }
+  .main-ctn2-content { bottom: 20px; left: 20px; }
+  .main-ctn2-content p { font-size: 22px; }
+}
+
+/* ==================================== */
+/* SECTION 3: SẢN PHẨM NGẪU NHIÊN (Đã thêm mới)*/
+/* ==================================== */
+.product-grid-section {
+    margin-top: 50px;
+    padding-bottom: 50px;
+}
+
+.section-title-highlight {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #001F3E; /* Màu xanh đen */
+    position: relative;
+    text-transform: uppercase;
+}
+
+.section-title-highlight::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: #ff0000;
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+.product-grid-10-items {
+    display: grid;
+    /* Hiển thị 5 sản phẩm/hàng trên màn hình lớn */
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 20px;
+}
+
+.product-item {
+    border: 1px solid #eee;
+    padding: 10px;
+    text-align: center;
+    transition: box-shadow 0.3s, transform 0.3s;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.product-item:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+}
+
+.product-link {
+    text-decoration: none;
+    color: #333;
+    display: block;
+}
+
+.product-img {
+    width: 100%;
+    height: 250px; /* Chiều cao cố định */
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.product-details {
+    padding: 5px 0;
+}
+
+.product-name-short {
+    font-size: 14px;
+    font-weight: 500;
+    height: 3em; /* Giới hạn 2 dòng */
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.product-price-box {
+    margin-top: 5px;
+}
+
+.product-sale-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ff0000; /* Màu đỏ cho giá sale */
+    margin-right: 10px;
+}
+
+.product-original-price {
+    font-size: 12px;
+    color: #888;
+    text-decoration: line-through;
+}
+
+/* Icons (Giỏ hàng, Chi tiết) */
+.product-action-icons {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 15px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    /* Hiệu ứng nổi lên khi hover */
+    background: rgba(255, 255, 255, 0.9); 
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.product-item:hover .product-action-icons {
+    opacity: 1;
+}
+
+.icon-link img {
+    width: 24px;
+    height: 24px;
+    background-color: #001F3E;
+    padding: 4px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.icon-link:hover img {
+    transform: scale(1.1);
+    background-color: #ff0000;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .product-grid-10-items {
+        grid-template-columns: repeat(4, 1fr); /* 4 sản phẩm/hàng */
+    }
+}
+
+@media (max-width: 768px) {
+    .product-grid-10-items {
+        grid-template-columns: repeat(3, 1fr); /* 3 sản phẩm/hàng */
+    }
+    .product-img {
+        height: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .product-grid-10-items {
+        grid-template-columns: repeat(2, 1fr); /* 2 sản phẩm/hàng */
+    }
+    .section-title-highlight {
+        font-size: 24px;
+    }
 }
