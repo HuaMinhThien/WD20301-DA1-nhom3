@@ -12,7 +12,7 @@
         <div class="logo"><h2><i class="fa-solid fa-shirt"></i> AuraAdmin</h2></div>
         <ul class="menu">
             <li><a href="?admin=thongke"><i class="fa-solid fa-chart-line"></i> <span>Thống Kê</span></a></li>
-            <li class="active"><a href="?admin=products"><i class="fa-solid fa-box-open"></i> <span>Sản Phẩm</span></a></li>
+            <li class=""><a href="?admin=products"><i class="fa-solid fa-box-open"></i> <span>Sản Phẩm</span></a></li>
             <li><a href="?admin=categories"><i class="fa-solid fa-list"></i> <span>Danh Mục</span></a></li>
             <li><a href="?admin=orders"><i class="fa-solid fa-cart-shopping"></i> <span>Đơn Hàng</span></a></li>
             <li><a href="?admin=customers"><i class="fa-solid fa-users"></i> <span>Người Dùng</span></a></li>
