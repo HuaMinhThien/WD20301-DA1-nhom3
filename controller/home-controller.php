@@ -74,7 +74,7 @@ class HomeController {
 
     public function home() {
         // Lấy 10 sản phẩm ngẫu nhiên để hiển thị ở Section 3
-        $random_products = $this->productModel->getFeaturedProductsRandom(10); 
+        $random_products = $this->productModel->getFeaturedProductsRandom(20); 
 
         // Truyền $random_products sang View
         include_once 'pages/home.php';
