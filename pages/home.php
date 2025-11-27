@@ -87,49 +87,53 @@
     </div>
     
     <section class="product-grid-section">
-        <h2 class="section-title-highlight">🔥 SẢN PHẨM NỔI BẬT KHUYẾN MÃI</h2>
-        <div class="product-grid-10-items">
-            <?php 
-            // $random_products được lấy từ HomeController::home()
-            if (isset($random_products) && !empty($random_products)):
-                foreach ($random_products as $product):
-                    // Xác định thư mục ảnh dựa trên category_id
-                    $imageFolder = 'assets/images/';
+    <h2 class="section-title-highlight">🔥 SẢN PHẨM NỔI BẬT NGẪU NHIÊN (10 SP)</h2>
+    <div class="pro-section-2-box2" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;">
+        <?php 
+        // Giả định $random_products được lấy từ Controller (phải chứa 10 sản phẩm ngẫu nhiên)
+        // Cần đảm bảo rằng $random_products đã được fetch và có dữ liệu: ['id'], ['name'], ['price'], ['image'], ['category_id']
+        // Tái tạo lại logic xác định $imagePath
+        $imagePath = 'assets/images/'; 
+        
+        if (!empty($random_products) && is_array($random_products)): 
+            foreach (array_slice($random_products, 0, 10) as $product): // Đảm bảo chỉ lấy tối đa 10 sản phẩm
+                // Xác định thư mục ảnh chính xác nếu cần (giữ lại logic cũ)
+                $productImagePath = $imagePath;
+                if (isset($product['category_id'])) {
                     if ($product['category_id'] == 1) {
-                        $imageFolder .= 'ao/'; 
+                        $productImagePath .= 'ao/'; 
                     } elseif ($product['category_id'] == 2) {
-                        $imageFolder .= 'quan/'; 
+                        $productImagePath .= 'quan/'; 
                     } 
-                    
-                    $original_price = number_format($product['price'], 0, ',', '.');
-                    // Giả định giảm giá 10% (Tùy chỉnh nếu có cột giảm giá trong DB)
-                    $sale_price = number_format($product['price'] * 0.9, 0, ',', '.'); 
-            ?>
-            <div class="product-item">
-                <a href="?page=products_Details&id=<?= $product['id'] ?>" class="product-link">
-                    <img src="<?= $imageFolder . $product['image'] ?>" alt="<?= $product['name'] ?>" class="product-img">
-                    <div class="product-details">
-                        <p class="product-name-short"><?= $product['name'] ?></p>
-                        <div class="product-price-box">
-                            <span class="product-sale-price"><?= $sale_price ?>đ</span>
-                            <span class="product-original-price"><?= $original_price ?>đ</span>
-                        </div>
-                    </div>
-                </a>
-                <div class="product-action-icons">
-                    <a href="?page=products_Details&id=<?= $product['id'] ?>" class="icon-link"><img src="assets/images/img-icon/eye.png" alt="Chi tiết"></a>
-                    <a href="#" class="icon-link add-to-cart"><img src="assets/images/img-icon/shopping-cart.png" alt="Thêm giỏ hàng"></a>
+                }
+        ?>
+        
+        <a href="?page=products_Details&id=<?php echo htmlspecialchars($product['id']); ?>" class="pro-section-2-boxSP" style="width: 100%; height: auto;">
+            <img src="<?php echo htmlspecialchars($productImagePath . $product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>"> 
+
+            <p class="pro-sec2-boxSP-name">
+                <?php echo htmlspecialchars($product['name']); ?>
+            </p>
+            
+            <div class="pro-sec2-boxSP-miniBox">
+                <p>
+                    <?php echo number_format($product['price'], 0, ',', '.'); ?> ₫
+                </p>
+
+                <div class="pro-sec2-boxSP-icon">
+                    <img src="assets/images/img-icon/heart.png" alt="Yêu thích">
+                    <img src="assets/images/img-icon/online-shopping.png" alt="Thêm vào giỏ">
                 </div>
             </div>
-            <?php 
-                endforeach;
-            else:
-            ?>
-            <p>Không có sản phẩm nào để hiển thị.</p>
-            <?php
-            endif;
-            ?>
-        </div>
+        </a>
+
+        <?php 
+            endforeach; 
+        else: 
+        ?>
+        <p style="grid-column: 1 / -1; text-align: center;">Xin lỗi, hiện tại không có sản phẩm nào để hiển thị.</p>
+        <?php endif; ?>
+    </div>
     </section>
     </main>
 

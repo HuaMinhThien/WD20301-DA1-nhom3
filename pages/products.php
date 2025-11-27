@@ -230,20 +230,28 @@
 
             <div class="pro-section-2-box2">
                 <?php 
-                // Khởi tạo $imagePath nếu nó chưa được đặt (để tránh lỗi)
-                if (!isset($imagePath)) {
-                    $imagePath = 'assets/images/'; 
-                }
                 
                 // Kiểm tra xem $products có tồn tại và là mảng không
                 if (!empty($products) && is_array($products)): 
                     // Lặp qua từng sản phẩm trong mảng
                     foreach ($products as $product):
-                        // Cấu trúc dữ liệu giả định: $product['id'], $product['name'], $product['price'], $product['image']
+                        // =========================================================
+                        // ✨ LOGIC ĐÃ SỬA: TẠO ĐƯỜNG DẪN ẢNH CHÍNH XÁC CHO TỪNG SẢN PHẨM
+                        // =========================================================
+                        $productImagePath = 'assets/images/'; 
+                        $product_cat_id = $product['category_id'] ?? 0;
+
+                        if ($product_cat_id == 1) {
+                            $productImagePath .= 'ao/'; 
+                        } elseif ($product_cat_id == 2) {
+                            $productImagePath .= 'quan/'; 
+                        } 
+                        // Nếu category_id khác 1 và 2, đường dẫn là 'assets/images/'
+
                 ?>
                 
                 <a href="?page=products_Details&id=<?php echo htmlspecialchars($product['id']); ?>" class="pro-section-2-boxSP">
-                    <img src="<?php echo htmlspecialchars($imagePath . $product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>"> 
+                    <img src="<?php echo htmlspecialchars($productImagePath . $product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>"> 
 
                     <p class="pro-sec2-boxSP-name">
                         <?php echo htmlspecialchars($product['name']); ?>

@@ -68,7 +68,7 @@
 
                 <!-- Phụ Kiện với menu con -->
                 <div class="hd-a-cate-wrapper">
-                    <a class="hd-a-cate" href="?page=products&category_id=3">
+                    <a class="hd-a-cate" href="?page=products&category_id=12">
                         <div class="hd-categories">
                             <p>Phụ Kiện</p>
                             <img style="height: 10px; width: 10px; margin-top: 5px;" src="assets/images/img-icon/down-arrow.png" alt="">

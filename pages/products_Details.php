@@ -106,29 +106,45 @@ $available_sizes = ['S', 'M', 'L', 'XL'];
 
     <div class="related-products-section">
         <h2>SẢN PHẨM LIÊN QUAN</h2>
-        <div class="related-products-list">
+        <div class="pro-section-2-box2" style="justify-content: center; gap: 2%;">
             <?php 
-            // Giả định $related_products được truyền từ Controller
-            // Dùng vòng lặp để hiển thị tối đa 4 sản phẩm liên quan
+            // Giả định $related_products được truyền từ Controller (chỉ cần lấy 4)
+            // Cần đảm bảo rằng $related_products đã được fetch và có dữ liệu
+            $imagePath = $imagePath ?? 'assets/images/'; // Giữ lại biến $imagePath đã được định nghĩa ở trên
             $count = 0;
-            if (!empty($related_products)) {
-                foreach ($related_products as $rp): 
+            if (!empty($related_products) && is_array($related_products)):
+                foreach ($related_products as $product):
                     if ($count >= 4) break; 
+                    // Tái tạo lại logic xác định $imagePath nếu cần (thường chỉ dùng $imagePath chung)
+                    // Ở đây dùng $imagePath đã có sẵn, giả định $product['image'] là tên file
             ?>
-                <div class="related-product-item">
-                    <a href="?page=products_Details&id=<?php echo $rp['id']; ?>">
-                        <img src="<?php echo $imagePath . htmlspecialchars($rp['image']); ?>" alt="<?php echo htmlspecialchars($rp['name']); ?>">
-                        <p class="rp-name"><?php echo htmlspecialchars($rp['name']); ?></p>
-                        <p class="rp-price"><?php echo number_format($rp['price'], 0, ',', '.'); ?>₫</p>
-                    </a>
+            
+            <a href="?page=products_Details&id=<?php echo htmlspecialchars($product['id']); ?>" class="pro-section-2-boxSP" style="width: 23%; height: auto;">
+                <img src="<?php echo htmlspecialchars($imagePath . $product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>"> 
+
+                <p class="pro-sec2-boxSP-name">
+                    <?php echo htmlspecialchars($product['name']); ?>
+                </p>
+                
+                <div class="pro-sec2-boxSP-miniBox">
+                    <p>
+                        <?php echo number_format($product['price'], 0, ',', '.'); ?> ₫
+                    </p>
+
+                    <div class="pro-sec2-boxSP-icon">
+                        <img src="assets/images/img-icon/heart.png" alt="Yêu thích">
+                        <img src="assets/images/img-icon/online-shopping.png" alt="Thêm vào giỏ">
+                    </div>
                 </div>
+            </a>
+
             <?php 
-                    $count++;
-                endforeach;
-            } else {
-                echo "<p>Không có sản phẩm liên quan nào.</p>";
-            }
+                $count++;
+                endforeach; 
+            else: 
             ?>
+            <p style="width: 100%; text-align: center;">Không có sản phẩm liên quan nào.</p>
+            <?php endif; ?>
         </div>
     </div>
 </div>
