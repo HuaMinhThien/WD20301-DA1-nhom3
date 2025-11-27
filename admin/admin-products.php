@@ -1,13 +1,13 @@
 
 
-        <div class="main-content">
-            <header>
-                <h1>Quản Lý Sản Phẩm</h1>
-                <div class="user-wrapper">
-                    <img src="https://via.placeholder.com/40" alt="Admin">
-                    <div><h4>Admin</h4><small>Super Admin</small></div>
-                </div>
-            </header>
+    <div class="main-content">
+        <header>
+            <h1>Quản Lý Sản Phẩm</h1>
+            <div class="user-wrapper">
+                <img src="https://via.placeholder.com/40" alt="Admin">
+                <div><h4>Admin</h4><small>Super Admin</small></div>
+            </div>
+        </header>
 
             <main>
                 <div class="recent-grid">
