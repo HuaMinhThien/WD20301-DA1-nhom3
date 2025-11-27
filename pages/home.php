@@ -12,7 +12,6 @@
         <div class="prev">&#10094;</div>
         <div class="next">&#10095;</div>
 
-        <!-- CẬP NHẬT: 5 dots cho 5 slides -->
         <div class="dots">
             <span class="dot active"></span>
             <span class="dot"></span>
@@ -47,10 +46,8 @@
     </div>
 
     <div class="main-container-2">
-    <!-- Layout Grid 4x3 mới -->
-        <div class="main-ctn2-promo-grid-4x3">
+    <div class="main-ctn2-promo-grid-4x3">
 
-            <!-- 1. Túi xách: cột 1-2, hàng 1 -->
             <div class="main-ctn2-grid-item main-ctn2-item-bag">
                 <img src="assets/images/img-banner/banner-con-1.png" alt="Túi xách">
                 <div class="main-ctn2-content">
@@ -60,8 +57,7 @@
                 </div>
             </div>
 
-        <!-- 2. Thời trang nam: cột 3-4, hàng 1-2 (cao gấp đôi) -->
-            <div class="main-ctn2-grid-item main-ctn2-item-man">
+        <div class="main-ctn2-grid-item main-ctn2-item-man">
                 <img src="assets/images/img-banner/banner-con-2.png" alt="Thời trang nam">
                 <div class="main-ctn2-content">
                     <h3>Thời trang nam</h3>
@@ -70,8 +66,7 @@
                 </div>
             </div>
 
-        <!-- 3. Thời trang nữ: cột 1-2, hàng 2-3 (cao gấp đôi) -->
-            <div class="main-ctn2-grid-item main-ctn2-item-woman">
+        <div class="main-ctn2-grid-item main-ctn2-item-woman">
                 <img src="assets/images/img-banner/banner-con-3.png" alt="Thời trang nữ">
                 <div class="main-ctn2-content">
                     <h3>Thời trang nữ</h3>
@@ -79,7 +74,6 @@
                     <a href="?page=products&category_id=1&gender_id=2" class="main-ctn2-btn">Mua ngay</a>
                 </div>
             </div>
-            <!-- 4. Cho bé: cột 3-4, hàng 3 -->
             <div class="main-ctn2-grid-item main-ctn2-item-kid">
                     <img src="assets/images/img-banner/banner-con-4.png" alt="Cho bé">
                     <div class="main-ctn2-content">
@@ -91,9 +85,52 @@
 
         </div>
     </div>
-    <!-- top nổi bật -->
-    <!-- end top nổi bật -->
-</main>
+    
+    <section class="product-grid-section">
+        <h2 class="section-title-highlight">🔥 SẢN PHẨM NỔI BẬT KHUYẾN MÃI</h2>
+        <div class="product-grid-10-items">
+            <?php 
+            // $random_products được lấy từ HomeController::home()
+            if (isset($random_products) && !empty($random_products)):
+                foreach ($random_products as $product):
+                    // Xác định thư mục ảnh dựa trên category_id
+                    $imageFolder = 'assets/images/';
+                    if ($product['category_id'] == 1) {
+                        $imageFolder .= 'ao/'; 
+                    } elseif ($product['category_id'] == 2) {
+                        $imageFolder .= 'quan/'; 
+                    } 
+                    
+                    $original_price = number_format($product['price'], 0, ',', '.');
+                    // Giả định giảm giá 10% (Tùy chỉnh nếu có cột giảm giá trong DB)
+                    $sale_price = number_format($product['price'] * 0.9, 0, ',', '.'); 
+            ?>
+            <div class="product-item">
+                <a href="?page=products_Details&id=<?= $product['id'] ?>" class="product-link">
+                    <img src="<?= $imageFolder . $product['image'] ?>" alt="<?= $product['name'] ?>" class="product-img">
+                    <div class="product-details">
+                        <p class="product-name-short"><?= $product['name'] ?></p>
+                        <div class="product-price-box">
+                            <span class="product-sale-price"><?= $sale_price ?>đ</span>
+                            <span class="product-original-price"><?= $original_price ?>đ</span>
+                        </div>
+                    </div>
+                </a>
+                <div class="product-action-icons">
+                    <a href="?page=products_Details&id=<?= $product['id'] ?>" class="icon-link"><img src="assets/images/img-icon/eye.png" alt="Chi tiết"></a>
+                    <a href="#" class="icon-link add-to-cart"><img src="assets/images/img-icon/shopping-cart.png" alt="Thêm giỏ hàng"></a>
+                </div>
+            </div>
+            <?php 
+                endforeach;
+            else:
+            ?>
+            <p>Không có sản phẩm nào để hiển thị.</p>
+            <?php
+            endif;
+            ?>
+        </div>
+    </section>
+    </main>
 
 <script src="assets/js/banner.js"></script>
-
