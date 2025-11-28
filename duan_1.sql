@@ -207,6 +207,14 @@ CREATE TABLE `products` (
   `gender_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Thêm cột số lượng kho 
+ ALTER TABLE products
+ADD COLUMN storage INT DEFAULT 0;
+
+-- Thêm số lượng ngẫu nhiên 
+UPDATE products
+SET storage = FLOOR(10 + (RAND() * 91));
+
 --
 -- Đang đổ dữ liệu cho bảng `products`
 --

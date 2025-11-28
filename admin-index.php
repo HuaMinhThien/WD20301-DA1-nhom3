@@ -16,4 +16,9 @@
         // ... code gọi controller của bạn ...
         $controller->$page();
     }
+    // File: index.php
+require 'controller/ProductController.php';
+
+$controller = new ProductController();
+$controller->handleRequest();
 ?>

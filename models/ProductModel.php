@@ -27,7 +27,7 @@ class ProductModel {
 
     // Hàm lấy tất cả sản phẩm
     public function getAllProducts() {
-        $sql = "SELECT id, name, price, description, img AS image FROM products"; 
+        $sql = "SELECT id, name, price, storage, description, img AS image FROM products";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -147,5 +147,37 @@ class ProductModel {
         $stmt->bindParam(':id', $variant_id);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }// --- BỔ SUNG CÁC HÀM QUẢN TRỊ (ADMIN) ---
+
+    // 1. Thêm sản phẩm
+    public function insertProduct($name, $price, $storage, $desc, $img, $category_id, $gender_id) {
+        $sql = "INSERT INTO products (name, price, storage, description, img, category_id, id_gender) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$name, $price, $storage, $desc, $img, $category_id, $gender_id]);
     }
+
+    // 2. Cập nhật sản phẩm
+    public function updateProduct($id, $name, $price, $storage, $desc, $img, $category_id, $gender_id) {
+        if ($img) {
+            // Nếu có up ảnh mới -> Cập nhật cả ảnh
+            $sql = "UPDATE products SET name=?, price=?, storage=?, description=?, img=?, category_id=?, id_gender=? WHERE id=?";
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([$name, $price, $storage, $desc, $img, $category_id, $gender_id, $id]);
+        } else {
+            // Nếu không up ảnh -> Giữ nguyên ảnh cũ
+            $sql = "UPDATE products SET name=?, price=?, storage=?, description=?, category_id=?, id_gender=? WHERE id=?";
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([$name, $price, $storage, $desc, $category_id, $gender_id, $id]);
+        }
+    }
+
+    // 3. Xóa sản phẩm
+    public function deleteProduct($id) {
+        $sql = "DELETE FROM products WHERE id = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$id]);
+    }
+
+
 }
