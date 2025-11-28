@@ -2,10 +2,12 @@
 // File: controller/HomeController.php (Đã sửa lỗi ArgumentCountError)
 
 require_once('models/ProductModel.php'); 
+require_once('models/UserModel.php');
 require_once('config/Database.php'); // Cần nạp để lấy kết nối DB
 
 class HomeController {
     private $productModel;
+    private $userModel;
     private $db; // Thuộc tính để lưu kết nối DB
 
     public function __construct() {
@@ -15,6 +17,7 @@ class HomeController {
         
         // 2. Khởi tạo đối tượng Model (Sửa lỗi: Truyền kết nối DB vào)
         $this->productModel = new ProductModel($this->db); 
+        $this->userModel = new UserModel($this->db);
     }
 
     // Trong class HomeController 

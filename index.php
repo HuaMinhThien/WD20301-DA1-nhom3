@@ -1,4 +1,5 @@
 <?php
+// File: index.php (Đã sửa lỗi định tuyến cho login/register)
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -14,28 +15,39 @@ $controller_file = '';
 $method_to_call = $page; 
 
 switch ($page) {
+    // --- 1. ĐỊNH TUYẾN CHO CARTCONTROLLER ---
     case 'cart':
     case 'remove':
     case 'update_quantity':
     case 'add': 
         $controller_name = 'CartController';
         $controller_file = 'controller/cart-controller.php'; 
-        // SỬA LỖI: Phương thức mặc định cho CartController là 'index'
+        // Phương thức mặc định cho CartController là 'index'
         $method_to_call = $action ?? 'index'; 
         break;
         
+    // --- 2. ĐỊNH TUYẾN CHO HOMECONTROLLER ---
+    // Gộp tất cả các trang HomeController vào một case
     case 'products':
     case 'products_Details':
     case 'home':
+    case 'login':       
+    case 'register':    
+    case 'user':        
+    case 'cart_history': 
+    case 'sale':        
+    case 'shop':        
+        $controller_name = 'HomeController';
+        $controller_file = 'controller/home-controller.php';
+        // Phương thức gọi sẽ là tên trang (ví dụ: 'login' gọi login())
+        $method_to_call = $page; 
+        break;
+        
+    // --- 3. XỬ LÝ TRANG KHÔNG TỒN TẠI (404) ---
     default:
         $controller_name = 'HomeController';
         $controller_file = 'controller/home-controller.php';
-        
-        if ($page === 'products' || $page === 'products_Details') {
-            $method_to_call = $page;
-        } else {
-            $method_to_call = 'home';
-        }
+        $method_to_call = 'home'; // Chuyển hướng về trang chủ
         break;
 }
 
@@ -57,7 +69,7 @@ $controller = new $controller_name();
 if ($controller && method_exists($controller, $method_to_call)) {
     $controller->$method_to_call();
 } else {
-    // Gọi home() cho HomeController và index() cho CartController
+    // Nếu phương thức không tồn tại, gọi home (hoặc index cho CartController)
     if ($controller_name === 'CartController') {
         $controller->index();
     } else {
