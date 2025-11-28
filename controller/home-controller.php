@@ -17,7 +17,7 @@ class HomeController {
         $this->productModel = new ProductModel($this->db); 
     }
 
-    // Trong class HomeController
+    // Trong class HomeController 
     public function products() {
         $products = [];
         
@@ -84,6 +84,7 @@ class HomeController {
         include_once 'pages/home.php';
     }
     
+    
     // ---
     
     public function user() {
@@ -132,5 +133,123 @@ class HomeController {
         
         // Truyền dữ liệu sang View
         include_once 'pages/products_Details.php';
+    }
+    public function login() {
+        // Biến để lưu thông báo lỗi
+        $error_message = '';
+        $success_message = '';
+
+        // 1. Kiểm tra nếu form đã được POST (Người dùng nhấn nút Đăng nhập)
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = $_POST['email'] ?? '';
+            $password = $_POST['password'] ?? '';
+            
+            // Loại bỏ khoảng trắng thừa
+            $email = trim($email);
+            $password = trim($password);
+
+            // 2. Kiểm tra dữ liệu đầu vào cơ bản
+            if (empty($email) || empty($password)) {
+                $error_message = "Vui lòng nhập đầy đủ Email và Mật khẩu.";
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $error_message = "Địa chỉ Email không hợp lệ.";
+            } else {
+                // 3. Gọi Model để kiểm tra đăng nhập
+                // Giả định loginUser() trả về đối tượng người dùng (hoặc mảng) nếu thành công, false nếu thất bại
+                $user = $this->userModel->loginUser($email, $password);
+
+                if ($user) {
+                    // 4. Đăng nhập thành công: Lưu session, chuyển hướng
+                    
+                    // Khởi động session nếu chưa có
+                    if (session_status() == PHP_SESSION_NONE) {
+                        session_start();
+                    }
+
+                    // Lưu thông tin người dùng vào session
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['user_name'] = $user['name'] ?? $user['email'];
+                    $_SESSION['is_logged_in'] = true;
+                    
+                    // Thiết lập thông báo thành công và chuyển hướng đến trang chủ hoặc trang người dùng
+                    // Chú ý: Cần exit sau header để ngăn chặn code phía sau tiếp tục chạy
+                    header('Location: index.php?route=user'); 
+                    exit;
+
+                } else {
+                    // 5. Đăng nhập thất bại
+                    $error_message = "Email hoặc Mật khẩu không chính xác.";
+                }
+            }
+        }
+        
+        // 6. Nạp View: Hiển thị form đăng nhập (hoặc hiển thị lại với lỗi)
+        include_once 'pages/login.php';
+    }
+    // =========================================================
+    // HÀM XỬ LÝ ĐĂNG KÝ (REGISTER)
+    // =========================================================
+    public function register() {
+        $error_message = '';
+        $success_message = '';
+        
+        // Dữ liệu người dùng nhập (được giữ lại khi form thất bại)
+        $input_data = [
+            'name' => '',
+            'email' => '',
+            'phone_number' => '',
+            'dob' => '',
+            'gender' => ''
+        ];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            
+            // 1. Lấy và làm sạch dữ liệu
+            $input_data['name'] = trim($_POST['name'] ?? '');
+            $input_data['email'] = trim($_POST['email'] ?? '');
+            $input_data['phone_number'] = trim($_POST['phone_number'] ?? '');
+            $input_data['dob'] = trim($_POST['dob'] ?? '');
+            $input_data['gender'] = $_POST['gender'] ?? ''; // '0' (Nữ) hoặc '1' (Nam)
+            $password = $_POST['password'] ?? '';
+            
+            // 2. Kiểm tra tính hợp lệ cơ bản
+            if (empty($input_data['name']) || empty($input_data['email']) || empty($password)) {
+                $error_message = "Vui lòng nhập đầy đủ các trường bắt buộc.";
+            } elseif (!filter_var($input_data['email'], FILTER_VALIDATE_EMAIL)) {
+                $error_message = "Địa chỉ Email không hợp lệ.";
+            } elseif (strlen($password) < 6) {
+                $error_message = "Mật khẩu phải có ít nhất 6 ký tự.";
+            } elseif ($this->userModel->isEmailExist($input_data['email'])) { // Kiểm tra Email đã tồn tại
+                $error_message = "Email này đã được đăng ký. Vui lòng đăng nhập.";
+            } else {
+                
+                // 3. Hash mật khẩu và chuẩn bị dữ liệu cho Model
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                
+                $data = [
+                    'name' => $input_data['name'],
+                    'email' => $input_data['email'],
+                    'password_hash' => $hashed_password,
+                    'phone_number' => $input_data['phone_number'],
+                    'dob' => $input_data['dob'],
+                    'gender' => $input_data['gender']
+                ];
+
+                // 4. Gọi Model để lưu vào DB
+                if ($this->userModel->registerUser($data)) {
+                    $success_message = "Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.";
+                    
+                    // Chuyển hướng về trang đăng nhập sau khi đăng ký thành công
+                    header('Location: index.php?route=login&status=success'); 
+                    exit;
+                    
+                } else {
+                    $error_message = "Đã xảy ra lỗi trong quá trình đăng ký tài khoản. Vui lòng thử lại.";
+                }
+            }
+        }
+        
+        // Nạp View (Hiển thị form đăng ký với lỗi hoặc dữ liệu đã nhập)
+        include_once 'pages/register.php';
     }
 }

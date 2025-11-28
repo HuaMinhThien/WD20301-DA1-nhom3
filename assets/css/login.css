@@ -1,0 +1,188 @@
+/* ==================================== */
+/* CÁC THIẾT LẬP CHUNG TRANG ĐĂNG NHẬP */
+/* ==================================== */
+.auth-page-main {
+    padding: 150px 0 50px;
+    background-color: #f7f7f7;
+    min-height: 100vh;
+}
+
+.container-center {
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+/* ==================================== */
+/* FORM CONTAINER */
+/* ==================================== */
+.login-form-container {
+    width: 100%;
+    max-width: 500px; /* Chiều rộng cố định như trong ảnh */
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.login-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #001F3E;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+
+.login-instruction {
+    font-size: 0.95em;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* ==================================== */
+/* SOCIAL LOGIN BUTTONS (ĐÃ SỬA ĐỔI) */
+/* ==================================== */
+.social-login-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    /* --- BỔ SUNG ĐỂ CĂN GIỮA CÁC NÚT --- */
+    align-items: center; 
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%; 
+    max-width: 300px; /* GIỚI HẠN CHIỀU RỘNG ĐỂ KHÔNG BẰNG INPUT */
+    padding: 12px 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    background-color: #fff; /* Đảm bảo màu nền trắng */
+    color: #333; /* Màu chữ */
+}
+
+.social-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.social-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 15px;
+}
+
+/* Kẻ chia (Hoặc) */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #999;
+    margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #eee;
+}
+
+.divider:not(:empty)::before {
+    margin-right: .5em;
+}
+
+.divider:not(:empty)::after {
+    margin-left: .5em;
+}
+
+/* ==================================== */
+/* EMAIL/PASSWORD FORM */
+/* ==================================== */
+.login-email-label {
+    margin-top: 15px;
+    text-align: left;
+}
+
+.login-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.login-input:focus {
+    border-color: #001F3E;
+    outline: none;
+}
+
+.forgot-password {
+    text-align: right;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+}
+
+.forgot-password a {
+    color: #001F3E;
+    text-decoration: underline;
+}
+
+/* reCAPTCHA Note */
+.recaptcha-note {
+    font-size: 0.8em;
+    color: #777;
+    margin-bottom: 25px;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.recaptcha-note .policy-link {
+    color: #001F3E;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.recaptcha-note .policy-link:hover {
+    text-decoration: underline;
+}
+
+/* Nút ĐĂNG NHẬP */
+.btn-login-submit {
+    width: 100%;
+    padding: 15px;
+    background-color: #001F3E;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-login-submit:hover {
+    background-color: #333;
+}
+
+/* Link Đăng ký */
+.register-link-box {
+    margin-top: 20px;
+    font-size: 0.95em;
+}
+
+.register-link {
+    color: #001F3E;
+    font-weight: bold;
+    text-decoration: underline;
+}

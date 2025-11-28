@@ -30,7 +30,7 @@
                 
                 <div class="hd-container-icon">
                     <a href="?page=cart_history"> <div class="hd-icon"><img src="assets/images/img-icon/clock.png" alt=""></div></a>
-                    <a href="?page=user"> <div class="hd-icon"><img src="assets/images/img-icon/user.png" alt=""></div></a>
+                    <a href="?page=login"> <div class="hd-icon"><img src="assets/images/img-icon/user.png" alt=""></div></a>
                     <a href="?page=cart"> <div class="hd-icon"><img src="assets/images/img-icon/grocery-store.png" alt=""></div></a>
                 </div>
             </div>

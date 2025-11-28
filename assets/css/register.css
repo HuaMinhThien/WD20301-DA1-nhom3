@@ -1,0 +1,187 @@
+/* ==================================== */
+/* 1. LAYOUT VÀ CONTAINER CƠ BẢN */
+/* ==================================== */
+/* (Cần thiết để căn giữa form và tạo nền) */
+.auth-page-main {
+    padding: 150px 0 50px; 
+    background-color: #f7f7f7; 
+    min-height: 100vh;
+}
+
+.container-center {
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+/* Container chính của form Đăng ký */
+.register-form-container {
+    width: 100%;
+    max-width: 550px; /* Chiều rộng dành cho form Đăng ký */
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+/* Tiêu đề và hướng dẫn */
+.register-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #001F3E;
+    margin-bottom: 5px; 
+    text-transform: uppercase;
+}
+
+.register-instruction {
+    font-size: 0.95em;
+    color: #555;
+    margin-bottom: 25px; 
+}
+
+/* ==================================== */
+/* 2. INPUT FIELDS VÀ KIỂM SOÁT */
+/* ==================================== */
+
+/* Style chung cho tất cả input */
+.login-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+    height: 48px;
+}
+
+.login-input:focus {
+    border-color: #001F3E;
+    outline: none;
+}
+
+/* Trường Ngày sinh */
+.login-input[type="date"] {
+    color: #555; 
+}
+
+/* ==================================== */
+/* 3. PHẦN CHỌN GIỚI TÍNH (Điều chỉnh chính) */
+/* ==================================== */
+.gender-selection-group {
+    /* Đảm bảo container này có chiều cao, padding, và style giống như input */
+    display: flex;
+    justify-content: flex-start; /* Bắt đầu từ lề trái */
+    align-items: center; /* CĂN GIỮA NỘI DUNG THEO CHIỀU DỌC */
+    gap: 40px; /* Khoảng cách giữa Nữ và Nam */
+    
+    padding: 12px; /* Padding ngang và dọc giống hệt input */
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    height: 48px; /* Chiều cao cố định giống các input khác */
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng tổng chiều cao */
+}
+
+.gender-radio {
+    font-size: 1em;
+    color: #555;
+    cursor: pointer;
+    display: flex;
+    align-items: center; /* Căn giữa Radio và Text */
+    white-space: nowrap; 
+    /* Đảm bảo không có padding/margin thừa ở đây */
+    margin: 0;
+    padding: 0;
+}
+
+.gender-radio input[type="radio"] {
+    /* Style cho Radio Button */
+    margin-right: 8px; /* Khoảng cách giữa radio và text */
+    
+    width: 16px;
+    height: 16px;
+    
+    appearance: none; 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    outline: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    flex-shrink: 0; 
+    
+    /* Điều chỉnh vị trí cuối cùng */
+    position: relative; 
+    top: 0px; /* Đặt lại top về 0, để align-items: center xử lý */
+}
+
+.gender-radio input[type="radio"]:checked {
+    border: 5px solid #001F3E; 
+    background-color: #fff;
+}
+
+/* ==================================== */
+/* 4. ĐIỀU KHOẢN VÀ NÚT */
+/* ==================================== */
+
+/* Ghi chú Điều khoản dịch vụ */
+.terms-note {
+    font-size: 0.85em;
+    color: #777;
+    margin: 20px 0;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.terms-note .policy-link {
+    color: #001F3E;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.terms-note .policy-link:hover {
+    text-decoration: underline;
+}
+
+/* Nút Đăng ký (Tái sử dụng style nút Đăng nhập) */
+.btn-register-submit {
+    width: 100%;
+    padding: 15px;
+    background-color: #001F3E;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.btn-register-submit:hover {
+    background-color: #333;
+}
+
+/* Quay lại trang chủ */
+.back-to-home-link {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.back-to-home-link .register-link {
+    font-weight: 500;
+    text-decoration: none;
+    color: #001F3E;
+    transition: color 0.3s;
+}
+
+.back-to-home-link .register-link:hover {
+    color: #333;
+}
