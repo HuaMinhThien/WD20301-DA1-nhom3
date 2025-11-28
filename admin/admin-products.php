@@ -1,6 +1,4 @@
-
-
-    <div class="main-content">
+<div class="main-content">
         <header>
             <h1>Quản Lý Sản Phẩm</h1>
             <div class="user-wrapper">

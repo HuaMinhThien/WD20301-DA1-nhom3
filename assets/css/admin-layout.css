@@ -288,3 +288,39 @@ td .status {
     .main-content { margin-left: 70px; }
     header { left: 70px; width: calc(100% - 70px); }
 }
+
+/* --- FORM STYLES --- */
+/* Thêm style cho input[type="color"] để trông giống hình ảnh hơn */
+.admin-form input, .admin-form select, .admin-form textarea {
+    width: 100%;
+    padding: 0.7rem; /* Giữ padding mặc định cho các input khác */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+/* Sửa đổi style cho input[type="color"] */
+.admin-form input[type="color"] {
+    /* Loại bỏ padding mặc định để chỉ hiển thị ô màu */
+    padding: 0; 
+    /* Đảm bảo chiều cao hợp lý (đã set inline trong HTML, nhưng thêm ở đây để đồng bộ) */
+    height: 45px; 
+    /* Thêm căn chỉnh dọc nếu cần (tùy thuộc browser) */
+    box-sizing: border-box; 
+    cursor: pointer;
+}
+.admin-form input:focus { border-color: var(--main-color); }
+.form-group-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+/* ... (các style khác giữ nguyên) */
+
+.product-img {
+    width: 50px; /* Kích thước nhỏ cho hình ảnh đại diện */
+    height: 50px; 
+    object-fit: cover; 
+    border-radius: 4px; 
+}
+td {
+    padding: .75rem 1rem; /* Tăng padding dọc cho td để hình ảnh vừa vặn hơn */
+    font-size: .9rem;
+    color: #222;
+}
+
