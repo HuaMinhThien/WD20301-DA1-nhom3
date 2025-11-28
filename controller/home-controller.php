@@ -120,7 +120,7 @@ class HomeController {
             if ($product) {
                 // Xác định thư mục ảnh
                 if ($product['category_id'] == 1) {
-                    $imagePath .= 'ao/'; 
+                    $imagePath .= 'ao/';    
                 } elseif ($product['category_id'] == 2) {
                     $imagePath .= 'quan/'; 
                 }

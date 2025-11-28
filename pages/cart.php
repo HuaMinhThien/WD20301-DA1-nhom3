@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="assets/css/cart.css">
 
-<main class="cart-page-container">
+<main class="cart-page-container" style="margin-top: 120px;">
     <div class="breadcrumb-bar container">
         <span>Trang chủ / Giỏ hàng</span>
     </div>

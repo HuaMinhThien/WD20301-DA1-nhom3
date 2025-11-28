@@ -101,7 +101,7 @@
                         }
                     }
                     ?>
-                    </div>
+                </div>
             </div>
 
             <div class="pro-sec1-box1">
@@ -250,31 +250,46 @@
 
                 ?>
                 
-                <a href="?page=products_Details&id=<?php echo htmlspecialchars($product['id']); ?>" class="pro-section-2-boxSP">
-                    <img src="<?php echo htmlspecialchars($productImagePath . $product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>"> 
+                <div class="pro-section-2-boxSP">
+                    
+                    <a href="?page=products_Details&id=<?php echo htmlspecialchars($product['id']); ?>">
+                        <img src="<?php echo htmlspecialchars($productImagePath . $product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>"> 
 
-                    <p class="pro-sec2-boxSP-name">
-                        <?php echo htmlspecialchars($product['name']); ?>
-                    </p>
+                        <p class="pro-sec2-boxSP-name">
+                            <?php echo htmlspecialchars($product['name']); ?>
+                        </p>
+                    </a>
                     
                     <div class="pro-sec2-boxSP-miniBox">
                         <p>
                             <?php echo number_format($product['price'], 0, ',', '.'); ?> ₫
                         </p>
 
-                        <div class="pro-sec2-boxSP-icon">
-                            <img src="assets/images/img-icon/heart.png" alt="Yêu thích">
-                            <img src="assets/images/img-icon/online-shopping.png" alt="Thêm vào giỏ">
-                        </div>
+                        <form action="index.php?page=cart&action=add" method="POST" id="add-form-<?php echo $product['id']; ?>" style="display:inline;"> 
+                            
+                            <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
+                            <input type="hidden" name="quantity" value="1"> 
+                            
+                            <input type="hidden" name="color_id" value="1"> 
+                            <input type="hidden" name="size_id" value="1"> 
+                            
+                            <div class="pro-sec2-boxSP-icon">
+                                <img src="assets/images/img-icon/heart.png" alt="Yêu thích">
+                                
+                                <img 
+                                    src="assets/images/img-icon/online-shopping.png" 
+                                    alt="Thêm vào giỏ"
+                                    style="cursor: pointer;"
+                                    onclick="event.preventDefault(); document.getElementById('add-form-<?php echo $product['id']; ?>').submit();"
+                                >
+                            </div>
+                        </form>
                     </div>
-                </a>
-
-                <?php 
-                    endforeach; 
-                else: 
-                ?>
+                </div>
+                <?php endforeach; // Đóng foreach ?>
+                <?php else: // Nếu không có sản phẩm ?>
                 <p>Xin lỗi, hiện tại không có sản phẩm nào phù hợp.</p>
-                <?php endif; ?>
+                <?php endif; // Đóng if kiểm tra $products ?>
             </div>
             
         </div>

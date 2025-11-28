@@ -1,58 +1,69 @@
 <?php
 
-// Bắt đầu Session cho tất cả các trang
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Kéo header vào trước
 include_once 'includes/header.php';
 
-// 1. Lấy tên trang (page)
 $page = $_GET['page'] ?? 'home'; 
 $action = $_GET['action'] ?? null; 
 
-$controller = null; // Khởi tạo biến Controller
-$controller_file = '';
-
-// =========================================================
-// 2. LOGIC ĐỊNH TUYẾN (Routing Logic)
-// =========================================================
-$controller = null; 
-$method_to_call = $page; 
 $controller_name = '';
 $controller_file = '';
+$method_to_call = $page; 
 
-
-if ($page === 'cart') {
-    $controller_name = 'CartController';
-    $controller_file = 'controller/cart-controller.php'; 
-    $method_to_call = $action ?? 'index'; 
-
-} else {
-    $controller_name = 'HomeController';
-    $controller_file = 'controller/home-controller.php';
-    $method_to_call = $page; 
+switch ($page) {
+    case 'cart':
+    case 'remove':
+    case 'update_quantity':
+    case 'add': 
+        $controller_name = 'CartController';
+        $controller_file = 'controller/cart-controller.php'; 
+        // SỬA LỖI: Phương thức mặc định cho CartController là 'index'
+        $method_to_call = $action ?? 'index'; 
+        break;
+        
+    case 'products':
+    case 'products_Details':
+    case 'home':
+    default:
+        $controller_name = 'HomeController';
+        $controller_file = 'controller/home-controller.php';
+        
+        if ($page === 'products' || $page === 'products_Details') {
+            $method_to_call = $page;
+        } else {
+            $method_to_call = 'home';
+        }
+        break;
 }
 
+$is_file_found = file_exists($controller_file);
 
-require $controller_file; 
+if (!$is_file_found) {
+    $controller_name = 'HomeController';
+    $controller_file = 'controller/home-controller.php'; 
+    $method_to_call = 'home';
+    
+    if (!file_exists($controller_file)) {
+         die("Lỗi nghiêm trọng: Không tìm thấy file Controller mặc định: " . $controller_file);
+    }
+}
+
+require_once $controller_file; 
 $controller = new $controller_name(); 
 
-
-// 4. Gọi phương thức
 if ($controller && method_exists($controller, $method_to_call)) {
-    // Gọi phương thức tương ứng
     $controller->$method_to_call();
 } else {
-    if (!($controller instanceof HomeController)) {
-        // Nếu chưa nạp HomeController, nạp nó vào
-        require 'controller/home-controller.php'; 
-        $controller = new HomeController();
+    // Gọi home() cho HomeController và index() cho CartController
+    if ($controller_name === 'CartController') {
+        $controller->index();
+    } else {
+        $controller->home();
     }
-    $controller->home(); 
 }
 
-// Kéo footer vào
 include_once 'includes/footer.php';
 ?>
