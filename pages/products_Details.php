@@ -6,7 +6,7 @@ if (empty($product)) {
     return; 
 }
 
-// 🚨 ĐÃ SỬA: Đảm bảo $imagePath đã được Controller xác định (ví dụ: assets/images/ao/)
+// $imagePath giờ đây đã là 'assets/images/' cố định từ Controller.
 
 $product_image = $product['image'] ?? 'default-main.jpg';
 $product_image_child = $product['image_child'] ?? 'default-child.jpg'; 
@@ -52,45 +52,41 @@ $full_description = $product['description_full'] ?? $product['description'] ?? '
                 <?php endif; ?>
             </div>
             
-            <form action="index.php?page=cart&action=add" method="POST">
+            <form id="add-to-cart-form" action="index.php?page=cart&action=add" method="POST">
                 <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
-                <input type="hidden" name="action_type" value="add"> <div class="product-selection-group">
+                
+                <div class="product-selection-group">
                     <label for="color-select">Màu sắc:</label>
                     <select name="color_id" id="color-select" required>
-                        <?php 
-                        // 🚨 SỬ DỤNG $available_colors ĐƯỢC TRUYỀN TỪ CONTROLLER
-                        if (empty($available_colors)):
-                        ?>
-                            <option value="">Không có màu</option>
-                        <?php
-                        else:
-                            foreach ($available_colors as $color): 
-                        ?>
-                            <option value="<?php echo $color['id']; ?>"><?php echo htmlspecialchars($color['name']); ?></option>
-                        <?php 
-                            endforeach;
-                        endif;
-                        ?>
+                        <option value="" disabled selected>Chọn màu sắc</option>
+                        <?php if (!empty($available_colors)): ?>
+                            <?php foreach ($available_colors as $color): ?>
+                                <option value="<?php echo $color['id']; ?>">
+                                    <?php echo htmlspecialchars($color['name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <option value="" disabled>Không có màu nào</option>
+                        <?php endif; ?>
                     </select>
+                    <?php if (empty($available_colors)): ?>
+                        <small style="color: red;">Sản phẩm tạm hết hàng</small>
+                    <?php endif; ?>
                 </div>
 
                 <div class="product-selection-group">
                     <label for="size-select">Kích cỡ:</label>
                     <select name="size_id" id="size-select" required>
-                        <?php 
-                        // 🚨 SỬ DỤNG $available_sizes ĐƯỢC TRUYỀN TỪ CONTROLLER
-                        if (empty($available_sizes)):
-                        ?>
-                             <option value="">Không có size</option>
-                        <?php
-                        else:
-                            foreach ($available_sizes as $size): 
-                        ?>
-                            <option value="<?php echo $size['id']; ?>"><?php echo htmlspecialchars($size['name']); ?></option>
-                        <?php 
-                            endforeach;
-                        endif;
-                        ?>
+                        <option value="" disabled selected>Chọn kích cỡ</option>
+                        <?php if (!empty($available_sizes)): ?>
+                            <?php foreach ($available_sizes as $size): ?>
+                                <option value="<?php echo $size['id']; ?>">
+                                    <?php echo htmlspecialchars($size['name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <option value="" disabled>Không có size nào</option>
+                        <?php endif; ?>
                     </select>
                 </div>
 
@@ -98,10 +94,16 @@ $full_description = $product['description_full'] ?? $product['description'] ?? '
                     <label for="quantity-input">Số lượng:</label>
                     <input type="number" name="quantity" id="quantity-input" value="1" min="1" max="99" required style="width: 60px;">
                 </div>
-
-                <button type="submit" class="btn-add-to-cart">
-                    <i class="fa fa-shopping-cart"></i> Thêm vào Giỏ hàng
-                </button>
+                
+                <div class="action-buttons">
+                    <button type="submit" class="btn-add-to-cart">
+                        <i class="fa fa-shopping-cart"></i> Thêm vào Giỏ hàng
+                    </button>
+                    
+                    <button type="button" id="buy-now-button" class="btn-buy-now">
+                        Mua Ngay
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -125,19 +127,12 @@ $full_description = $product['description_full'] ?? $product['description'] ?? '
                 foreach ($related_products as $related_item): // Đổi tên biến tránh xung đột
                     if ($count >= 4) break; 
                     
-                    // 🚨 ĐÃ SỬA: Kiểm tra tồn tại và gán giá trị mặc định nếu không tồn tại
-                    $related_category_id = $related_item['category_id'] ?? 0; // Gán 0 nếu không có category_id
-                    
-                    $item_imagePath = 'assets/images/';
-                    if ($related_category_id == 1) { // 🚨 SỬ DỤNG BIẾN related_category_id ĐÃ KIỂM TRA
-                         $item_imagePath = 'assets/images/ao/';     
-                    } elseif ($related_category_id == 2) {
-                         $item_imagePath = 'assets/images/quan/'; 
-                    }
+                    // 🚨 ĐÃ SỬA: LOẠI BỎ TOÀN BỘ LOGIC XÁC ĐỊNH ĐƯỜNG DẪN THEO CATEGORY/ITEM
+                    // Chỉ sử dụng $imagePath cố định từ Controller.
             ?>
             
             <a href="?page=products_Details&id=<?php echo htmlspecialchars($related_item['id']); ?>" class="pro-section-2-boxSP" style="width: 23%; height: auto;">
-                <img src="<?php echo htmlspecialchars($item_imagePath . $related_item['image']); ?>" alt="<?php echo htmlspecialchars($related_item['name']); ?>"> 
+                <img src="<?php echo htmlspecialchars($imagePath . $related_item['image']); ?>" alt="<?php echo htmlspecialchars($related_item['name']); ?>"> 
 
                 <p class="pro-sec2-boxSP-name">
                     <?php echo htmlspecialchars($related_item['name']); ?>
@@ -194,5 +189,26 @@ $full_description = $product['description_full'] ?? $product['description'] ?? '
         if (thumbnails.length > 0) {
             thumbnails[0].parentElement.classList.add('active');
         }
+
+
+        document.getElementById('buy-now-button').addEventListener('click', function(event) {
+            const form = document.getElementById('add-to-cart-form');
+            
+            // 1. Kiểm tra validation của form (màu, size, quantity)
+            if (!form.reportValidity()) {
+                return; // Ngăn chặn hành động nếu form chưa hợp lệ (required fields)
+            }
+            
+            // 2. Thay đổi action của form sang trang thanh toán/giỏ hàng
+            // Giả định trang checkout của bạn là index.php?page=checkout
+            form.action = 'index.php?page=cart&action=add&redirect=checkout'; 
+            
+            // 3. Submit form (sẽ thực hiện thêm vào giỏ hàng và chuyển hướng đến trang checkout)
+            form.submit();
+        });
+        
+        // Đặt lại action của form về Add to Cart mặc định khi trang tải xong 
+        // (để nút "Thêm vào Giỏ" hoạt động đúng)
+        document.getElementById('add-to-cart-form').action = 'index.php?page=cart&action=add';
     });
 </script>

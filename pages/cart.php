@@ -156,13 +156,15 @@
                         <?php foreach ($suggested_products as $suggested_product): 
                             $s_id = htmlspecialchars($suggested_product['id']);
                             $s_name = htmlspecialchars($suggested_product['name']);
+                            
+                            // Sử dụng 'sale_price' nếu có, ngược lại dùng 'price'
                             $s_final_price = $suggested_product['sale_price'] ?? $suggested_product['price'];
                             $s_price_formatted = number_format($s_final_price, 0, ',', '.');
                             
-                            // Lấy đường dẫn ảnh
-                            $s_category_id = $suggested_product['category_id'] ?? 0;
-                            $s_folder_prefix = getFolderPrefix($s_category_id);
-                            $s_image = 'assets/images/' . $s_folder_prefix . htmlspecialchars($suggested_product['image'] ?? 'default.jpg');
+                            // 🚨 ĐÃ SỬA: BỎ LOGIC XÁC ĐỊNH FOLDER (ao/ quan/...)
+                            // Chỉ sử dụng đường dẫn cố định 'assets/images/' + tên file ảnh
+                            $s_image_file = htmlspecialchars($suggested_product['image'] ?? 'default.jpg');
+                            $s_image = 'assets/images/' . $s_image_file;
                         ?>
                             <a href="index.php?page=products_Details&id=<?php echo $s_id; ?>" class="pro-section-2-boxSP">
                                 <img src="<?php echo $s_image; ?>" alt="<?php echo $s_name; ?>"> 

@@ -46,16 +46,21 @@ class CartModel {
      * @return array
      */
     public function getCartItemsByUserId($userId) {
-        // 🚨 SỬA: Đã đổi tên bảng từ 'product_variants' sang 'product_variant'
         $query = "
             SELECT 
-                cd.id, cd.quantity, 
+                cd.id, 
+                cd.quantity, 
                 cd.productVariant_id AS variant_id,
-                p.id AS product_id, p.name, p.img AS image, p.price, p.category_id,
-                s.name AS size_name, c.name AS color_name
+                p.id AS product_id, 
+                p.name, 
+                p.img AS image, 
+                p.price, 
+                p.category_id,
+                s.name AS size_name, 
+                c.name AS color_name
             FROM " . $this->cart_detail_table . " cd
             JOIN " . $this->cart_table . " cart ON cd.cart_id = cart.id
-            JOIN product_variant pv ON cd.productVariant_id = pv.id  
+            JOIN product_variant pv ON cd.productVariant_id = pv.id
             JOIN products p ON pv.product_id = p.id
             JOIN size s ON pv.size_id = s.id
             JOIN color c ON pv.color_id = c.id

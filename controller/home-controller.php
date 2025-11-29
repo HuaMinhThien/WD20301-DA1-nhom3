@@ -108,53 +108,36 @@ class HomeController {
     }
     
     // ---
-    
-    public function products_Details() {
+
+    public function products_Details() { 
         $product_id = $_GET['id'] ?? null;
-        $product = null;
-        $related_products = [];
-        $imagePath = 'assets/images/'; // Đường dẫn mặc định (sẽ được thay đổi)
-        $available_colors = []; // KHỞI TẠO: Mảng chứa màu sắc
-        $available_sizes = [];  // KHỞI TẠO: Mảng chứa kích cỡ
-
-        if ($product_id) {
-            $product_id = (int)$product_id;
-            
-            // 1. Lấy chi tiết sản phẩm
-            $product = $this->productModel->getProductDetails($product_id); // Hàm này trả về chi tiết sản phẩm
-
-            if ($product) {
-                // 2. Xác định thư mục ảnh (sử dụng đường dẫn tuyệt đối từ thư mục gốc)
-                if ($product['category_id'] == 1) {
-                    $imagePath = 'assets/images/ao/';     
-                } elseif ($product['category_id'] == 2) {
-                    $imagePath = 'assets/images/quan/'; 
-                } else {
-                    $imagePath = 'assets/images/'; // Trường hợp khác
-                }
-                
-                // 3. Lấy tất cả Variants (Màu sắc và Kích cỡ) của sản phẩm
-                $available_variants = $this->productModel->getProductVariants($product_id);
-
-                // 4. Phân tách Colors và Sizes từ Variants (để dễ dàng hiển thị trong thẻ <select>)
-                if (!empty($available_variants)) {
-                    $colors = [];
-                    $sizes = [];
-                    foreach ($available_variants as $variant) {
-                        $colors[$variant['color_id']] = ['id' => $variant['color_id'], 'name' => $variant['color_name']];
-                        $sizes[$variant['size_id']] = ['id' => $variant['size_id'], 'name' => $variant['size_name']];
-                    }
-                    $available_colors = array_values($colors);
-                    $available_sizes = array_values($sizes);
-                }
-                
-                // 5. Lấy sản phẩm liên quan
-                $related_products = $this->productModel->getRelatedProducts($product['category_id'], $product_id);
-            }
-        }
         
-        // Truyền dữ liệu sang View (View đã có: $product, $related_products, $imagePath)
-        // BỔ SUNG: $available_colors, $available_sizes
+        // 1. Kiểm tra ID hợp lệ
+        if (!is_numeric($product_id) || $product_id <= 0) {
+            header('Location: index.php?page=products');
+            exit;
+        }
+
+        // 2. Lấy chi tiết sản phẩm
+        $product = $this->productModel->getProductById((int)$product_id);
+
+        if (empty($product)) {
+            echo "<div style='text-align: center; padding: 50px;'>Không tìm thấy sản phẩm.</div>";
+            return; 
+        }
+
+        $imagePath = 'assets/images/sanpham/';
+
+        // 3. Lấy các biến thể có sẵn
+        // Giả định hàm getAvailableVariants trả về mảng có key 'colors' và 'sizes'
+        $available_variants = $this->productModel->getAvailableVariants((int)$product_id);
+        $available_colors = $available_variants['colors'] ?? [];
+        $available_sizes = $available_variants['sizes'] ?? [];
+
+        // 4. Lấy sản phẩm liên quan
+        $related_products = $this->productModel->getRelatedProducts($product['category_id'], (int)$product_id);
+        
+        // 5. Nạp View
         include_once 'pages/products_Details.php';
     }
     public function login() {

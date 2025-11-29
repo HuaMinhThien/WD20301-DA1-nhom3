@@ -20,7 +20,8 @@ if (!empty($random_products) && is_array($random_products)) {
     $section2_products = [];
 }
 
-$imagePath = 'assets/images/'; 
+// Đường dẫn cơ sở cho tất cả ảnh sản phẩm
+$imagePath = 'assets/images/sanpham/'; 
 ?>
 
     <div class="main-container-banner">
@@ -200,30 +201,24 @@ $imagePath = 'assets/images/';
         // SỬ DỤNG $section1_products
         if (!empty($section1_products) && is_array($section1_products)): 
             foreach ($section1_products as $product): // Lặp qua 10 sản phẩm Section 1
-                // Xác định thư mục ảnh chính xác nếu cần (giữ lại logic cũ)
-                $productImagePath = $imagePath;
-                if (isset($product['category_id'])) {
-                    if ($product['category_id'] == 1) {
-                        $productImagePath .= 'ao/'; 
-                    } elseif ($product['category_id'] == 2) {
-                        $productImagePath .= 'quan/'; 
-                    } 
-                }
+                // Đã xóa logic thêm đường dẫn 'ao/' hoặc 'quan/' theo yêu cầu.
+                // Đường dẫn ảnh sản phẩm giờ chỉ là $imagePath + $product['image']
+                $productImagePath = $imagePath; 
         ?>
         
         <div class="pro-section-2-boxSP" style="width: 100%; height: auto;">
              <a href="?page=products_Details&id=<?php echo htmlspecialchars($product['id']); ?>" class="product-link">
-                <div class="product-image-wrapper">
+                 <div class="product-image-wrapper">
                     <img src="<?php echo htmlspecialchars($productImagePath . $product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>"> 
                     
-                    <div class="product-overlay">
-                        <span class="overlay-text">XEM CHI TIẾT</span>
-                    </div>
-                </div>
-                <p class="pro-sec2-boxSP-name">
-                    <?php echo htmlspecialchars($product['name']); ?>
-                </p>
-            </a>
+                     <div class="product-overlay">
+                         <span class="overlay-text">XEM CHI TIẾT</span>
+                     </div>
+                 </div>
+                 <p class="pro-sec2-boxSP-name">
+                     <?php echo htmlspecialchars($product['name']); ?>
+                 </p>
+             </a>
             
             <div class="pro-sec2-boxSP-miniBox">
                 <p>
@@ -265,30 +260,24 @@ $imagePath = 'assets/images/';
         // SỬ DỤNG $section2_products
         if (!empty($section2_products) && is_array($section2_products)): 
             foreach ($section2_products as $product): // Lặp qua 10 sản phẩm Section 2
-                // Xác định thư mục ảnh chính xác nếu cần (giữ lại logic cũ)
-                $productImagePath = $imagePath;
-                if (isset($product['category_id'])) {
-                    if ($product['category_id'] == 1) {
-                        $productImagePath .= 'ao/'; 
-                    } elseif ($product['category_id'] == 2) {
-                        $productImagePath .= 'quan/'; 
-                    } 
-                }
+                // Đã xóa logic thêm đường dẫn 'ao/' hoặc 'quan/' theo yêu cầu.
+                // Đường dẫn ảnh sản phẩm giờ chỉ là $imagePath + $product['image']
+                $productImagePath = $imagePath; 
         ?>
         
         <div class="pro-section-2-boxSP" style="width: 100%; height: auto;">
              <a href="?page=products_Details&id=<?php echo htmlspecialchars($product['id']); ?>" class="product-link">
-                <div class="product-image-wrapper">
+                 <div class="product-image-wrapper">
                     <img src="<?php echo htmlspecialchars($productImagePath . $product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>"> 
                     
-                    <div class="product-overlay">
-                        <span class="overlay-text">XEM CHI TIẾT</span>
-                    </div>
-                </div>
-                <p class="pro-sec2-boxSP-name">
-                    <?php echo htmlspecialchars($product['name']); ?>
-                </p>
-            </a>
+                     <div class="product-overlay">
+                         <span class="overlay-text">XEM CHI TIẾT</span>
+                     </div>
+                 </div>
+                 <p class="pro-sec2-boxSP-name">
+                     <?php echo htmlspecialchars($product['name']); ?>
+                 </p>
+             </a>
             
             <div class="pro-sec2-boxSP-miniBox">
                 <p>

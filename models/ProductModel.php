@@ -91,13 +91,14 @@ class ProductModel {
         return $product;
     }
 
+
     public function getAvailableVariants($product_id) {
-        // Lấy tất cả Color ID và Size ID duy nhất cho sản phẩm này
         $sql = "SELECT DISTINCT pv.color_id, c.name AS color_name, pv.size_id, s.name AS size_name
                 FROM product_variant pv
                 JOIN color c ON pv.color_id = c.id
                 JOIN size s ON pv.size_id = s.id
-                WHERE pv.product_id = :pid";
+                WHERE pv.product_id = :pid
+                AND pv.quantity > 0";
         
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':pid', $product_id, PDO::PARAM_INT);
@@ -107,14 +108,21 @@ class ProductModel {
         $colors = [];
         $sizes = [];
 
-        // Tách dữ liệu thành 2 mảng riêng biệt (loại bỏ trùng lặp)
+        // Lặp qua kết quả để nhóm màu và size duy nhất
         foreach ($variants_raw as $row) {
-            $colors[$row['color_id']] = ['id' => $row['color_id'], 'name' => $row['color_name']];
-            $sizes[$row['size_id']] = ['id' => $row['size_id'], 'name' => $row['size_name']];
+            // Sử dụng color_id làm key để đảm bảo tính duy nhất của màu
+            if (!isset($colors[$row['color_id']])) {
+                $colors[$row['color_id']] = ['id' => $row['color_id'], 'name' => $row['color_name']];
+            }
+            
+            // Sử dụng size_id làm key để đảm bảo tính duy nhất của size
+            if (!isset($sizes[$row['size_id']])) {
+                $sizes[$row['size_id']] = ['id' => $row['size_id'], 'name' => $row['size_name']];
+            }
         }
 
         return [
-            // Dùng array_values để trả về mảng index liên tục (0, 1, 2...)
+            // Chuyển mảng kết hợp thành mảng tuần tự (chỉ giữ lại giá trị)
             'colors' => array_values($colors), 
             'sizes' => array_values($sizes)
         ];
