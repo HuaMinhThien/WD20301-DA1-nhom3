@@ -38,40 +38,36 @@ class ProductModel {
         $sql = "SELECT DISTINCT 
                     p.id, 
                     p.name, 
-                    p.img AS image,           -- đúng tên cột trong DB của bạn
-                    p.price
+                    p.img AS image, 
+                    p.price,
+                    p.category_id        -- ĐÃ THÊM DÒNG NÀY
                 FROM products p
-                INNER JOIN product_variant pv ON p.id = pv.product_id
+                LEFT JOIN product_variant pv ON p.id = pv.product_id
                 WHERE 1=1";
 
         $params = [];
 
-        // 1. Lọc danh mục (hỗ trợ category_id = 12 → lọc nhiều ID)
         if (!empty($filters['category_ids'])) {
             $placeholders = str_repeat('?,', count($filters['category_ids']) - 1) . '?';
-            $sql .= " AND p.category_id IN ($placeholders)";
+            $sql .= " AND pv.category_id IN ($placeholders)";
             $params = array_merge($params, $filters['category_ids']);
         }
 
-        // 2. Giới tính
         if ($filters['gender_id'] !== null) {
-            $sql .= " AND p.gender_id = ?";
+            $sql .= " AND pv.gender_id = ?";
             $params[] = $filters['gender_id'];
         }
 
-        // 3. Màu sắc
         if ($filters['color_id'] !== null) {
             $sql .= " AND pv.color_id = ?";
             $params[] = $filters['color_id'];
         }
 
-        // 4. Kích cỡ
         if ($filters['size_id'] !== null) {
             $sql .= " AND pv.size_id = ?";
             $params[] = $filters['size_id'];
         }
 
-        // 5. Khoảng giá
         if ($filters['price_min'] !== null) {
             $sql .= " AND p.price >= ?";
             $params[] = $filters['price_min'];
@@ -81,15 +77,11 @@ class ProductModel {
             $params[] = $filters['price_max'];
         }
 
-        // 6. Chỉ lấy sản phẩm còn hàng trong kho (rất quan trọng!)
-        $sql .= " AND pv.quantity > 0";
-
-        // 7. Sắp xếp mới nhất trước
+        $sql .= " AND (pv.quantity > 0 OR pv.id IS NULL)";
         $sql .= " ORDER BY p.id DESC";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
-
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     

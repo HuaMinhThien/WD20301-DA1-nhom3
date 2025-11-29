@@ -324,21 +324,38 @@ $current_size_id     = $_GET['size_id']     ?? null;
                         </p>
 
                         <form action="index.php?page=cart&action=add&user_id=<?php echo $uid; ?>" method="POST" id="add-form-<?php echo $product['id']; ?>" style="display:inline;"> 
-                            
                             <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
                             <input type="hidden" name="quantity" value="1"> 
-                            
-                            <input type="hidden" name="color_id" value="1"> 
-                            <input type="hidden" name="size_id" value="1"> 
-                            
+
+                            <?php
+                            // Nếu là phụ kiện (category_id 3,4,5,6,7,8) → thêm trực tiếp, không cần variant
+                            $is_phu_kien = in_array($product['category_id'], [3,4,5,6,7,8]);
+                            if ($is_phu_kien) {
+                                // Phụ kiện không cần variant → dùng variant_id = 0 hoặc bỏ qua (sửa CartController tương ứng nếu cần)
+                                echo '<input type="hidden" name="variant_id" value="0">';  // Hoặc bỏ input này nếu CartController xử lý được
+                            } else {
+                                $stmt = $pdo->prepare("SELECT id FROM product_variant WHERE product_id = ? AND quantity > 0 LIMIT 1");
+                                $stmt->execute([$product['id']]);
+                                $available_variant_id = $stmt->fetchColumn();
+
+                                if ($available_variant_id) {
+                                    echo '<input type="hidden" name="variant_id" value="' . $available_variant_id . '">';
+                                }
+                            }
+                            ?>
+
                             <div class="pro-sec2-boxSP-icon">
                                 <img src="assets/images/img-icon/heart.png" alt="Yêu thích">
-                                
                                 <img 
                                     src="assets/images/img-icon/online-shopping.png" 
                                     alt="Thêm vào giỏ"
                                     style="cursor: pointer;"
-                                    onclick="event.preventDefault(); document.getElementById('add-form-<?php echo $product['id']; ?>').submit();"
+                                    <?php if ($is_phu_kien || $available_variant_id): ?>
+                                        onclick="event.preventDefault(); document.getElementById('add-form-<?php echo $product['id']; ?>').submit();"
+                                    <?php else: ?>
+                                        onclick="alert('Sản phẩm tạm hết hàng!'); return false;"
+                                        style="opacity:0.5; cursor:not-allowed;"
+                                    <?php endif; ?>
                                 >
                             </div>
                         </form>
