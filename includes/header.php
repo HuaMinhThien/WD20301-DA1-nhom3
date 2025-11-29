@@ -14,7 +14,7 @@
     <header>
         <div class="hd-container1-bg">
             <div class="hd-container1-content container-center">
-                <a href="?page=home">
+                <a href="?page=home&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>">
                     <div class="hd-logo">
                         <img src="assets/images/img-logo/logo.jpg" alt="">
                     </div>
@@ -29,16 +29,16 @@
                 </div>
                 
                 <div class="hd-container-icon">
-                    <a href="?page=cart_history"> <div class="hd-icon"><img src="assets/images/img-icon/clock.png" alt=""></div></a>
-                    <a href="?page=login"> <div class="hd-icon"><img src="assets/images/img-icon/user.png" alt=""></div></a>
-                    <a href="?page=cart"> <div class="hd-icon"><img src="assets/images/img-icon/grocery-store.png" alt=""></div></a>
+                    <a href="?page=cart_history&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>"> <div class="hd-icon"><img src="assets/images/img-icon/clock.png" alt=""></div></a>
+                    <a href="?page=login&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>"> <div class="hd-icon"><img src="assets/images/img-icon/user.png" alt=""></div></a>
+                    <a href="?page=cart&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>"> <div class="hd-icon"><img src="assets/images/img-icon/grocery-store.png" alt=""></div></a>
                 </div>
             </div>
             
         </div>
         <div class="hd-container2-bg">
             <div class="hd-container2-content container-center">
-                <a class="hd-a-cate" href="?page=home">
+                <a class="hd-a-cate" href="?page=home&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>">
                     <div class="hd-categories">
                         <p>Trang Chủ</p>
                     </div>
@@ -46,7 +46,7 @@
                 
                 <!-- Áo với menu con -->
                 <div class="hd-a-cate-wrapper">
-                    <a class="hd-a-cate" href="?page=products&category_id=1">
+                    <a class="hd-a-cate" href="?page=products&category_id=1&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>">
                         <div class="hd-categories">
                             <p>Áo</p>
                             <img style="height: 10px; width: 10px; margin-top: 5px;" src="assets/images/img-icon/down-arrow.png" alt="">
@@ -57,7 +57,7 @@
 
                 <!-- Quần với menu con -->
                 <div class="hd-a-cate-wrapper">
-                    <a class="hd-a-cate" href="?page=products&category_id=2">
+                    <a class="hd-a-cate" href="?page=products&category_id=2&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>">
                         <div class="hd-categories">
                             <p>Quần</p>
                             <img style="height: 10px; width: 10px; margin-top: 5px;" src="assets/images/img-icon/down-arrow.png" alt="">
@@ -68,7 +68,7 @@
 
                 <!-- Phụ Kiện với menu con -->
                 <div class="hd-a-cate-wrapper">
-                    <a class="hd-a-cate" href="?page=products&category_id=12">
+                    <a class="hd-a-cate" href="?page=products&category_id=12&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>">
                         <div class="hd-categories">
                             <p>Phụ Kiện</p>
                             <img style="height: 10px; width: 10px; margin-top: 5px;" src="assets/images/img-icon/down-arrow.png" alt="">
@@ -77,12 +77,12 @@
                     
                 </div>
                 
-                <a class="hd-a-cate" href="?page=sale">
+                <a class="hd-a-cate" href="?page=sale&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>">
                     <div class="hd-categories">
                         <p>Khuyến Mãi</p>
                     </div>
                 </a>
-                <a class="hd-a-cate" href="?page=shop">
+                <a class="hd-a-cate" href="?page=shop&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>">
                     <div class="hd-categories">
                         <p>Cửa Hàng</p>
                     </div>

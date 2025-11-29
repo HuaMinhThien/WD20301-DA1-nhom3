@@ -35,39 +35,61 @@ class ProductModel {
     
     // HÀM LỌC TỔNG QUÁT (Dùng PDO)
     public function getFilteredProducts($filters) {
-        $category_ids = $filters['category_ids'] ?? null; 
-        $gender_id = $filters['gender_id'] ?? null;
-        $price_min = $filters['price_min'] ?? null;
-        $price_max = $filters['price_max'] ?? null;
+        $sql = "SELECT DISTINCT 
+                    p.id, 
+                    p.name, 
+                    p.img AS image,           -- đúng tên cột trong DB của bạn
+                    p.price
+                FROM products p
+                INNER JOIN product_variant pv ON p.id = pv.product_id
+                WHERE 1=1";
 
-        $sql = "SELECT id, name, price, description, img AS image, category_id, gender_id 
-            FROM products 
-            WHERE 1=1"; 
-        
         $params = [];
 
-        if (!empty($category_ids) && is_array($category_ids)) {
-            $placeholders = implode(',', array_fill(0, count($category_ids), '?'));
-            $sql .= " AND category_id IN ($placeholders)";
-            $params = array_merge($params, $category_ids);
-        } 
-        
-        if ($gender_id !== null) {
-            $sql .= " AND gender_id = ?";
-            $params[] = $gender_id;
+        // 1. Lọc danh mục (hỗ trợ category_id = 12 → lọc nhiều ID)
+        if (!empty($filters['category_ids'])) {
+            $placeholders = str_repeat('?,', count($filters['category_ids']) - 1) . '?';
+            $sql .= " AND p.category_id IN ($placeholders)";
+            $params = array_merge($params, $filters['category_ids']);
         }
 
-        if ($price_min !== null && $price_max !== null) {
-            $sql .= " AND price >= ? AND price <= ?";
-            $params[] = $price_min;
-            $params[] = $price_max;
+        // 2. Giới tính
+        if ($filters['gender_id'] !== null) {
+            $sql .= " AND p.gender_id = ?";
+            $params[] = $filters['gender_id'];
         }
-        
-        $sql .= " ORDER BY id DESC";
+
+        // 3. Màu sắc
+        if ($filters['color_id'] !== null) {
+            $sql .= " AND pv.color_id = ?";
+            $params[] = $filters['color_id'];
+        }
+
+        // 4. Kích cỡ
+        if ($filters['size_id'] !== null) {
+            $sql .= " AND pv.size_id = ?";
+            $params[] = $filters['size_id'];
+        }
+
+        // 5. Khoảng giá
+        if ($filters['price_min'] !== null) {
+            $sql .= " AND p.price >= ?";
+            $params[] = $filters['price_min'];
+        }
+        if ($filters['price_max'] !== null) {
+            $sql .= " AND p.price <= ?";
+            $params[] = $filters['price_max'];
+        }
+
+        // 6. Chỉ lấy sản phẩm còn hàng trong kho (rất quan trọng!)
+        $sql .= " AND pv.quantity > 0";
+
+        // 7. Sắp xếp mới nhất trước
+        $sql .= " ORDER BY p.id DESC";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->execute($params); 
-        
+        $stmt->execute($params);
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     

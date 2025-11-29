@@ -22,38 +22,37 @@ class HomeController {
 
     // Trong class HomeController 
     public function products() {
-        $products = [];
-        
         // LẤY DANH MỤC VÀ GIỚI TÍNH TỪ MODEL VÀ TRUYỀN SANG VIEW
         $categories = $this->productModel->getAllCategories();
-        $genders = $this->productModel->getAllGenders();
-        
-        // Lấy Tham số Lọc từ URL
-        $category_id = $_GET['category_id'] ?? null; 
-        $gender_id = $_GET['gender_id'] ?? null; 
-        $price_range = $_GET['price_range'] ?? null; 
-        
-        // Ép kiểu sang int nếu có
+        $genders    = $this->productModel->getAllGenders();
+
+        // Lấy tất cả tham số lọc từ URL
+        $category_id   = $_GET['category_id']   ?? null;
+        $gender_id     = $_GET['gender_id']     ?? null;
+        $price_range   = $_GET['price_range']   ?? null;
+        $color_id      = $_GET['color_id']      ?? null;
+        $size_id       = $_GET['size_id']       ?? null;
+
+        // Ép kiểu int
         $category_id = $category_id ? (int)$category_id : null;
-        $gender_id = $gender_id ? (int)$gender_id : null;
-        
+        $gender_id   = $gender_id   ? (int)$gender_id   : null;
+        $color_id    = $color_id    ? (int)$color_id    : null;
+        $size_id     = $size_id     ? (int)$size_id     : null;
+
         // =========================================================
-        // LOGIC XỬ LÝ category_id = 12 và chuẩn bị filters
+        // LOGIC XỬ LÝ category_id = 12 (giữ nguyên như cũ của bạn)
         // =========================================================
         $filter_category_ids = null;
         if ($category_id === 12) {
-            // Nếu category_id là 12, đặt mảng các ID cần lọc
             $filter_category_ids = [3, 4, 5, 6, 7, 8, 9];
-        } else {
-            // Nếu không phải 12, vẫn sử dụng category_id bình thường
-            $filter_category_ids = $category_id ? [$category_id] : null;
+        } elseif ($category_id !== null) {
+            $filter_category_ids = [$category_id];
         }
         // =========================================================
 
+        // XỬ LÝ KHOẢNG GIÁ
         $price_min = null;
         $price_max = null;
-        
-        // XỬ LÝ KHOẢNG GIÁ
         if ($price_range) {
             $parts = explode('_', $price_range);
             if (count($parts) === 2) {
@@ -61,19 +60,21 @@ class HomeController {
                 $price_max = (int)$parts[1];
             }
         }
-        
-        // CHUẨN BỊ MẢNG THAM SỐ LỌC CHO MODEL
+
+        // CHUẨN BỊ MẢNG THAM SỐ LỌC CHO MODEL (bổ sung color_id và size_id)
         $filters = [
-            'category_ids' => $filter_category_ids, 
-            'gender_id' => $gender_id,
-            'price_min' => $price_min, 
-            'price_max' => $price_max 
+            'category_ids' => $filter_category_ids,
+            'gender_id'          => $gender_id,
+            'price_min'    => $price_min,
+            'price_max'    => $price_max,
+            'color_id'     => $color_id,
+            'size_id'      => $size_id
         ];
-        
-        // GỌI HÀM LỌC TỔNG QUÁT TRONG MODEL
+
+        // GỌI HÀM LỌC TỔNG QUÁT TRONG MODEL (sẽ sửa ở bước 2)
         $products = $this->productModel->getFilteredProducts($filters);
 
-        // Nạp View (pages/products.php)
+        // Truyền biến ra view (giữ nguyên như cũ)
         include_once 'pages/products.php';
     }
     
@@ -179,7 +180,7 @@ class HomeController {
                     
                     // Thiết lập thông báo thành công và chuyển hướng đến trang chủ hoặc trang người dùng
                     // Chú ý: Cần exit sau header để ngăn chặn code phía sau tiếp tục chạy
-                    header('Location: index.php?route=user'); 
+                    header('Location: index.php?page=user&user_id=' . $_SESSION['user_id']);
                     exit;
 
                 } else {

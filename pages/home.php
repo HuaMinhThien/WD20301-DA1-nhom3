@@ -130,7 +130,7 @@ $imagePath = 'assets/images/sanpham/';
 
                 <p>MUA 2 SẢN PHẨM GIẢM 50%</p>
 
-                <a href="?page=products&category_id=5" class="main-ctn2-btn">Mua ngay</a>
+                <a href="?page=products&category_id=5&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>" class="main-ctn2-btn">Mua ngay</a>
 
             </div>
 
@@ -148,7 +148,7 @@ $imagePath = 'assets/images/sanpham/';
 
                 <p>XU HƯỚNG MỚI NHẤT<br>MÙA HÈ NÀY</p>
 
-                <a href="?page=products&category_id=1&gender_id=1" class="main-ctn2-btn">Mua ngay</a>
+                <a href="?page=products&category_id=1&gender_id=1&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>" class="main-ctn2-btn">Mua ngay</a>
 
             </div>
 
@@ -166,7 +166,7 @@ $imagePath = 'assets/images/sanpham/';
 
                 <p>BỘ SƯU TẬP HÈ<br>MỚI NHẤT</p>
 
-                <a href="?page=products&category_id=1&gender_id=2" class="main-ctn2-btn">Mua ngay</a>
+                <a href="?page=products&category_id=1&gender_id=2&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>" class="main-ctn2-btn">Mua ngay</a>
 
             </div>
 
@@ -207,7 +207,7 @@ $imagePath = 'assets/images/sanpham/';
         ?>
         
         <div class="pro-section-2-boxSP" style="width: 100%; height: auto;">
-             <a href="?page=products_Details&id=<?php echo htmlspecialchars($product['id']); ?>" class="product-link">
+             <a href="?page=products_Details&id=<?php echo htmlspecialchars($product['id']); ?>&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>" class="product-link">
                  <div class="product-image-wrapper">
                     <img src="<?php echo htmlspecialchars($productImagePath . $product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>"> 
                     
@@ -266,7 +266,7 @@ $imagePath = 'assets/images/sanpham/';
         ?>
         
         <div class="pro-section-2-boxSP" style="width: 100%; height: auto;">
-             <a href="?page=products_Details&id=<?php echo htmlspecialchars($product['id']); ?>" class="product-link">
+             <a href="?page=products_Details&id=<?php echo htmlspecialchars($product['id']); ?>&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>" class="product-link">
                  <div class="product-image-wrapper">
                     <img src="<?php echo htmlspecialchars($productImagePath . $product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>"> 
                     
@@ -313,13 +313,13 @@ $imagePath = 'assets/images/sanpham/';
            <h2 class="section-title-highlight">Danh Mục Sản Phẩm</h2>
 
         <div class="div-cate-home-box">
-            <a class="cate-home-img" href="?page=products&category_id=1&gender_id=1">
+            <a class="cate-home-img" href="?page=products&category_id=1&gender_id=1&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>">
                 <img src="assets/images/img-banner/banner-cate-nam.png" alt="">
             </a>
-            <a class="cate-home-img" href="?page=products&category_id=1&gender_id=2">
+            <a class="cate-home-img" href="?page=products&category_id=1&gender_id=2&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>">
                 <img src="assets/images/img-banner/banner-cate-phukien.png" alt="">
             </a>
-            <a class="cate-home-img" href="?page=products&category_id=12">
+            <a class="cate-home-img" href="?page=products&category_id=12&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>">
                 <img src="assets/images/img-banner/banner-cate-nu.png" alt="">
             </a>
         </div>

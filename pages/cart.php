@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="assets/css/cart.css">
-
 <main class="cart-page-container" style="margin-top: 120px;">
     <div class="breadcrumb-bar container">
         <span>Trang chủ / Giỏ hàng</span>
@@ -7,6 +6,7 @@
 
     <?php 
     // Lấy thông báo thành công từ Controller (Đã unset trong Controller)
+    $current_user_id = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2;
     $success_message = $_SESSION['success_message'] ?? null;
     $error_message = $_SESSION['error_message'] ?? null;
     ?>
@@ -32,7 +32,17 @@
             $grand_total = 0;
         ?>
 
-        <h1 class="cart-title">Giỏ hàng của bạn</h1>
+        <h1 class="cart-title">
+        
+        <p style="color: #e74c3c; font-weight: bold; margin: 10px 0;">
+            Đang xem giỏ hàng của User ID: <strong><?php echo $current_user_id; ?></strong>
+            <?php if (!isset($_SESSION['user_id'])): ?>
+                (Chưa đăng nhập - đang dùng tài khoản khách ID=2)
+            <?php endif; ?>
+        </p>
+
+            Giỏ hàng của bạn
+        </h1>
         <p class="cart-subtitle">Có <?php echo $total_items; ?> sản phẩm trong giỏ hàng</p>
 
         <?php if ($total_items > 0): ?>
@@ -79,7 +89,7 @@
                                     <button class="qty-btn">+</button>
                                 </div>
                                 <div class="item-remove">
-                                    <a href="index.php?page=cart&action=remove&key=<?php echo urlencode($unique_key); ?>" title="Xóa sản phẩm">
+                                    <a href="index.php?page=cart&action=remove&key=<?php echo urlencode($unique_key); ?>&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>" title="Xóa sản phẩm">
                                         <i class="fas fa-times"></i>
                                     </a>
                                 </div>
@@ -94,7 +104,7 @@
                         <span class="total-price"><?php echo number_format($grand_total, 0, ',', '.'); ?>₫</span>
                     </div>
                     <button class="btn-checkout">THANH TOÁN</button>
-                    <a href="index.php?page=home" class="btn-continue">Tiếp tục mua hàng</a>
+                    <a href="index.php?page=home&user_id=<?php echo $this->userId ?? 2; ?>" class="btn-continue">Tiếp tục mua hàng</a>
                 </div>
             </div>
 
@@ -130,7 +140,6 @@
                     <button type="submit" class="btn-invoice">LƯU THÔNG TIN</button>
                 </form>
             </div>
-
             <div class="suggested-products-section">
                 <h2>SẢN PHẨM GỢI Ý CHO BẠN</h2>
                 <div class="pro-section-2-box2"> 
@@ -150,7 +159,7 @@
                             $s_image_file = htmlspecialchars($suggested_product['image'] ?? 'default.jpg');
                             $s_image = 'assets/images/sanpham/' . $s_image_file;
                         ?>
-                            <a href="index.php?page=products_Details&id=<?php echo $s_id; ?>" class="pro-section-2-boxSP">
+                            <a href="index.php?page=products_Details&id=<?php echo $s_id; ?>&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>" class="pro-section-2-boxSP">
                                 <img src="<?php echo $s_image; ?>" alt="<?php echo $s_name; ?>"> 
 
                                 <p class="pro-sec2-boxSP-name">
@@ -179,7 +188,7 @@
         <?php else: ?>
             <div style="text-align: center; padding: 50px 0;">
                 <p>Giỏ hàng của bạn hiện đang trống.</p>
-                <a href="index.php?page=products" class="btn-continue" style="display: inline-block; margin-top: 20px;">Quay lại mua sắm</a>
+                <a href="index.php?page=products&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2; ?>" class="btn-continue" style="display: inline-block; margin-top: 20px;">Quay lại mua sắm</a>
             </div>
         <?php endif; ?>
     </div>

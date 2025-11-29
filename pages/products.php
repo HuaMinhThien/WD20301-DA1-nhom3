@@ -1,5 +1,20 @@
 <link rel="stylesheet" href="assets/css/products.css">
 <link rel="stylesheet" href="assets/css/sale.css">
+
+<?php
+// === KẾT NỐI DATABASE ===
+require_once __DIR__ . '/../config/Database.php';
+$pdo = (new Database())->getConnection();
+
+// === LẤY USER_ID VÀ CÁC BỘ LỌC HIỆN TẠI ===
+$uid                 = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2;
+$current_category_id = $_GET['category_id'] ?? null;
+$current_gender_id   = $_GET['gender_id']   ?? null;
+$current_price_range = $_GET['price_range'] ?? null;
+$current_color_id    = $_GET['color_id']    ?? null;
+$current_size_id     = $_GET['size_id']     ?? null;
+?>
+
 <main>
     <div class="sale-bannerfull">
         <img src="assets/images/img-banner/banner-chinh-4.jpg" alt="">
@@ -13,32 +28,19 @@
                 <div class="pro-sec1-box-checkbox">
                     
                     <?php 
-                    // Lấy ID hiện tại từ URL (đã được Controller truyền từ $_GET)
-                    $current_category_id = $_GET['category_id'] ?? null; 
-                    $current_gender_id = $_GET['gender_id'] ?? null;
-                    
-                    // --- PHẦN LỌC THEO GIỚI TÍNH (SỬ DỤNG ID) ---
-                    
-                    // URL cơ bản cho lọc Giới tính (giữ lại category ID nếu có)
-                    $base_url_gender = "?page=products";
+                    $base_url_gender = "?page=products&user_id=$uid";
                     if ($current_category_id) {
                         $base_url_gender .= "&category_id=" . htmlspecialchars($current_category_id);
                     }
-                    
                     ?>
                     
                     <h3>Giới tính</h3>
                     <?php 
-                    // Lặp qua danh sách $genders được truyền từ Controller
                     if (isset($genders) && is_array($genders)) {
                         foreach ($genders as $gender) {
                             $gender_id = (int)$gender['id'];
                             $gender_name = htmlspecialchars($gender['name']);
-                            
-                            // URL đích: ?page=products[&category_id=X]&gender_id=Y
                             $gender_url = $base_url_gender . "&gender_id=" . $gender_id;
-                            
-                            // Kiểm tra trạng thái checked
                             $is_checked = ($current_gender_id == $gender_id);
                             ?>
                             <div class="pro-sec1-box-check-label">
@@ -48,9 +50,7 @@
                                     type="radio" 
                                     name="gender_filter" 
                                     value="<?php echo $gender_id; ?>"
-                                    
                                     onclick="window.location.href='<?php echo $gender_url; ?>'"
-                                    
                                     <?php echo $is_checked ? 'checked' : ''; ?>
                                 > 
                                 <label for="gender-<?php echo $gender_id; ?>"><?php echo $gender_name; ?></label> 
@@ -64,24 +64,17 @@
 
                     <h3>Loại sản phẩm</h3>
                     <?php 
-                    // URL cơ bản cho lọc Category (giữ lại gender ID nếu có)
-                    $base_url_category = "?page=products";
+                    $base_url_category = "?page=products&user_id=$uid";
                     if ($current_gender_id) {
                         $base_url_category .= "&gender_id=" . htmlspecialchars($current_gender_id);
                     }
                     
-                    // Lặp qua danh sách $categories được truyền từ Controller
                     if (isset($categories) && is_array($categories)) {
                         foreach ($categories as $category) {
                             $category_id = (int)$category['id'];
                             $category_name = htmlspecialchars($category['name']);
-                            
-                            // URL đích: ?page=products[&gender_id=Y]&category_id=X
                             $category_url = $base_url_category . "&category_id=" . $category_id;
-                            
-                            // Kiểm tra trạng thái checked
                             $is_checked = ($current_category_id == $category_id);
-                            
                             ?>
                             <div class="pro-sec1-box-check-label">
                                 <input 
@@ -90,9 +83,7 @@
                                     type="radio" 
                                     name="category_filter" 
                                     value="<?php echo $category_id; ?>"
-                                    
                                     onclick="window.location.href='<?php echo $category_url; ?>'"
-                                    
                                     <?php echo $is_checked ? 'checked' : ''; ?>
                                 > 
                                 <label for="category-<?php echo $category_id; ?>"><?php echo $category_name; ?></label> 
@@ -104,15 +95,62 @@
                 </div>
             </div>
 
+            <!-- ==================== MÀU SẮC ==================== -->
             <div class="pro-sec1-box1">
                 <h2>Màu sắc</h2>
                 <div class="pro-sec1-box-checkbox">
-                    <div class="pro-sec1-box-check-label">
-                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="den" type="checkbox"> <label for="">Đen</label> 
-                    </div>
-                    <div class="pro-sec1-box-check-label">
-                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="trang" type="checkbox"> <label for="">Trắng</label>
-                    </div> 
+
+                    <?php
+                    // FIX: Bỏ hex_code vì bảng color không có cột này
+                    $sql_colors = "SELECT id, name FROM color ORDER BY name";
+                    $stmt_colors = $pdo->query($sql_colors);
+                    $colors = $stmt_colors->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach ($colors as $color) {
+                        $color_id   = (int)$color['id'];
+                        $color_name = htmlspecialchars($color['name']);
+
+                        $base_url_color = "?page=products&user_id=$uid";
+                        if ($current_category_id) $base_url_color .= "&category_id=" . htmlspecialchars($current_category_id);
+                        if ($current_gender_id)   $base_url_color .= "&gender_id=" . htmlspecialchars($current_gender_id);
+                        if ($current_price_range) $base_url_color .= "&price_range=" . htmlspecialchars($current_price_range);
+                        if ($current_size_id)     $base_url_color .= "&size_id=" . $current_size_id;
+
+                        $color_url  = $base_url_color . "&color_id=" . $color_id;
+                        $is_checked = ($current_color_id == $color_id);
+                        ?>
+                        <div class="pro-sec1-box-check-label">
+                            <input 
+                                id="color-<?php echo $color_id; ?>" 
+                                style="width: 20px; height: 20px; border-radius: 50%;" 
+                                type="radio" 
+                                name="color_filter" 
+                                value="<?php echo $color_id; ?>"
+                                onclick="window.location.href='<?php echo $color_url; ?>'"
+                                <?php echo $is_checked ? 'checked' : ''; ?>
+                            > 
+                            <label for="color-<?php echo $color_id; ?>">
+                                <!-- FIX: Màu mặc định (bạn có thể thay bằng màu tương ứng thủ công sau) -->
+                                <span style="display:inline-block;width:15px;height:15px;background:#333;border-radius:50%;vertical-align:middle;margin-right:8px;border:1px solid #ccc;"></span>
+                                <?php echo $color_name; ?>
+                            </label> 
+                        </div>
+                        <?php
+                    }
+
+                    if ($current_color_id) {
+                        $clear_url = "?page=products&user_id=$uid";
+                        if ($current_category_id) $clear_url .= "&category_id=" . htmlspecialchars($current_category_id);
+                        if ($current_gender_id)   $clear_url .= "&gender_id=" . htmlspecialchars($current_gender_id);
+                        if ($current_price_range) $clear_url .= "&price_range=" . htmlspecialchars($current_price_range);
+                        if ($current_size_id)     $clear_url .= "&size_id=" . $current_size_id;
+                        ?>
+                        <div class="pro-sec1-box-check-label">
+                            <a href="<?php echo $clear_url; ?>" style="color:red;margin-left:30px;font-weight:bold;text-decoration:none;">× Bỏ chọn màu</a>
+                        </div>
+                        <?php
+                    }
+                    ?>
                 </div>
             </div>
 
@@ -121,13 +159,6 @@
 
                 <div class="pro-sec1-box-checkbox">
                     <?php
-                    // Lấy các tham số lọc hiện tại (đã có từ Controller)
-                    $current_category_id = $_GET['category_id'] ?? null;
-                    $current_gender_id = $_GET['gender_id'] ?? null;
-                    $current_price_range = $_GET['price_range'] ?? null; // Tham số mới
-                    
-                    // Định nghĩa các khoảng giá và giá trị (value) tương ứng
-                    // value sẽ là "min_max" (ví dụ: "100000_200000")
                     $price_ranges = [
                         ['min' => 0, 'max' => 200000, 'label' => 'Dưới 200.000đ', 'value' => '0_200000'],
                         ['min' => 200000, 'max' => 300000, 'label' => '200.000đ - 300.000đ', 'value' => '200000_300000'],
@@ -139,8 +170,7 @@
                     ];
 
                     foreach ($price_ranges as $range) {
-                        // URL cơ sở: giữ lại Category và Gender nếu có
-                        $base_url_price = "?page=products";
+                        $base_url_price = "?page=products&user_id=$uid";
                         if ($current_category_id) {
                             $base_url_price .= "&category_id=" . htmlspecialchars($current_category_id);
                         }
@@ -148,7 +178,6 @@
                             $base_url_price .= "&gender_id=" . htmlspecialchars($current_gender_id);
                         }
                         
-                        // URL đích
                         $price_url = $base_url_price . "&price_range=" . htmlspecialchars($range['value']);
                         $is_checked = ($current_price_range === $range['value']);
                         ?>
@@ -169,7 +198,7 @@
                     <?php } ?>
                     
                     <?php if ($current_price_range): 
-                        $base_url_clear = "?page=products";
+                        $base_url_clear = "?page=products&user_id=$uid";
                         if ($current_category_id) {
                             $base_url_clear .= "&category_id=" . htmlspecialchars($current_category_id);
                         }
@@ -178,28 +207,72 @@
                         }
                     ?>
                         <div class="pro-sec1-box-check-label">
-                            <a href="<?php echo $base_url_clear; ?>" style="color: red; margin-left: 30px; font-weight: bold; text-decoration: none;">&times; Bỏ lọc giá</a>
+                            <a href="<?php echo $base_url_clear; ?>" style="color: red; margin-left: 30px; font-weight: bold; text-decoration: none;">× Bỏ lọc giá</a>
                         </div>
                     <?php endif; ?>
                 </div>
             </div>
 
+            <!-- ==================== KÍCH CỠ ==================== -->
             <div class="pro-sec1-box1">
                 <h2>Kích cỡ</h2>
-
                 <div class="pro-sec1-box-checkbox">
-                    <div class="pro-sec1-box-check-label">
-                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="S" type="checkbox"> <label for="">S</label> 
-                    </div>
-                    <div class="pro-sec1-box-check-label">
-                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="M" type="checkbox"> <label for="">M</label>
-                    </div> 
-                    <div class="pro-sec1-box-check-label">
-                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="L" type="checkbox"> <label for="">L</label> 
-                    </div>
-                    <div class="pro-sec1-box-check-label">
-                        <input style="width: 20px; height: 20px; border-radius: 50%;" value="XL" type="checkbox"> <label for="">XL</label>
-                    </div>
+
+                    <?php
+                    $sql_sizes = "SELECT id, name FROM size ORDER BY 
+                                  CASE name 
+                                    WHEN 'XS' THEN 1 
+                                    WHEN 'S' THEN 2 
+                                    WHEN 'M' THEN 3 
+                                    WHEN 'L' THEN 4 
+                                    WHEN 'XL' THEN 5 
+                                    WHEN 'XXL' THEN 6 
+                                    ELSE 99 
+                                  END";
+                    $stmt_sizes = $pdo->query($sql_sizes);
+                    $sizes = $stmt_sizes->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach ($sizes as $size) {
+                        $size_id   = (int)$size['id'];
+                        $size_name = htmlspecialchars($size['name']);
+
+                        $base_url_size = "?page=products&user_id=$uid";
+                        if ($current_category_id) $base_url_size .= "&category_id=" . htmlspecialchars($current_category_id);
+                        if ($current_gender_id)   $base_url_size .= "&gender_id=" . htmlspecialchars($current_gender_id);
+                        if ($current_price_range) $base_url_size .= "&price_range=" . htmlspecialchars($current_price_range);
+                        if ($current_color_id)    $base_url_size .= "&color_id=" . $current_color_id;
+
+                        $size_url   = $base_url_size . "&size_id=" . $size_id;
+                        $is_checked = ($current_size_id == $size_id);
+                        ?>
+                        <div class="pro-sec1-box-check-label">
+                            <input 
+                                id="size-<?php echo $size_id; ?>" 
+                                style="width: 20px; height: 20px; border-radius: 50%;" 
+                                type="radio" 
+                                name="size_filter" 
+                                value="<?php echo $size_id; ?>"
+                                onclick="window.location.href='<?php echo $size_url; ?>'"
+                                <?php echo $is_checked ? 'checked' : ''; ?>
+                            > 
+                            <label for="size-<?php echo $size_id; ?>"><?php echo $size_name; ?></label> 
+                        </div>
+                        <?php
+                    }
+
+                    if ($current_size_id) {
+                        $clear_size_url = "?page=products&user_id=$uid";
+                        if ($current_category_id) $clear_size_url .= "&category_id=" . htmlspecialchars($current_category_id);
+                        if ($current_gender_id)   $clear_size_url .= "&gender_id=" . htmlspecialchars($current_gender_id);
+                        if ($current_price_range) $clear_size_url .= "&price_range=" . htmlspecialchars($current_price_range);
+                        if ($current_color_id)    $clear_size_url .= "&color_id=" . $current_color_id;
+                        ?>
+                        <div class="pro-sec1-box-check-label">
+                            <a href="<?php echo $clear_size_url; ?>" style="color:red; margin-left:30px; font-weight:bold; text-decoration:none;">× Bỏ chọn kích cỡ</a>
+                        </div>
+                        <?php
+                    }
+                    ?>
                 </div>
             </div>
         </div>
@@ -209,7 +282,6 @@
             <div class="pro-section-2-box1">
                 <p>Có 
                     <?php 
-                    // Biến $products được truyền từ Controller
                     if (isset($products) && is_array($products)) {
                         echo count($products);
                     } else {
@@ -231,20 +303,14 @@
             <div class="pro-section-2-box2">
                 <?php 
                 
-                // Kiểm tra xem $products có tồn tại và là mảng không
                 if (!empty($products) && is_array($products)): 
-                    // Lặp qua từng sản phẩm trong mảng
                     foreach ($products as $product):
-                        
-                        // SỬA: Đảm bảo đường dẫn luôn là 'assets/images/' 
-                        // Bỏ logic kiểm tra category_id và thêm subfolder 'ao/'/'quan/'
                         $productImagePath = 'assets/images/sanpham/'; 
-                        
                 ?>
                 
                 <div class="pro-section-2-boxSP">
                     
-                    <a href="?page=products_Details&id=<?php echo htmlspecialchars($product['id']); ?>">
+                    <a href="?page=products_Details&id=<?php echo htmlspecialchars($product['id']); ?>&user_id=<?php echo $uid; ?>">
                         <img src="<?php echo htmlspecialchars($productImagePath . $product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>"> 
 
                         <p class="pro-sec2-boxSP-name">
@@ -257,7 +323,7 @@
                             <?php echo number_format($product['price'], 0, ',', '.'); ?> ₫
                         </p>
 
-                        <form action="index.php?page=cart&action=add" method="POST" id="add-form-<?php echo $product['id']; ?>" style="display:inline;"> 
+                        <form action="index.php?page=cart&action=add&user_id=<?php echo $uid; ?>" method="POST" id="add-form-<?php echo $product['id']; ?>" style="display:inline;"> 
                             
                             <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
                             <input type="hidden" name="quantity" value="1"> 
