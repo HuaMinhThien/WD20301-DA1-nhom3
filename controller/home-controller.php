@@ -22,35 +22,37 @@ class HomeController {
 
     // Trong class HomeController 
     public function products() {
-        // LẤY DANH MỤC VÀ GIỚI TÍNH TỪ MODEL VÀ TRUYỀN SANG VIEW
+        // LẤY DANH MỤC VÀ GIỚI TÍNH ĐỂ HIỂN THỊ MENU
         $categories = $this->productModel->getAllCategories();
         $genders    = $this->productModel->getAllGenders();
 
-        // Lấy tất cả tham số lọc từ URL
-        $category_id   = $_GET['category_id']   ?? null;
-        $gender_id     = $_GET['gender_id']     ?? null;
-        $price_range   = $_GET['price_range']   ?? null;
-        $color_id      = $_GET['color_id']      ?? null;
-        $size_id       = $_GET['size_id']       ?? null;
+        // Lấy tham số từ URL
+        $category_id = $_GET['category_id'] ?? null;
+        $gender_id   = $_GET['gender_id']   ?? null;
+        $price_range = $_GET['price_range'] ?? null;
+        $color_id    = $_GET['color_id'] ?? null;
+        $size_id     = $_GET['size_id']     ?? null;
 
-        // Ép kiểu int
+        // Ép kiểu an toàn
         $category_id = $category_id ? (int)$category_id : null;
         $gender_id   = $gender_id   ? (int)$gender_id   : null;
         $color_id    = $color_id    ? (int)$color_id    : null;
         $size_id     = $size_id     ? (int)$size_id     : null;
 
         // =========================================================
-        // LOGIC XỬ LÝ category_id = 12 (giữ nguyên như cũ của bạn)
+        // XỬ LÝ category_id = 12 → hiện toàn bộ phụ kiện
         // =========================================================
         $filter_category_ids = null;
         if ($category_id === 12) {
-            $filter_category_ids = [3, 4, 5, 6, 7, 8, 9];
+            $filter_category_ids = [3, 4, 5, 6, 7, 8]; // Thắt lưng, Kính, Túi, Vớ, Balo, Ví
         } elseif ($category_id !== null) {
             $filter_category_ids = [$category_id];
         }
-        // =========================================================
+        // Nếu không có category_id → để null = hiện hết (tùy bạn muốn)
 
+        // =========================================================
         // XỬ LÝ KHOẢNG GIÁ
+        // =========================================================
         $price_min = null;
         $price_max = null;
         if ($price_range) {
@@ -61,20 +63,22 @@ class HomeController {
             }
         }
 
-        // CHUẨN BỊ MẢNG THAM SỐ LỌC CHO MODEL (bổ sung color_id và size_id)
+        // =========================================================
+        // GOM THAM SỐ GỬI QUA MODEL
+        // =========================================================
         $filters = [
-            'category_ids' => $filter_category_ids,
-            'gender_id'          => $gender_id,
+            'category_ids' => $filter_category_ids,   // mảng hoặc null
+            'gender_id'    => $gender_id,           // 1 = Nam, 2 = Nữ, null = cả hai
             'price_min'    => $price_min,
             'price_max'    => $price_max,
             'color_id'     => $color_id,
             'size_id'      => $size_id
         ];
 
-        // GỌI HÀM LỌC TỔNG QUÁT TRONG MODEL (sẽ sửa ở bước 2)
+        // GỌI MODEL – BÂY GIỜ DÙNG pv.category_id và pv.gender_id
         $products = $this->productModel->getFilteredProducts($filters);
 
-        // Truyền biến ra view (giữ nguyên như cũ)
+        // Truyền ra view
         include_once 'pages/products.php';
     }
     
