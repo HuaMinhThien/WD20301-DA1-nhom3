@@ -39,35 +39,50 @@ class ProductModel {
                     p.id, 
                     p.name, 
                     p.img AS image, 
-                    p.price,
-                    p.category_id        -- ĐÃ THÊM DÒNG NÀY
+                    p.price
                 FROM products p
-                LEFT JOIN product_variant pv ON p.id = pv.product_id -- note: sửa lọc sản phẩm và show ra là bảng Prod_variant 
                 WHERE 1=1";
 
         $params = [];
 
+        // === LỌC THEO DANH MỤC (dùng p.category_id thay vì pv.category_id) ===
         if (!empty($filters['category_ids'])) {
             $placeholders = str_repeat('?,', count($filters['category_ids']) - 1) . '?';
-            $sql .= " AND pv.category_id IN ($placeholders)";
+            $sql .= " AND p.category_id IN ($placeholders)";
             $params = array_merge($params, $filters['category_ids']);
         }
 
+        // === LỌC THEO GIỚI TÍNH (dùng p.gender_id, không dùng pv.gender_id) ===
         if ($filters['gender_id'] !== null) {
-            $sql .= " AND pv.gender_id = ?";
+            $sql .= " AND p.gender_id = ?";
             $params[] = $filters['gender_id'];
         }
 
-        if ($filters['color_id'] !== null) {
-            $sql .= " AND pv.color_id = ?";
-            $params[] = $filters['color_id'];
+        // === LỌC THEO MÀU + SIZE + SỐ LƯỢNG → MỚI DÙNG product_variant ===
+        if ($filters['color_id'] !== null || $filters['size_id'] !== null) {
+            $sql .= " AND EXISTS (
+                        SELECT 1 FROM product_variant pv 
+                        WHERE pv.product_id = p.id 
+                        AND (pv.quantity > 0 OR pv.quantity IS NULL)
+                    ";
+            if ($filters['color_id'] !== null) {
+                $sql .= " AND pv.color_id = ?";
+                $params[] = $filters['color_id'];
+            }
+            if ($filters['size_id'] !== null) {
+                $sql .= " AND pv.size_id = ?";
+                $params[] = $filters['size_id'];
+            }
+            $sql .= ")";
+        } else {
+            // Nếu không lọc màu/size → chỉ cần có ít nhất 1 variant còn hàng (hoặc không cần variant)
+            $sql .= " AND (
+                        EXISTS (SELECT 1 FROM product_variant pv WHERE pv.product_id = p.id AND pv.quantity > 0)
+                        OR NOT EXISTS (SELECT 1 FROM product_variant pv2 WHERE pv2.product_id = p.id)
+                    )";
         }
 
-        if ($filters['size_id'] !== null) {
-            $sql .= " AND pv.size_id = ?";
-            $params[] = $filters['size_id'];
-        }
-
+        // Lọc giá
         if ($filters['price_min'] !== null) {
             $sql .= " AND p.price >= ?";
             $params[] = $filters['price_min'];
@@ -77,7 +92,6 @@ class ProductModel {
             $params[] = $filters['price_max'];
         }
 
-        $sql .= " AND (pv.quantity > 0 OR pv.id IS NULL)";
         $sql .= " ORDER BY p.id DESC";
 
         $stmt = $this->db->prepare($sql);

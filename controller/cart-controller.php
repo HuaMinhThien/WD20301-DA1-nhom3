@@ -1,15 +1,11 @@
 <?php
-// File: /controller/CartController.php
+// File: /controller/cart-controller.php
 // ĐÃ SỬA HOÀN CHỈNH: KHÔNG CÒN LỖI HEADER + THÔNG BÁO ĐẸP + AN TOÀN
 
 $root_path = dirname(__DIR__);
 require_once($root_path . '/models/ProductModel.php');
 require_once($root_path . '/models/CartModels.php');
 require_once($root_path . '/config/Database.php');
-
-// BỎ 2 DÒNG NÀY ĐI → NGUYÊN NHÂN CHÍNH GÂY LỖI HEADER!!!
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
 
 class CartController {
     private $productModel;
@@ -53,56 +49,38 @@ class CartController {
         switch ($action) {
             case 'add':     $this->add_to_cart(); break;
             case 'remove':  $this->remove(); break;
-            case 'update':  $this->update_quantity(); break;
+            case 'update':  $this->update_quantity(); break;  // THÊM DÒNG NÀY
             default:        $this->index();
         }
     }
 
     public function add_to_cart() {
         $product_id = $_POST['product_id'] ?? null;
-        $variant_id = $_POST['variant_id'] ?? null;  // THÊM DÒNG NÀY - ƯU TIÊN VARIANT_ID NẾU CÓ
-        $color_id   = $_POST['color_id'] ?? 1;
-        $size_id    = $_POST['size_id'] ?? 1;
+        $color_id   = $_POST['color_id'] ?? null;  // Bắt buộc phải có color
+        $size_id    = $_POST['size_id'] ?? null;   // Bắt buộc phải có size
         $quantity   = max(1, (int)($_POST['quantity'] ?? 1));
 
-        if (!$product_id || !is_numeric($product_id)) {
-            $_SESSION['error_message'] = 'Lỗi: Không xác định được sản phẩm.';
-            $this->jsRedirect('products', $this->userId);
+        if (!$product_id || !is_numeric($product_id) || !$color_id || !$size_id) {
+            $_SESSION['error_message'] = 'Vui lòng chọn đầy đủ sản phẩm, màu sắc và kích thước.';
+            $this->jsRedirect('products_Details&id=' . $product_id, $this->userId);
         }
 
-        // Nếu form gửi variant_id trực tiếp (từ trang danh sách) → dùng luôn
-        if ($variant_id) {
-            // Kiểm tra tồn kho
-            $variantDetail = $this->productModel->getVariantDetails($variant_id);
-            if ($variantDetail && $variantDetail['quantity'] < $quantity) {
-                $_SESSION['error_message'] = 'Chỉ còn ' . $variantDetail['quantity'] . ' sản phẩm!';
-                $this->jsRedirect('cart', $this->userId);
-            }
-
-            $result = $this->cartModel->saveItem($this->userId, $variant_id, $quantity);
-            $_SESSION['success_message'] = $result ? 'Đã thêm vào giỏ hàng!' : 'Lỗi hệ thống!';
-            $this->jsRedirect('cart', $this->userId);
-        }
-
-        // Nếu không có variant_id → dùng color/size như cũ
+        // Tìm variant_id dựa trên color và size chọn (nghiêm ngặt)
         $variant_id = $this->productModel->getVariantId((int)$product_id, (int)$color_id, (int)$size_id);
 
         if (!$variant_id) {
-            $stmt = $this->db->prepare("SELECT id FROM product_variant WHERE product_id = ? AND quantity > 0 LIMIT 1");
-            $stmt->execute([$product_id]);
-            $variant_id = $stmt->fetchColumn();
-            if (!$variant_id) {
-                $_SESSION['error_message'] = 'Sản phẩm tạm hết hàng!';
-                $this->jsRedirect('products_Details&id=' . $product_id, $this->userId);
-            }
+            $_SESSION['error_message'] = 'Biến thể sản phẩm (màu và size) không tồn tại hoặc không khả dụng.';
+            $this->jsRedirect('products_Details&id=' . $product_id, $this->userId);
         }
 
+        // Kiểm tra stock của variant cụ thể
         $variantDetail = $this->productModel->getVariantDetails($variant_id);
-        if ($variantDetail && $variantDetail['quantity'] < $quantity) {
-            $_SESSION['error_message'] = 'Chỉ còn ' . $variantDetail['quantity'] . ' sản phẩm!';
-            $this->jsRedirect('cart', $this->userId);
+        if (!$variantDetail || $variantDetail['quantity'] < $quantity) {
+            $_SESSION['error_message'] = 'Biến thể sản phẩm tạm hết hàng hoặc số lượng không đủ (chỉ còn ' . ($variantDetail['quantity'] ?? 0) . ' sản phẩm).';
+            $this->jsRedirect('products_Details&id=' . $product_id, $this->userId);
         }
 
+        // Nếu OK, lưu vào cart
         $result = $this->cartModel->saveItem($this->userId, $variant_id, $quantity);
         $_SESSION['success_message'] = $result ? 'Đã thêm vào giỏ hàng!' : 'Lỗi hệ thống!';
 
@@ -119,12 +97,15 @@ class CartController {
         $this->jsRedirect('cart', $this->userId);
     }
 
+    // THÊM HÀM NÀY ĐỂ UPDATE QUANTITY TỪ + / -
     public function update_quantity() {
         $variant_id = $_POST['variant_id'] ?? null;
         $new_qty = (int)($_POST['quantity'] ?? 1);
         if ($variant_id && $new_qty >= 1) {
             $this->cartModel->updateQuantity($this->userId, (int)$variant_id, $new_qty);
             $_SESSION['success_message'] = 'Đã cập nhật số lượng!';
+        } else {
+            $_SESSION['error_message'] = 'Số lượng không hợp lệ!';
         }
         $this->jsRedirect('cart', $this->userId);
     }
@@ -132,8 +113,9 @@ class CartController {
     // HÀM GIÚP REDIRECT AN TOÀN 100% - KHÔNG BAO GIỜ LỖI HEADER
     private function jsRedirect($page, $user_id) {
         $url = "index.php?page={$page}&user_id={$user_id}";
+        $msg = $_SESSION['success_message'] ?? $_SESSION['error_message'] ?? 'Thao tác thành công!';
         echo "<script>
-                alert('" . ($_SESSION['success_message'] ?? $_SESSION['error_message'] ?? 'Thao tác thành công!') . "');
+                alert('{$msg}');
                 window.location.href = '{$url}';
               </script>";
         exit;

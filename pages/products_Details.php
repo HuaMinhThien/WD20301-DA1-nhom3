@@ -6,7 +6,6 @@ if (empty($product)) {
     return; 
 }
 
-// $imagePath giờ đây đã là 'assets/images/' cố định từ Controller.
 
 $product_image = $product['image'] ?? 'default-main.jpg';
 $product_image_child = $product['image_child'] ?? 'default-child.jpg'; 
@@ -57,36 +56,29 @@ $full_description = $product['description_full'] ?? $product['description'] ?? '
                 
                 <div class="product-selection-group">
                     <label for="color-select">Màu sắc:</label>
-                    <select name="color_id" id="color-select" required>
+                    <select name="color_id" id="color-select" required onchange="updateSizes()">
                         <option value="" disabled selected>Chọn màu sắc</option>
-                        <?php if (!empty($available_colors)): ?>
-                            <?php foreach ($available_colors as $color): ?>
-                                <option value="<?php echo $color['id']; ?>">
-                                    <?php echo htmlspecialchars($color['name']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <option value="" disabled>Không có màu nào</option>
-                        <?php endif; ?>
+                        <?php 
+                        if (!empty($available_colors) && is_array($available_colors)) {
+                            foreach ($available_colors as $color_id => $color_name) {
+                                echo '<option value="'.$color_id.'">'.htmlspecialchars($color_name).'</option>';
+                            }
+                        }
+                        ?>
                     </select>
-                    <?php if (empty($available_colors)): ?>
-                        <small style="color: red;">Sản phẩm tạm hết hàng</small>
-                    <?php endif; ?>
                 </div>
 
                 <div class="product-selection-group">
-                    <label for="size-select">Kích cỡ:</label>
+                    <label for="size-select">Kích thước:</label>
                     <select name="size_id" id="size-select" required>
-                        <option value="" disabled selected>Chọn kích cỡ</option>
-                        <?php if (!empty($available_sizes)): ?>
-                            <?php foreach ($available_sizes as $size): ?>
-                                <option value="<?php echo $size['id']; ?>">
-                                    <?php echo htmlspecialchars($size['name']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <option value="" disabled>Không có size nào</option>
-                        <?php endif; ?>
+                        <option value="" disabled selected>Chọn kích thước</option>
+                        <?php 
+                        if (!empty($available_sizes) && is_array($available_sizes)) {
+                            foreach ($available_sizes as $size_id => $size_name) {
+                                echo '<option value="'.$size_id.'">'.htmlspecialchars($size_name).'</option>';
+                            }
+                        }
+                        ?>
                     </select>
                 </div>
 
@@ -211,4 +203,28 @@ $full_description = $product['description_full'] ?? $product['description'] ?? '
         // (để nút "Thêm vào Giỏ" hoạt động đúng)
         document.getElementById('add-to-cart-form').action = 'index.php?page=cart&action=add';
     });
+
+    const variants = <?php echo json_encode($variants ?? []); ?>;
+
+    function updateSizes() {
+        const colorId = document.getElementById('color-select').value;
+        const sizeSelect = document.getElementById('size-select');
+        sizeSelect.innerHTML = '<option value="" disabled selected>Chọn kích thước</option>';
+
+        if (!colorId) return;
+
+        const available = variants
+            .filter(v => v.color_id == colorId && v.stock_quantity > 0)
+            .map(v => ({id: v.size_id, name: v.size_name}));
+
+        // Loại trùng
+        const unique = [...new Map(available.map(item => [item.id, item])).values()];
+
+        unique.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = s.name;
+            sizeSelect.appendChild(opt);
+        });
+    }
 </script>
