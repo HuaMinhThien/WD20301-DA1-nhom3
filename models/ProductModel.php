@@ -42,7 +42,7 @@ class ProductModel {
                     p.price,
                     p.category_id        -- ĐÃ THÊM DÒNG NÀY
                 FROM products p
-                LEFT JOIN product_variant pv ON p.id = pv.product_id
+                LEFT JOIN product_variant pv ON p.id = pv.product_id -- note: sửa lọc sản phẩm và show ra là bảng Prod_variant 
                 WHERE 1=1";
 
         $params = [];
