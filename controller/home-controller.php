@@ -145,57 +145,51 @@ class HomeController {
         include_once 'pages/products_Details.php';
     }
     public function login() {
-        // Biến để lưu thông báo lỗi
-        $error_message = '';
-        $success_message = '';
+    $error_message = '';
 
-        // 1. Kiểm tra nếu form đã được POST (Người dùng nhấn nút Đăng nhập)
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'] ?? '';
-            $password = $_POST['password'] ?? '';
-            
-            // Loại bỏ khoảng trắng thừa
-            $email = trim($email);
-            $password = trim($password);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $email = trim($_POST['email'] ?? '');
+        $password = trim($_POST['password'] ?? '');
 
-            // 2. Kiểm tra dữ liệu đầu vào cơ bản
-            if (empty($email) || empty($password)) {
-                $error_message = "Vui lòng nhập đầy đủ Email và Mật khẩu.";
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $error_message = "Địa chỉ Email không hợp lệ.";
-            } else {
-                // 3. Gọi Model để kiểm tra đăng nhập
-                // Giả định loginUser() trả về đối tượng người dùng (hoặc mảng) nếu thành công, false nếu thất bại
-                $user = $this->userModel->loginUser($email, $password);
+        if (empty($email) || empty($password)) {
+            $error_message = "Vui lòng nhập đầy đủ Email và Mật khẩu.";
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error_message = "Địa chỉ Email không hợp lệ.";
+        } else {
+            // Gọi model để đăng nhập (trả về user đầy đủ thông tin, bao gồm role)
+            $user = $this->userModel->loginUser($email, $password);
 
-                if ($user) {
-                    // 4. Đăng nhập thành công: Lưu session, chuyển hướng
-                    
-                    // Khởi động session nếu chưa có
-                    if (session_status() == PHP_SESSION_NONE) {
-                        session_start();
-                    }
-
-                    // Lưu thông tin người dùng vào session
-                    $_SESSION['user_id'] = $user['id'];
-                    $_SESSION['user_name'] = $user['name'] ?? $user['email'];
-                    $_SESSION['is_logged_in'] = true;
-                    
-                    // Thiết lập thông báo thành công và chuyển hướng đến trang chủ hoặc trang người dùng
-                    // Chú ý: Cần exit sau header để ngăn chặn code phía sau tiếp tục chạy
-                    header('Location: index.php?page=user&user_id=' . $_SESSION['user_id']);
-                    exit;
-
-                } else {
-                    // 5. Đăng nhập thất bại
-                    $error_message = "Email hoặc Mật khẩu không chính xác.";
+            if ($user) {
+                // Khởi động session
+                if (session_status() == PHP_SESSION_NONE) {
+                    session_start();
                 }
+
+                // Lưu thông tin vào session
+                $_SESSION['user_id']   = $user['id'];
+                $_SESSION['user_name'] = $user['name'] ?? $user['email'];
+                $_SESSION['user_role'] = $user['role']; // Quan trọng: lưu role
+                $_SESSION['is_logged_in'] = true;
+
+                // KIỂM TRA ROLE VÀ CHUYỂN HƯỚNG TƯƠNG ỨNG
+                if ($user['role'] === 'admin') {
+                    // Đi đến trang admin
+                    header('Location: admin-index.php');
+                    exit;
+                } else {
+                    // Người dùng thường → trang cá nhân
+                    header('Location: index.php?page=user&user_id=' . $user['id']);
+                    exit;
+                }
+            } else {
+                $error_message = "Email hoặc Mật khẩu không chính xác.";
             }
         }
-        
-        // 6. Nạp View: Hiển thị form đăng nhập (hoặc hiển thị lại với lỗi)
-        include_once 'pages/login.php';
     }
+
+    // Nếu không phải POST hoặc có lỗi → hiển thị form login
+    include_once 'pages/login.php';
+}
     // =========================================================
     // HÀM XỬ LÝ ĐĂNG KÝ (REGISTER)
     // =========================================================

@@ -1,4 +1,10 @@
 <?php 
+session_start();
+if (!isset($_SESSION['is_logged_in']) || $_SESSION['user_role'] !== 'admin') {
+    header('Location: index.php?route=login');
+    exit;
+}
+
     require 'controller/admin-controller.php';
 
     // BƯỚC 1: Lấy tham số trang TRƯỚC (Đặt dòng này lên đầu)

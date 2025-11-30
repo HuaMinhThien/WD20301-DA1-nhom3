@@ -1,0 +1,191 @@
+/* Thiết lập cơ bản */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+}
+
+.container-user {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+/* Tiêu đề trang */
+.page-title {
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+/* Bố cục chính (Flexbox) */
+.user-content-wrapper {
+    display: flex;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    min-height: 500px; /* Chiều cao tối thiểu */
+}
+
+/* Box Trái (Sidebar) */
+.user-sidebar-box {
+    flex: 0 0 280px; /* Chiều rộng cố định */
+    border-right: 1px solid #eee;
+    padding: 30px 20px;
+    background-color: #f9f9f9;
+}
+
+.sidebar-header {
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.brand-logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ff7a00; /* Màu thương hiệu */
+    margin-bottom: 5px;
+}
+
+.user-email {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Điểm tích lũy */
+.loyalty-points {
+    padding: 10px;
+    margin-bottom: 30px;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.points-label {
+    font-size: 0.9em;
+    color: black;
+    margin-bottom: 3px;
+}
+
+.points-value {
+    font-size: 1.2em;
+    color: black;
+    font-weight: bold;
+}
+
+/* Menu */
+.user-menu {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.sidebar-menu {
+    list-style: none;
+}
+
+.menu-item a {
+    display: block;
+    padding: 12px 10px; 
+    text-decoration: none;
+    color: #555;
+    font-size: 1em;
+    transition: background-color 0.2s, color 0.2s;
+    border-left: 3px solid transparent;
+}
+
+.menu-item a:hover {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+/* Trạng thái Active */
+.menu-item.active a {
+    color: #FDFACF;
+    font-weight: bold;
+    background-color: #001F3E; /* Nền nhẹ khi active */
+    border-radius: 20px;
+}
+
+/* Box Phải (Nội dung chính) */
+.user-main-content-box {
+    flex-grow: 1;
+    padding: 40px;
+}
+
+.content-title {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Form */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.input-field {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.input-field.readonly {
+    background-color: #f9f9f9;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* Form 2 cột */
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-half {
+    flex: 1;
+}
+
+.gender-options label {
+    font-weight: normal;
+    margin-right: 20px;
+    color: #333;
+}
+
+/* Nút Cập nhật */
+.btn-update {
+    background-color: #001F3E;
+    color: #fff;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 20px;
+}
+
+.btn-update:hover {
+    background-color: #333;
+}

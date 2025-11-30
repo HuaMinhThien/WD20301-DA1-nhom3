@@ -27,7 +27,7 @@
             
             <div class="divider">Hoặc</div>
             
-            <form action="index.php?route=login" method="POST" class="email-login-form">
+            <form action="index.php?page=login" method="POST" class="email-login-form">
                 <p class="login-instruction login-email-label">Đăng nhập bằng địa chỉ Email</p>
                 
                 <input 
