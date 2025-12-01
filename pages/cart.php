@@ -49,53 +49,43 @@
             <div class="cart-main-grid">
                 
                 <div class="cart-items-list">
-                    
-                    <?php foreach ($cart_items as $item): 
-                        // Lấy dữ liệu từ $cart_items (từ SQL hoặc Session)
-                        $product_id = htmlspecialchars($item['product_id'] ?? $item['id']);
-                        $item_name = htmlspecialchars($item['name']);
-                        $item_qty = (int)htmlspecialchars($item['quantity']);
-                        
-                        // Lấy Tên Size và Tên Color (Đã lấy từ JOIN trong Model hoặc lưu trong Session)
-                        $item_size = htmlspecialchars($item['size_name'] ?? $item['size'] ?? 'N/A'); 
-                        $item_color = htmlspecialchars($item['color_name'] ?? 'N/A');
-                        
-                        // Giá được lấy từ trường 'price' hoặc 'price_final'
-                        $item_price = $item['price_final'] ?? $item['price'] ?? 0; 
-                        $sub_total = $item_qty * $item_price;
+                    <?php 
+                    $grand_total = 0;
+                    foreach ($cart_items as $item): 
+                        $sub_total = $item['price'] * $item['quantity'];
                         $grand_total += $sub_total;
-                        
-                        // Tạo key duy nhất để xóa hoặc cập nhật: (Variant ID hoặc key Session)
-                        $unique_key = $item['variant_id'] ?? $product_id . '_' . $item_size . '_' . $item_color; 
-
-                        // Đường dẫn ảnh cố định
-                        $item_image = 'assets/images/sanpham/' . htmlspecialchars($item['image'] ?? 'default.jpg'); 
                     ?>
                         <div class="cart-item">
                             <div class="item-img-wrap">
-                                <img src="<?php echo $item_image; ?>" alt="<?php echo $item_name; ?>">
+                                <img src="assets/images/sanpham/<?php echo htmlspecialchars($item['image']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>">
                             </div>
                             <div class="item-details">
-                                <div class="item-name"><?php echo $item_name; ?></div>
-                                <div class="item-variant">Màu: <strong><?php echo $item_color; ?></strong> / Size: <strong><?php echo $item_size; ?></strong></div>
-                                <div class="item-price-mobile"><?php echo number_format($item_price, 0, ',', '.'); ?>₫</div>
+                                <div class="item-name"><?php echo htmlspecialchars($item['name']); ?></div>
+                                <div class="item-variant">
+                                    Màu: <strong><?php echo htmlspecialchars($item['color_name']); ?></strong> / 
+                                    Size: <strong><?php echo htmlspecialchars($item['size_name']); ?></strong>
+                                </div>
                             </div>
                             <div class="item-actions">
-                                <div class="item-price"><?php echo number_format($item_price, 0, ',', '.'); ?>₫</div>
-                                <!-- Thêm subtotal mỗi item -->
-                                <div class="item-subtotal" style="color: #e74c3c; font-weight: bold; margin-bottom: 10px;">
+                                <div class="item-price"><?php echo number_format($item['price'], 0, ',', '.'); ?>₫</div>
+                                <div class="item-subtotal">
                                     Tạm tính: <?php echo number_format($sub_total, 0, ',', '.'); ?>₫
                                 </div>
+
+                                <!-- Form cập nhật số lượng -->
                                 <form action="index.php?page=cart&action=update&user_id=<?php echo $current_user_id; ?>" method="POST" style="display:inline;">
                                     <input type="hidden" name="variant_id" value="<?php echo $item['variant_id']; ?>">
                                     <div class="item-quantity">
-                                        <button type="button" class="qty-btn" onclick="updateQty(this, -1)">-</button>
-                                        <input type="number" name="quantity" value="<?php echo $item_qty; ?>" class="qty-input" min="1" readonly>
-                                        <button type="button" class="qty-btn" onclick="updateQty(this, 1)">+</button>
+                                        <button type="button" class="qty-btn" onclick="this.parentNode.querySelector('input[name=quantity]').stepDown(); this.form.submit();">-</button>
+                                        <input type="number" name="quantity" value="<?php echo $item['quantity']; ?>" min="1" class="qty-input" readonly>
+                                        <button type="button" class="qty-btn" onclick="this.parentNode.querySelector('input[name=quantity]').stepUp(); this.form.submit();">+</button>
                                     </div>
                                 </form>
+
+                                <!-- Nút xóa -->
                                 <div class="item-remove">
-                                    <a href="index.php?page=cart&action=remove&key=<?php echo urlencode($unique_key); ?>&user_id=<?php echo $current_user_id; ?>" title="Xóa sản phẩm">
+                                    <a href="index.php?page=cart&action=remove&key=<?php echo $item['variant_id']; ?>&user_id=<?php echo $current_user_id; ?>" 
+                                    onclick="return confirm('Xóa sản phẩm này khỏi giỏ hàng?')">
                                         <i class="fas fa-times"></i>
                                     </a>
                                 </div>

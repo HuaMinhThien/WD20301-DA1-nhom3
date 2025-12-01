@@ -38,6 +38,7 @@ class CartController {
             $item['sub_total'] = $item['price'] * $item['quantity'];
             $total_amount += $item['sub_total'];
         }
+        unset($item);   // ← THÊM DÒNG NÀY LÀ HẾT BUG NGAY LẬP TỨC
 
         $suggested_products = $this->productModel->getFeaturedProductsRandom(4);
 

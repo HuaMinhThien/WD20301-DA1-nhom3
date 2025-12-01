@@ -11,7 +11,10 @@ class ProductModel {
 
     // Lấy tất cả danh mục
     public function getAllCategories() {
-        $sql = "SELECT id, name FROM category ORDER BY id ASC"; 
+        $sql = "SELECT id, name FROM category 
+                WHERE name NOT LIKE '[ẨN] %' 
+                ORDER BY id ASC"; 
+        
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -41,24 +44,26 @@ class ProductModel {
                     p.img AS image, 
                     p.price
                 FROM products p
-                WHERE 1=1";
+                JOIN category c ON p.category_id = c.id
+                WHERE 1=1
+                AND c.name NOT LIKE '[ẨN] %'";  // ← Ẩn sản phẩm nếu danh mục bị ẩn
 
         $params = [];
 
-        // === LỌC THEO DANH MỤC (dùng p.category_id thay vì pv.category_id) ===
+        // === LỌC THEO DANH MỤC ===
         if (!empty($filters['category_ids'])) {
             $placeholders = str_repeat('?,', count($filters['category_ids']) - 1) . '?';
             $sql .= " AND p.category_id IN ($placeholders)";
             $params = array_merge($params, $filters['category_ids']);
         }
 
-        // === LỌC THEO GIỚI TÍNH (dùng p.gender_id, không dùng pv.gender_id) ===
+        // === LỌC THEO GIỚI TÍNH ===
         if ($filters['gender_id'] !== null) {
             $sql .= " AND p.gender_id = ?";
             $params[] = $filters['gender_id'];
         }
 
-        // === LỌC THEO MÀU + SIZE + SỐ LƯỢNG → MỚI DÙNG product_variant ===
+        // === LỌC THEO MÀU + SIZE ===
         if ($filters['color_id'] !== null || $filters['size_id'] !== null) {
             $sql .= " AND EXISTS (
                         SELECT 1 FROM product_variant pv 
@@ -75,7 +80,6 @@ class ProductModel {
             }
             $sql .= ")";
         } else {
-            // Nếu không lọc màu/size → chỉ cần có ít nhất 1 variant còn hàng (hoặc không cần variant)
             $sql .= " AND (
                         EXISTS (SELECT 1 FROM product_variant pv WHERE pv.product_id = p.id AND pv.quantity > 0)
                         OR NOT EXISTS (SELECT 1 FROM product_variant pv2 WHERE pv2.product_id = p.id)
