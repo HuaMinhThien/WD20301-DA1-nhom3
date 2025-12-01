@@ -6,12 +6,14 @@ $root_path = dirname(__DIR__);
 require_once($root_path . '/models/ProductModel.php');
 require_once($root_path . '/models/CartModels.php');
 require_once($root_path . '/config/Database.php');
+require_once($root_path . '/models/BillModel.php');   
 
 class CartController {
     private $productModel;
     private $cartModel;
     private $db;
     private $userId;
+    private $billModel;
 
     public function __construct() {
         if (session_status() == PHP_SESSION_NONE) {
@@ -21,6 +23,8 @@ class CartController {
         $this->db = (new Database())->getConnection();
         $this->productModel = new ProductModel($this->db);
         $this->cartModel = new CartModel($this->db);
+        $this->billModel    = new BillModel($this->db);
+
 
         $this->userId = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2;
         $this->userId = (int)$this->userId;
@@ -50,7 +54,8 @@ class CartController {
         switch ($action) {
             case 'add':     $this->add_to_cart(); break;
             case 'remove':  $this->remove(); break;
-            case 'update':  $this->update_quantity(); break;  // THÊM DÒNG NÀY
+            case 'update':  $this->update_quantity(); break;  
+            case 'checkout':      $this->checkout(); break;
             default:        $this->index();
         }
     }
@@ -120,5 +125,22 @@ class CartController {
                 window.location.href = '{$url}';
               </script>";
         exit;
+    }
+    public function checkout() {
+        $userId = $_SESSION['user_id'] ?? $_GET['user_id'] ?? 2; // Ưu tiên session
+        $totalPay = $_POST['total_pay'] ?? 0; // Lấy từ form (tính lại để an toàn)
+
+        // Giả định form gửi thêm thông tin giao hàng (address, phone, email...)
+        // Bạn có thể thêm xử lý lưu vào bảng address nếu cần
+
+        $billId = $this->billModel->createBillFromCart($userId, null, $totalPay, 'pending');
+
+        if ($billId) {
+            $_SESSION['success_message'] = 'Đơn hàng đã được đặt thành công!';
+            $this->jsRedirect('cart_history', $userId);
+        } else {
+            $_SESSION['error_message'] = 'Lỗi khi đặt hàng!';
+            $this->jsRedirect('thanhtoan', $userId);
+        }
     }
 }

@@ -16,14 +16,14 @@ $current_size_id     = $_GET['size_id']     ?? null;
 ?>
 
 <main>
-    <div class="sale-bannerfull">
+    <div class="sale-bannerfull" style="padding-top: 100px;" >
         <img src="assets/images/img-banner/banner-chinh-4.jpg" alt="">
     </div>
 
-    <div class="products-container-1 container-center">
+    <div class="products-container-1 container-center" style="padding-top: 100px;">
         <div class="pro-section-1">
             
-            <div class="pro-sec1-box1">
+            <div class="pro-sec1-box1" >
                 <h2>Danh mục</h2>
                 <div class="pro-sec1-box-checkbox">
                     

@@ -99,13 +99,12 @@
                         <span class="label">Tổng tiền:</span>
                         <span class="total-price"><?php echo number_format($grand_total, 0, ',', '.'); ?>₫</span>
                     </div>
-                    <button class="btn-checkout">THANH TOÁN</button>
+                    <a href="index.php?page=thanhtoan&user_id=<?php echo $current_user_id; ?>" class="btn-checkout">THANH TOÁN</a>
                     <a href="index.php?page=home&user_id=<?php echo $current_user_id; ?>" class="btn-continue">Tiếp tục mua hàng</a>
                 </div>
             </div>
 
-            <!-- Phần còn lại giữ nguyên (notes, policies, invoice, suggested products) -->
-            <!-- ... (copy phần còn lại từ code cũ của bạn) ... -->
+            
 
         <?php else: ?>
             <div style="text-align: center; padding: 50px 0;">

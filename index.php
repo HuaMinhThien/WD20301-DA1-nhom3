@@ -1,44 +1,49 @@
 <?php
-// File: index.php (ĐÃ SỬA)
+// File: index.php - PHIÊN BẢN HOÀN CHỈNH & AN TOÀN
 
-if (session_status() == PHP_SESSION_NONE) {
+// 1. Bắt đầu session TRƯỚC MỌI OUTPUT
+if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-include_once 'includes/header.php';
+// 2. QUAN TRỌNG: KHÔNG ĐƯỢC INCLUDE HEADER NGAY ĐÂY!!!
+// → Để dành cho controller tự include khi cần
 
-$page = $_GET['page'] ?? 'home'; 
-$action = $_GET['action'] ?? null; 
+$page = $_GET['page'] ?? 'home';
+$action = $_GET['action'] ?? null;
 
 $controller_name = '';
 $controller_file = '';
-$method_to_call = $page; 
+$method_to_call = $page;
 
 switch ($page) {
-    // --- 1. ĐỊNH TUYẾN CHO CARTCONTROLLER ---
+    // Cart
     case 'cart':
+    case 'add_to_cart':
+    case 'remove_from_cart':
+    case 'update_cart':
         $controller_name = 'CartController';
-        $controller_file = 'controller/cart-controller.php'; 
-        // 🚨 SỬA: Gọi handleRequest() thay vì gọi method trực tiếp
-        $method_to_call = 'handleRequest';
+        $controller_file = 'controller/cart-controller.php';
+        $method_to_call = 'handleRequest'; // CartController sẽ tự phân tuyến
         break;
-        
-    // --- 2. ĐỊNH TUYẾN CHO HOMECONTROLLER ---
+
+    // HomeController - các trang thông thường
     case 'products':
     case 'products_Details':
     case 'home':
-    case 'login':       
-    case 'register':    
-    case 'user':        
-    case 'cart_history': 
-    case 'sale':        
-    case 'shop':        
+    case 'login':
+    case 'register':
+    case 'user':
+    case 'cart_history':
+    case 'sale':
+    case 'shop':
+    case 'thanhtoan':
         $controller_name = 'HomeController';
         $controller_file = 'controller/home-controller.php';
-        $method_to_call = $page; 
+        $method_to_call = $page;
         break;
-        
-    // --- 3. XỬ LÝ TRANG KHÔNG TỒN TẠI (404) ---
+
+    // Trang mặc định
     default:
         $controller_name = 'HomeController';
         $controller_file = 'controller/home-controller.php';
@@ -46,37 +51,55 @@ switch ($page) {
         break;
 }
 
-$is_file_found = file_exists($controller_file);
-
-if (!$is_file_found) {
-    $controller_name = 'HomeController';
-    $controller_file = 'controller/home-controller.php'; 
+// Kiểm tra file controller tồn tại
+if (!file_exists($controller_file)) {
+    // Nếu không tìm thấy → fallback về home
+    $controller_file = 'controller/home-controller.php';
     $method_to_call = 'home';
-    
-    if (!file_exists($controller_file)) {
-         die("Lỗi nghiêm trọng: Không tìm thấy file Controller mặc định: " . $controller_file);
-    }
 }
 
-require_once $controller_file; 
+require_once $controller_file;
 
-// 🚨 SỬA: Kiểm tra class tồn tại trước khi khởi tạo
+// Kiểm tra class tồn tại
 if (!class_exists($controller_name)) {
-    die("Lỗi: Không tìm thấy class $controller_name");
+    die("Lỗi hệ thống: Không tìm thấy controller $controller_name");
 }
 
-$controller = new $controller_name(); 
+$controller = new $controller_name();
 
-if ($controller && method_exists($controller, $method_to_call)) {
+// Kiểm tra method tồn tại
+if (!method_exists($controller, $method_to_call)) {
+    // Nếu method không tồn tại → vẫn gọi home
+    $controller = new HomeController();
+    $controller->home();
+    exit;
+}
+
+// === QUAN TRỌNG: GỌI CONTROLLER TRƯỚC KHI INCLUDE HEADER/FOOTER ===
+ob_start(); // Bật buffer để phòng trường hợp còn sót header()
+
+try {
     $controller->$method_to_call();
-} else {
-    // 🚨 SỬA: Xử lý lỗi tốt hơn
-    echo "<div style='text-align: center; padding: 50px;'>";
-    echo "<h3>Lỗi 404 - Trang không tồn tại</h3>";
-    echo "<p>Phương thức <strong>$method_to_call</strong> không tồn tại trong <strong>$controller_name</strong></p>";
-    echo "<a href='index.php'>Quay về trang chủ</a>";
-    echo "</div>";
+} catch (Exception $e) {
+    echo "<h3>Lỗi hệ thống</h3>";
+    echo "<p>" . htmlspecialchars($e->getMessage()) . "</p>";
 }
 
-include_once 'includes/footer.php';
-?>
+// Nếu controller đã redirect rồi → script đã dừng ở exit() → không chạy tới đây
+// Nếu chưa redirect → nghĩa là cần hiển thị giao diện → lúc này mới include header/footer
+
+// Kiểm tra xem có output nào chưa (từ controller)
+if (!headers_sent()) {
+    // Chỉ include header/footer nếu chưa có output nào bị gửi
+    include_once 'includes/header.php';
+    
+    // Nếu controller chưa in gì (ví dụ chỉ redirect) → in nội dung từ buffer
+    if (ob_get_length() > 0) {
+        ob_end_flush();
+    }
+    
+    include_once 'includes/footer.php';
+} else {
+    // Nếu header đã bị gửi (do lỗi đâu đó) → chỉ flush buffer
+    ob_end_flush();
+}

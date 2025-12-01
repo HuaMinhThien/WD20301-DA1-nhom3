@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 01, 2025 lúc 11:29 AM
+-- Thời gian đã tạo: Th12 01, 2025 lúc 12:17 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -116,9 +116,9 @@ CREATE TABLE `cartdetail` (
 --
 
 INSERT INTO `cartdetail` (`id`, `cart_id`, `productVariant_id`, `quantity`) VALUES
-(8, 1, 45, 1),
-(15, 2, 52, 1),
-(17, 2, 55, 1);
+(8, 1, 45, 2),
+(22, 2, 211, 1),
+(25, 2, 514, 1);
 
 -- --------------------------------------------------------
 
@@ -1474,7 +1474,7 @@ ALTER TABLE `cart`
 -- AUTO_INCREMENT cho bảng `cartdetail`
 --
 ALTER TABLE `cartdetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT cho bảng `category`

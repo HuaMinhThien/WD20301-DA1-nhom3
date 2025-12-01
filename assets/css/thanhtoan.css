@@ -1,0 +1,314 @@
+/* Thiết lập chung cho phần main */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4; /* Màu nền nhẹ cho toàn bộ trang */
+    color: #333;
+}
+
+.checkout-page-main {
+    padding: 40px 0;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.checkout-container {
+    display: flex;
+    gap: 30px;
+}
+
+/* Các tiêu đề chung */
+.section-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* --- Cột Trái --- */
+.checkout-left {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* 1. Thông tin giao hàng */
+.shipping-info,
+.shipping-method,
+.payment-method {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tab-header {
+    margin-bottom: 20px;
+    font-size: 0.9em;
+}
+
+.tab-link {
+    color: #999;
+}
+
+.tab-link.active {
+    color: #333;
+    font-weight: bold;
+}
+
+.shipping-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box; /* Quan trọng để padding không làm tăng chiều rộng */
+    font-size: 1em;
+}
+
+/* 2. Phương thức giao hàng */
+.shipping-method .method-box {
+    text-align: center;
+    padding: 40px 20px;
+    border: 2px dashed #ddd;
+    border-radius: 5px;
+    color: #999;
+}
+
+.shipping-method .placeholder-icon {
+    font-size: 3em;
+    margin-bottom: 10px;
+}
+
+/* 3. Phương thức thanh toán */
+.payment-options {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    font-size: 0.95em;
+}
+
+.payment-option:last-child {
+    border-bottom: none;
+}
+
+.payment-option.active {
+    background-color: #f7f7f7;
+    border-left: 3px solid #000; /* Đường viền đen nổi bật */
+}
+
+/* Icon placeholder cho phương thức thanh toán */
+.icon-placeholder {
+    width: 25px;
+    height: 25px;
+    margin-right: 15px;
+    background-color: #ccc; /* Màu nền chung cho icon placeholder */
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.icon-placeholder.cod { background-color: #6a6a6a; } /* COD: Giao hàng */
+.icon-placeholder.visa { background-color: #2a3a8f; } /* VISA: Xanh */
+.icon-placeholder.momo { background-color: #b0006f; } /* MOMO: Hồng */
+.icon-placeholder.bank { background-color: #007bff; } /* BANK: Xanh dương */
+.icon-placeholder.vnpay { background-color: #0081c7; } /* VNPAY: Xanh */
+.icon-placeholder.applepay { background-color: #000; } /* Apple Pay: Đen */
+
+
+/* --- Cột Phải --- */
+.checkout-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 1. Sản phẩm */
+.product-summary {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.product-item {
+    display: grid;
+    grid-template-areas:
+        "thumb details details"
+        "thumb price quantity";
+    grid-template-columns: 80px 1fr 100px;
+    gap: 10px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.product-thumb {
+    grid-area: thumb;
+    width: 80px;
+    height: 100px;
+    background-color: #eee; /* Placeholder hình ảnh */
+    border-radius: 4px;
+    overflow: hidden;
+    text-align: center;
+    line-height: 100px;
+    color: #666;
+    font-size: 0.8em;
+}
+
+.product-details {
+    grid-area: details;
+    line-height: 1.4;
+}
+
+.product-name {
+    font-weight: bold;
+    margin: 0;
+    font-size: 0.95em;
+}
+
+.product-sku {
+    color: #999;
+    margin: 0;
+    font-size: 0.85em;
+}
+
+.product-price {
+    grid-area: price;
+    align-self: center;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.product-quantity {
+    grid-area: quantity;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.product-quantity button,
+.product-quantity input {
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    padding: 0;
+}
+
+.product-quantity input {
+    width: 40px;
+    border-left: none;
+    border-right: none;
+}
+
+.product-quantity button {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* 2. Mã khuyến mãi */
+.coupon-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.coupon-input {
+    display: flex;
+    gap: 5px;
+}
+
+.coupon-input input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.apply-btn {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+
+.apply-btn:hover {
+    background-color: #555;
+}
+
+/* 3. Tóm tắt đơn hàng */
+.order-summary {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.summary-details {
+    margin-bottom: 20px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 0.95em;
+}
+
+.summary-row:not(.total) {
+    color: #666;
+}
+
+.summary-row.total {
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+    padding-top: 15px;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #333;
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.checkout-btn:hover {
+    background-color: #555;
+}
+
+/* Media Queries cho thiết bị nhỏ hơn (tùy chọn) */
+@media (max-width: 992px) {
+    .checkout-container {
+        flex-direction: column;
+    }
+}
+
+

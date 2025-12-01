@@ -11,6 +11,16 @@
                     <?php echo htmlspecialchars($error_message); ?>
                 </div>
             <?php endif; ?>
+
+            <!-- Giữ lại email đã nhập khi bị lỗi -->
+            <input 
+                type="email" 
+                name="email" 
+                placeholder="Email..." 
+                required 
+                class="login-input"
+                value="<?php echo htmlspecialchars($old_email); ?>"
+            >
             
             <p class="login-instruction">Quý khách vui lòng chọn phương thức đăng nhập</p>
             

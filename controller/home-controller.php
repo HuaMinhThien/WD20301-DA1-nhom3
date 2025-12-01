@@ -3,12 +3,16 @@
 
 require_once('models/ProductModel.php'); 
 require_once('models/UserModel.php');
-require_once('config/Database.php'); // Cần nạp để lấy kết nối DB
+require_once('models/CartModels.php'); 
+require_once('models/BillModel.php');  
+require_once('config/Database.php');
 
 class HomeController {
     private $productModel;
     private $userModel;
-    private $db; // Thuộc tính để lưu kết nối DB
+    private $db;
+    private $cartModel;
+    private $billModel;
 
     public function __construct() {
         // 1. Khởi tạo kết nối DB (Sửa lỗi: Phải khởi tạo kết nối trước)
@@ -18,11 +22,11 @@ class HomeController {
         // 2. Khởi tạo đối tượng Model (Sửa lỗi: Truyền kết nối DB vào)
         $this->productModel = new ProductModel($this->db); 
         $this->userModel = new UserModel($this->db);
+        $this->cartModel = new CartModel($this->db); 
+        $this->billModel = new BillModel($this->db); 
     }
 
-    // Trong class HomeController 
     public function products() {
-        // LẤY DANH MỤC VÀ GIỚI TÍNH ĐỂ HIỂN THỊ MENU
         $categories = $this->productModel->getAllCategories();
         $genders    = $this->productModel->getAllGenders();
 
@@ -81,9 +85,7 @@ class HomeController {
         // Truyền ra view
         include_once 'pages/products.php';
     }
-    
-    // ---
-    
+        
     public function home() {
         // Lấy 20 sản phẩm ngẫu nhiên để hiển thị ở View home
         $random_products = $this->productModel->getFeaturedProductsRandom(20); 
@@ -92,9 +94,6 @@ class HomeController {
         include_once 'pages/home.php';
     }
     
-    
-    // ---
-    
     public function user() {
         include_once 'pages/user.php';
     }
@@ -102,8 +101,23 @@ class HomeController {
         // Giả định CartController xử lý logic giỏ hàng
         include_once 'pages/cart.php';
     }
+
+    public function thanhtoan() {
+        $userId = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2;
+        $cart_items = $this->cartModel->getCartItemsByUserId($userId);
+
+        $grand_total = 0;
+        foreach ($cart_items as $item) {
+            $grand_total += $item['price'] * $item['quantity'];
+        }
+
+        include_once 'pages/thanhtoan.php'; 
+    }
     public function cart_history() {
-        include_once 'pages/cart-history.php';
+        $userId = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2;
+        $bills = $this->billModel->getBillsByUserId($userId); 
+
+        include_once 'pages/cart-history.php'; 
     }
     public function sale() {
         include_once 'pages/sale.php';
@@ -111,8 +125,6 @@ class HomeController {
     public function shop() {
         include_once 'pages/shop.php';
     }
-    
-    // ---
 
     public function products_Details() {
         $id = $_GET['id'] ?? null;
@@ -145,54 +157,62 @@ class HomeController {
         include_once 'pages/products_Details.php';
     }
     public function login() {
-    $error_message = '';
+        // ============ CHỈ XỬ LÝ KHI NGƯỜI DÙNG NHẤN ĐĂNG NHẬP (POST) ============
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email    = trim($_POST['email'] ?? '');
+            $password = trim($_POST['password'] ?? '');
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $email = trim($_POST['email'] ?? '');
-        $password = trim($_POST['password'] ?? '');
+            // Kiểm tra đầu vào cơ bản
+            if (empty($email) || empty($password)) {
+                $_SESSION['login_error'] = 'Vui lòng nhập đầy đủ Email và Mật khẩu.';
+                header('Location: index.php?page=login');
+                exit;
+            }
 
-        if (empty($email) || empty($password)) {
-            $error_message = "Vui lòng nhập đầy đủ Email và Mật khẩu.";
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error_message = "Địa chỉ Email không hợp lệ.";
-        } else {
-            // Gọi model để đăng nhập (trả về user đầy đủ thông tin, bao gồm role)
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $_SESSION['login_error'] = 'Địa chỉ Email không hợp lệ.';
+                header('Location: index.php?page=login');
+                exit;
+            }
+
+            // Gọi model để kiểm tra đăng nhập
             $user = $this->userModel->loginUser($email, $password);
 
             if ($user) {
-                // Khởi động session
-                if (session_status() == PHP_SESSION_NONE) {
-                    session_start();
-                }
-
-                // Lưu thông tin vào session
-                $_SESSION['user_id']   = $user['id'];
-                $_SESSION['user_name'] = $user['name'] ?? $user['email'];
-                $_SESSION['user_role'] = $user['role']; // Quan trọng: lưu role
+                // Đăng nhập thành công → lưu session
+                session_start();
+                $_SESSION['user_id']      = $user['id'];
+                $_SESSION['user_name']    = $user['name'] ?? $user['email'];
+                $_SESSION['user_role']    = $user['role'];
                 $_SESSION['is_logged_in'] = true;
 
-                // KIỂM TRA ROLE VÀ CHUYỂN HƯỚNG TƯƠNG ỨNG
+                // Chuyển hướng theo role
                 if ($user['role'] === 'admin') {
-                    // Đi đến trang admin
                     header('Location: admin-index.php');
-                    exit;
                 } else {
-                    // Người dùng thường → trang cá nhân
                     header('Location: index.php?page=user&user_id=' . $user['id']);
-                    exit;
                 }
+                exit;
             } else {
-                $error_message = "Email hoặc Mật khẩu không chính xác.";
+                // Sai tài khoản/mật khẩu
+                $_SESSION['login_error'] = 'Email hoặc Mật khẩu không chính xác.';
+                header('Location: index.php?page=login');
+                exit;
             }
         }
+
+        // ============ CHỈ CHẠY KHI TRUY CẬP TRỰC TIẾP TRANG ĐĂNG NHẬP (GET) ============
+        // Lấy lỗi từ session (nếu có) rồi xóa đi
+        $error_message = $_SESSION['login_error'] ?? '';
+        unset($_SESSION['login_error']);
+
+        // Giữ lại email đã nhập (nếu có lỗi)
+        $old_email = $_POST['email'] ?? '';
+
+        // Bây giờ mới được include view (vì không có redirect nào nữa)
+        include_once 'pages/login.php';
     }
 
-    // Nếu không phải POST hoặc có lỗi → hiển thị form login
-    include_once 'pages/login.php';
-}
-    // =========================================================
-    // HÀM XỬ LÝ ĐĂNG KÝ (REGISTER)
-    // =========================================================
 
     public function register() {
         $error_message = '';
