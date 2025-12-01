@@ -47,7 +47,7 @@
                             name="gender" 
                             value="0" 
                             required 
-                            <?php echo (isset($input_data['gender']) && $input_data['gender'] === '0') ? 'checked' : ''; ?>
+                            <?php echo (isset($input_data['gender']) && $input_data['gender'] == '0') ? 'checked' : ''; ?>
                         > Nữ
                     </label>
                     <label class="gender-radio" style="margin-left: 25px;">
@@ -56,7 +56,7 @@
                             name="gender" 
                             value="1" 
                             required
-                            <?php echo (isset($input_data['gender']) && $input_data['gender'] === '1') ? 'checked' : ''; ?>
+                            <?php echo (isset($input_data['gender']) && $input_data['gender'] == '1') ? 'checked' : ''; ?>
                         > Nam
                     </label>
                     

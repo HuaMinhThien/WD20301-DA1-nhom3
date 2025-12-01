@@ -14,7 +14,7 @@
                 
             <p class="login-instruction">Quý khách vui lòng chọn phương thức đăng nhập</p>
             
-<form action="index.php?page=login" method="POST" class="email-login-form">
+            <form action="index.php?page=login" method="POST" class="email-login-form">
                 <p class="login-instruction login-email-label">Đăng nhập bằng địa chỉ Email</p>
                 
                 <input 
@@ -37,9 +37,11 @@
                     <a href="#">Quên mật khẩu</a>
                 </p>
                 
+                <!-- DI CHUYỂN NÚT SUBMIT VÀO ĐÂY (BÊN TRONG FORM) -->
+                <button type="submit" class="btn-login-submit">ĐĂNG NHẬP</button>
             </form>
 
-                <div class="divider">Hoặc</div>
+            <div class="divider">Hoặc</div>
 
             <div class="social-login-group">
                 <button class="social-btn social-google" type="button">
@@ -52,17 +54,13 @@
                 </button>
             </div>
             
-            
-
             <p class="recaptcha-note">
-                    Trang Web này được bảo vệ với reCAPTCHA <br>
-                    thường xuyên và tuân thủ <a href="#" class="policy-link">Chính sách bảo mật</a> và <a href="#" class="policy-link">Điều khoản dịch vụ</a> của Google được áp dụng.
-                </p>
-            
-            <button type="submit" class="btn-login-submit">ĐĂNG NHẬP</button>
+                Trang Web này được bảo vệ với reCAPTCHA <br>
+                thường xuyên và tuân thủ <a href="#" class="policy-link">Chính sách bảo mật</a> và <a href="#" class="policy-link">Điều khoản dịch vụ</a> của Google được áp dụng.
+            </p>
 
             <div class="register-link-box">
-    Khách hàng mới? <a href="?page=register" class="register-link">Tạo tài khoản</a>
+                Khách hàng mới? <a href="?page=register" class="register-link">Tạo tài khoản</a>
             </div>
 
         </div> 
