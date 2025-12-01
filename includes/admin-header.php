@@ -25,10 +25,7 @@
     </div>
     
     <ul class="menu">
-        <li class="<?php echo ($page == 'thongke') ? 'active' : ''; ?>">
-            <a href="admin-index.php?admin=thongke"><i class="fa-solid fa-chart-line"></i> <span>Thống Kê</span></a>
-        </li>
-
+        
         <li class="<?php echo ($page == 'products') ? 'active' : ''; ?>">
             <a href="admin-index.php?admin=products"><i class="fa-solid fa-box-open"></i> <span>Sản Phẩm</span></a>
         </li>

@@ -7,8 +7,8 @@ if (!isset($_SESSION['is_logged_in']) || $_SESSION['user_role'] !== 'admin') {
 
     require 'controller/admin-controller.php';
 
-    // BƯỚC 1: Lấy tham số trang TRƯỚC (Đặt dòng này lên đầu)
-    $page = isset($_GET['admin']) ? $_GET['admin'] : 'thongke';
+    // BƯỚC 1: Lấy tham số trang TRƯỚC 
+    $page = isset($_GET['admin']) ? $_GET['admin'] : 'categories';
 
     // BƯỚC 2: Gọi Header SAU (Lúc này Header mới biết $page là gì để active)
     include_once 'includes/admin-header.php';
@@ -16,8 +16,8 @@ if (!isset($_SESSION['is_logged_in']) || $_SESSION['user_role'] !== 'admin') {
     // BƯỚC 3: Xử lý logic hiển thị nội dung chính
     $controller = new AdminController();
 
-    if($page == 'thongke'){
-        include_once "admin/thongke.php";
+    if($page == 'categories'){
+        include_once "admin/categories.php";
     } else {
         // ... code gọi controller của bạn ...
         $controller->$page();
