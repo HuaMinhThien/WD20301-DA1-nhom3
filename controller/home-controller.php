@@ -1,5 +1,5 @@
 <?php
-// File: controller/HomeController.php (Đã sửa lỗi ArgumentCountError)
+// File: controller/HomeController.php (Sửa lỗi session trong hàm login)
 
 require_once('models/ProductModel.php'); 
 require_once('models/UserModel.php');
@@ -15,11 +15,10 @@ class HomeController {
     private $billModel;
 
     public function __construct() {
-        // 1. Khởi tạo kết nối DB (Sửa lỗi: Phải khởi tạo kết nối trước)
-        // Giả định class Database tồn tại và có hàm getConnection() trả về PDO
+        // 1. Khởi tạo kết nối DB
         $this->db = (new Database())->getConnection(); 
         
-        // 2. Khởi tạo đối tượng Model (Sửa lỗi: Truyền kết nối DB vào)
+        // 2. Khởi tạo đối tượng Model
         $this->productModel = new ProductModel($this->db); 
         $this->userModel = new UserModel($this->db);
         $this->cartModel = new CartModel($this->db); 
@@ -52,7 +51,6 @@ class HomeController {
         } elseif ($category_id !== null) {
             $filter_category_ids = [$category_id];
         }
-        // Nếu không có category_id → để null = hiện hết (tùy bạn muốn)
 
         // =========================================================
         // XỬ LÝ KHOẢNG GIÁ
@@ -156,7 +154,11 @@ class HomeController {
 
         include_once 'pages/products_Details.php';
     }
+    
     public function login() {
+        // THÊM session_start() ở đầu hàm để tránh lỗi session
+        session_start();
+
         // ============ CHỈ XỬ LÝ KHI NGƯỜI DÙNG NHẤN ĐĂNG NHẬP (POST) ============
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email    = trim($_POST['email'] ?? '');
@@ -180,7 +182,6 @@ class HomeController {
 
             if ($user) {
                 // Đăng nhập thành công → lưu session
-                session_start();
                 $_SESSION['user_id']      = $user['id'];
                 $_SESSION['user_name']    = $user['name'] ?? $user['email'];
                 $_SESSION['user_role']    = $user['role'];
@@ -213,63 +214,60 @@ class HomeController {
         include_once 'pages/login.php';
     }
 
-
-   // Thay thế hoàn toàn hàm register() trong HomeController bằng đoạn này:
-
-public function register() {
-    $error_message = '';
-    $success_message = '';
-    
-    // Dữ liệu giữ lại khi nhập sai
-    $input_data = [
-        'name' => $_POST['name'] ?? '',
-        'email' => $_POST['email'] ?? '',
-        'phone' => $_POST['phone'] ?? '',
-        'dob' => $_POST['dob'] ?? '',
-        'gender' => $_POST['gender'] ?? ''
-    ];
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    public function register() {
+        $error_message = '';
+        $success_message = '';
         
-        // Lấy và làm sạch dữ liệu
-        $name     = trim($input_data['name']);
-        $email    = trim($input_data['email']);
-        $phone    = trim($input_data['phone']);
-        $dob      = $input_data['dob'];
-        $gender   = $input_data['gender']; // 0 = Nữ, 1 = Nam
-        $password = $_POST['password'] ?? '';
+        // Dữ liệu giữ lại khi nhập sai
+        $input_data = [
+            'name' => $_POST['name'] ?? '',
+            'email' => $_POST['email'] ?? '',
+            'phone' => $_POST['phone'] ?? '',
+            'dob' => $_POST['dob'] ?? '',
+            'gender' => $_POST['gender'] ?? ''
+        ];
 
-        // Validate
-        if (empty($name) || empty($email) || empty($phone) || empty($password) || empty($gender)) {
-            $error_message = "Vui lòng điền đầy đủ các trường bắt buộc.";
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error_message = "Email không hợp lệ.";
-        } elseif (strlen($password) < 6) {
-            $error_message = "Mật khẩu phải có ít nhất 6 ký tự.";
-        } elseif ($this->userModel->isEmailExist($email)) {
-            $error_message = "Email này đã được sử dụng. Vui lòng đăng nhập.";
-        } else {
-            // Dữ liệu hợp lệ → lưu vào DB
-            $data = [
-                'name'      => $name,
-                'email'     => $email,
-                'password'  => $password,        // Lưu plaintext (theo dữ liệu mẫu hiện tại)
-                'phone'     => $phone,
-                'dob'       => $dob,
-                'gender'    => $gender
-            ];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            
+            // Lấy và làm sạch dữ liệu
+            $name     = trim($input_data['name']);
+            $email    = trim($input_data['email']);
+            $phone    = trim($input_data['phone']);
+            $dob      = $input_data['dob'];
+            $gender   = $input_data['gender']; // 0 = Nữ, 1 = Nam
+            $password = $_POST['password'] ?? '';
 
-            if ($this->userModel->registerUser($data)) {
-                // Đăng ký thành công → chuyển về trang login với thông báo
-                header("Location: index.php?page=login&register=success");
-                exit;
+            // Validate
+            if (empty($name) || empty($email) || empty($phone) || empty($password) || !isset($_POST['gender'])) {
+                $error_message = "Vui lòng điền đầy đủ các thông tin bắt buộc.";
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $error_message = "Email không hợp lệ.";
+            } elseif (strlen($password) < 6) {
+                $error_message = "Mật khẩu phải có ít nhất 6 ký tự.";
+            } elseif ($this->userModel->isEmailExist($email)) {
+                $error_message = "Email này đã được sử dụng. Vui lòng đăng nhập.";
             } else {
-                $error_message = "Đăng ký thất bại. Vui lòng thử lại.";
+                // Dữ liệu hợp lệ → lưu vào DB
+                $data = [
+                    'name'      => $name,
+                    'email'     => $email,
+                    'password'  => $password,        // Lưu plaintext (theo dữ liệu mẫu hiện tại)
+                    'phone'     => $phone,
+                    'dob'       => $dob,
+                    'gender'    => $gender
+                ];
+
+                if ($this->userModel->registerUser($data)) {
+                    // Đăng ký thành công → chuyển về trang login với thông báo
+                    header("Location: index.php?page=login&register=success");
+                    exit;
+                } else {
+                    $error_message = "Đăng ký thất bại. Vui lòng thử lại.";
+                }
             }
         }
-    }
 
-    // Hiển thị form đăng ký
-    include_once 'pages/register.php';
-}
+        // Hiển thị form đăng ký
+        include_once 'pages/register.php';
+    }
 }

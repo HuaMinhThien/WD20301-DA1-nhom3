@@ -63,7 +63,6 @@
                             <div class="gender-options">
                                 <label><input type="radio" name="gender" value="male" checked> Nam</label>
                                 <label><input type="radio" name="gender" value="female"> Nữ</label>
-                                <label><input type="radio" name="gender" value="other"> Tuấn (LGBT)</label>
                             </div>
                         </div>
 
