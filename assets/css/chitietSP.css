@@ -259,3 +259,42 @@
     font-weight: bold;
 }
 /* Kết thúc CSS cho Box sản phẩm mới */
+
+/* ==================== FORM TÙY CHỌN SẢN PHẨM ==================== */
+
+/* Container chung cho mỗi nhóm chọn (Màu, Size, Số lượng) */
+.product-selection-group {
+    margin-bottom: 20px; /* Khoảng cách dưới mỗi nhóm */
+    display: flex;
+    align-items: center; /* Căn chỉnh label và input/select theo chiều dọc */
+    gap: 15px; /* Khoảng cách giữa label và input/select */
+}
+
+/* Label của các tùy chọn */
+.product-selection-group label {
+    font-weight: bold;
+    width: 100px; /* Đặt chiều rộng cố định cho label để căn thẳng hàng */
+    flex-shrink: 0; /* Ngăn label bị co lại */
+}
+
+/* Định dạng chung cho Select và Input */
+.product-selection-group select,
+.product-selection-group input[type="number"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    min-width: 150px; /* Chiều rộng tối thiểu cho select */
+    flex-grow: 1; /* Cho phép select/input mở rộng nếu cần */
+    max-width: 250px; /* Chiều rộng tối đa */
+    box-sizing: border-box; /* Tính border và padding vào kích thước */
+}
+
+/* Điều chỉnh riêng cho ô Số lượng */
+.quantity-box input[type="number"] {
+    width: 60px !important; /* Ghi đè style inline/css trước đó */
+    flex-grow: 0; /* Không cho ô số lượng mở rộng */
+    text-align: center;
+    min-width: unset; /* Bỏ min-width chung */
+    max-width: 80px; /* Chiều rộng hợp lý cho số lượng */
+}

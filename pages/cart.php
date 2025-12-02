@@ -32,13 +32,6 @@
         ?>
 
         <h1 class="cart-title">
-        
-        <p style="color: #e74c3c; font-weight: bold; margin: 10px 0;">
-            Đang xem giỏ hàng của User ID: <strong><?php echo $current_user_id; ?></strong>
-            <?php if (!isset($_SESSION['user_id'])): ?>
-                (Chưa đăng nhập - đang dùng tài khoản khách ID=2)
-            <?php endif; ?>
-        </p>
 
             Giỏ hàng của bạn
         </h1>
@@ -99,8 +92,11 @@
                         <span class="label">Tổng tiền:</span>
                         <span class="total-price"><?php echo number_format($grand_total, 0, ',', '.'); ?>₫</span>
                     </div>
-                    <a href="index.php?page=thanhtoan&user_id=<?php echo $current_user_id; ?>" class="btn-checkout">THANH TOÁN</a>
-                    <a href="index.php?page=home&user_id=<?php echo $current_user_id; ?>" class="btn-continue">Tiếp tục mua hàng</a>
+                    <div class="o-btn">
+                        <a href="index.php?page=thanhtoan&user_id=<?php echo $current_user_id; ?>" class="btn-checkout">THANH TOÁN</a>
+                        <a href="index.php?page=home&user_id=<?php echo $current_user_id; ?>" class="btn-continue">Tiếp tục mua hàng</a>
+                    </div>
+                    
                 </div>
             </div>
 

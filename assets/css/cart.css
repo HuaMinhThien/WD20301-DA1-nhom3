@@ -163,6 +163,12 @@ input, button, textarea {
     height: fit-content;
     border: 1px solid #eee; /* Bổ sung border */
     box-shadow: 0 0 5px rgba(0,0,0,0.05); /* Bổ sung shadow */
+
+}
+
+.o-btn{
+    display: flex;
+    flex-direction: column;
 }
 .summary-total {
     display: flex;
@@ -189,6 +195,7 @@ input, button, textarea {
     cursor: pointer;
     transition: background-color 0.3s;
     margin-bottom: 10px;
+    text-align: center;
 }
 .btn-checkout:hover {
     background: #1c3d5e;

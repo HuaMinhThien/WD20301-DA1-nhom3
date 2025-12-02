@@ -118,12 +118,30 @@ class CartController {
 
     // HÀM GIÚP REDIRECT AN TOÀN 100% - KHÔNG BAO GIỜ LỖI HEADER
     private function jsRedirect($page, $user_id) {
+        // Danh sách các trang hợp lệ (tránh người dùng truyền tham số linh tinh)
+        $valid_pages = [
+            'cart'        => 'cart',
+            'thanhtoan'   => 'thanhtoan',
+            'checkout'    => 'thanhtoan',      
+            'cart_history'=> 'cart_history',
+            'products_Details' => 'products_Details',
+        ];
+
+        // Nếu trang không hợp lệ → mặc định về giỏ hàng
+        $page = $valid_pages[$page] ?? 'cart';
+
         $url = "index.php?page={$page}&user_id={$user_id}";
-        $msg = $_SESSION['success_message'] ?? $_SESSION['error_message'] ?? 'Thao tác thành công!';
+
+        // Lấy thông báo (nếu có)
+        $msg = $_SESSION['success_message'] ?? $_SESSION['error_message'] ?? 'Đã thêm vào giỏ hàng thành công!';
+        
+        // Xóa thông báo sau khi đã lấy để tránh hiển thị lại lần sau
+        unset($_SESSION['success_message'], $_SESSION['error_message']);
+
         echo "<script>
-                alert('{$msg}');
+                alert('" . addslashes($msg) . "');
                 window.location.href = '{$url}';
-              </script>";
+            </script>";
         exit;
     }
     public function checkout() {

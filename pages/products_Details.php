@@ -6,12 +6,9 @@ if (empty($product)) {
     return; 
 }
 
-
-$product_image = $product['image'] ?? 'default-main.jpg';
+$product_image       = $product['image'] ?? 'default-main.jpg';
 $product_image_child = $product['image_child'] ?? 'default-child.jpg'; 
-$full_description = $product['description_full'] ?? $product['description'] ?? 'Chưa có mô tả chi tiết.';
-
-// Biến $available_colors và $available_sizes giờ đây đã được Controller truyền sang.
+$full_description    = $product['description_full'] ?? $product['description'] ?? 'Chưa có mô tả chi tiết.';
 ?>
 
 <div class="product-detail-container">
@@ -54,6 +51,7 @@ $full_description = $product['description_full'] ?? $product['description'] ?? '
             <form id="add-to-cart-form" action="index.php?page=cart&action=add" method="POST">
                 <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
                 
+                <!-- Các select màu, size, số lượng ... giữ nguyên -->
                 <div class="product-selection-group">
                     <label for="color-select">Màu sắc:</label>
                     <select name="color_id" id="color-select" required onchange="updateSizes()">
@@ -89,7 +87,7 @@ $full_description = $product['description_full'] ?? $product['description'] ?? '
                 
                 <div class="action-buttons">
                     <button type="submit" class="btn-add-to-cart">
-                        <i class="fa fa-shopping-cart"></i> Thêm vào Giỏ hàng
+                        Thêm vào Giỏ hàng
                     </button>
                     
                     <button type="button" id="buy-now-button" class="btn-buy-now">
@@ -154,56 +152,42 @@ $full_description = $product['description_full'] ?? $product['description'] ?? '
 </div>
 
 <script>
-    /**
-     * Hàm thay đổi nguồn (src) của ảnh chính.
-     */
     function changeMainImage(newSrc) {
-        var mainImage = document.getElementById('main-product-image');
-        if (mainImage) {
-            mainImage.src = newSrc;
-        }
+        const mainImage = document.getElementById('main-product-image');
+        if (mainImage) mainImage.src = newSrc;
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        var thumbnails = document.querySelectorAll('.thumb-image');
-
-        thumbnails.forEach(function(thumb) {
+        // Thumbnail active
+        const thumbnails = document.querySelectorAll('.thumb-image');
+        thumbnails.forEach(thumb => {
             thumb.addEventListener('click', function() {
-                // Loại bỏ lớp 'active' khỏi tất cả các thumbnail
                 thumbnails.forEach(t => t.parentElement.classList.remove('active'));
-                
-                // Thêm lớp 'active' vào thumbnail vừa click
                 this.parentElement.classList.add('active');
             });
         });
-        
-        // Thiết lập ảnh đầu tiên là active khi trang tải
-        if (thumbnails.length > 0) {
-            thumbnails[0].parentElement.classList.add('active');
-        }
+        if (thumbnails.length > 0) thumbnails[0].parentElement.classList.add('active');
 
-
-        document.getElementById('buy-now-button').addEventListener('click', function(event) {
+        // ==================== XỬ LÝ NÚT "MUA NGAY" ====================
+        document.getElementById('buy-now-button').addEventListener('click', function() {
             const form = document.getElementById('add-to-cart-form');
-            
-            // 1. Kiểm tra validation của form (màu, size, quantity)
-            if (!form.reportValidity()) {
-                return; // Ngăn chặn hành động nếu form chưa hợp lệ (required fields)
+
+            // Kiểm tra các trường required (màu, size, số lượng)
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
             }
-            
-            // 2. Thay đổi action của form sang trang thanh toán/giỏ hàng
-            // Giả định trang checkout của bạn là index.php?page=checkout
-            form.action = 'index.php?page=cart&action=add&redirect=checkout'; 
-            
-            // 3. Submit form (sẽ thực hiện thêm vào giỏ hàng và chuyển hướng đến trang checkout)
+
+            // Thêm vào giỏ hàng và redirect thẳng tới trang thanh toán
+            form.action = 'index.php?page=cart&action=add&redirect=thanhtoan';
             form.submit();
         });
-        
-        // Đặt lại action của form về Add to Cart mặc định khi trang tải xong 
-        // (để nút "Thêm vào Giỏ" hoạt động đúng)
+
+        // Đặt lại action mặc định cho nút "Thêm vào giỏ hàng" (tránh bị ghi đè)
         document.getElementById('add-to-cart-form').action = 'index.php?page=cart&action=add';
     });
 
+    // Danh sách variant để lọc size theo màu
     const variants = <?php echo json_encode($variants ?? []); ?>;
 
     function updateSizes() {
@@ -217,7 +201,6 @@ $full_description = $product['description_full'] ?? $product['description'] ?? '
             .filter(v => v.color_id == colorId && v.stock_quantity > 0)
             .map(v => ({id: v.size_id, name: v.size_name}));
 
-        // Loại trùng
         const unique = [...new Map(available.map(item => [item.id, item])).values()];
 
         unique.forEach(s => {
