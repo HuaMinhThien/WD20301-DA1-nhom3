@@ -1,4 +1,9 @@
 <link rel="stylesheet" href="assets/css/user.css">
+
+<?php
+    $current_user_id = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2;
+
+?>
 <main class="user-page-main">
         <div class="container-user">
             <h1 class="page-title">TÀI KHOẢN CỦA BẠN</h1>
@@ -19,13 +24,13 @@
                     <nav class="user-menu">
                         <ul class="sidebar-menu">
                             <li class="menu-item active">
-                                <a href="?page=user&action=info">Thông tin cá nhân</a>
+                                <a href="?page=user&user_id=<?php echo $current_user_id; ?>">Thông tin cá nhân</a>
                             </li>
                             <li class="menu-item">
-                                <a href="?page=user&action=history">Lịch sử đặt hàng</a>
+                                <a href="?page=cart_history&user_id=<?php echo $current_user_id; ?>">Lịch sử đặt hàng</a>
                             </li>
                             <li class="menu-item logout">
-                                <a href="?page=logout">Đăng xuất</a>
+                                <a href="?page=home&user_id=<?php echo $current_user_id; ?>">Đăng xuất</a>
                             </li>
                         </ul>
                     </nav>

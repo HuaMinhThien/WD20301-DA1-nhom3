@@ -67,7 +67,11 @@ body {
     border-radius: 5px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
+.container-history{
+    display: flex;
+    justify-content: space-around;
 
+}
 /* Cột 1: Đơn hàng và thông tin biến thể (flex để chứa nhiều sản phẩm) */
 .product-info {
     flex: 3; /* Chiếm nhiều không gian hơn để chứa nhiều sản phẩm */

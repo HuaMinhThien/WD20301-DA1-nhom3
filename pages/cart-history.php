@@ -28,7 +28,8 @@
                     $firstItem = $items[0]; // Lấy info chung từ item đầu
                 ?>
                     <div class="order-item <?= strtolower($firstItem['status']) ?>">
-                        <div class="product-info">
+                        <div class="container-history">
+                            <div class="product-info">
                             <?php foreach ($items as $item): ?>
                             <div class="product-thumb">
                                 <img src="assets/images/sanpham/<?= htmlspecialchars($item['product_image']) ?>" alt="<?= htmlspecialchars($item['product_name']) ?>">
@@ -42,6 +43,8 @@
                             <hr>
                             <?php endforeach; ?>
                         </div>
+                        
+                    </div>
                         
                         <div class="order-status-and-date">
                             <span class="order-date">Ngày đặt: <?= date('d/m/Y', strtotime($firstItem['order_date'])) ?></span>
