@@ -1,0 +1,230 @@
+/* assets/css/address-modal.css */
+/* ============================ MODAL ĐỊA CHỈ - ĐẸP NHƯ SHOPEE ============================ */
+
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: #fff;
+    width: 92%;
+    max-width: 560px;
+    border-radius: 16px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+}
+
+.close-btn {
+    font-size: 32px;
+    color: #aaa;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.close-btn:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+/* Form bên trong modal */
+.address-form {
+    padding: 24px;
+}
+
+.address-form input,
+.address-form select {
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: border 0.3s;
+}
+
+.address-form input:focus,
+.address-form select:focus {
+    outline: none;
+    border-color: #ee4d2d;
+    box-shadow: 0 0 0 3px rgba(238, 77, 45, 0.1);
+}
+
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+
+.form-row input {
+    flex: 1;
+}
+
+/* Loại địa chỉ */
+.address-type {
+    display: flex;
+    gap: 30px;
+    margin: 20px 0;
+    font-size: 1em;
+}
+
+.address-type label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+}
+
+.address-type input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #ee4d2d;
+}
+
+/* Checkbox mặc định */
+.default-checkbox {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1em;
+    color: #333;
+}
+
+.default-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #ee4d2d;
+}
+
+/* Nút hành động */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.btn-cancel,
+.btn-complete {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-cancel {
+    background: #f5f5f5;
+    color: #555;
+}
+
+.btn-cancel:hover {
+    background: #e0e0e0;
+}
+
+.btn-complete {
+    background: #ee4d2d;
+    color: white;
+}
+
+.btn-complete:hover {
+    background: #d73b23;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(238, 77, 45, 0.3);
+}
+
+/* Tag "Mặc định" trên danh sách địa chỉ */
+.default-tag {
+    display: inline-block;
+    background: #ee4d2d;
+    color: white;
+    font-size: 0.75em;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+/* Hiệu ứng khi hover địa chỉ */
+.address-item.default-address {
+    border: 2px solid #ee4d2d !important;
+}
+
+.address-item.default-address::before {
+    content: "Mặc định";
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: #ee4d2d;
+    color: white;
+    font-size: 0.8em;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+    .form-row {
+        flex-direction: column;
+    }
+    .address-type {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .modal-actions {
+        flex-direction: column;
+    }
+    .btn-complete, .btn-cancel {
+        width: 100%;
+    }
+}
