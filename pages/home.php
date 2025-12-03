@@ -195,7 +195,7 @@ $imagePath = 'assets/images/sanpham/';
     </div>
     
     <section class="product-grid-section">
-    <h2 class="section-title-highlight">🔥 SẢN PHẨM NỔI BẬT NGẪU NHIÊN (10 SP)</h2>
+    <h2 class="section-title-highlight">🔥 SẢN PHẨM NỔI BẬT</h2>
     <div class="pro-section-2-box2" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;">
         <?php 
         // SỬ DỤNG $section1_products
@@ -254,7 +254,7 @@ $imagePath = 'assets/images/sanpham/';
     </div>
 
     <section class="product-grid-section">
-    <h2 class="section-title-highlight">⭐ XU HƯỚNG MỚI (10 SP KHÁC)</h2>
+    <h2 class="section-title-highlight">⭐ XU HƯỚNG MỚI</h2>
     <div class="pro-section-2-box2" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;">
         <?php 
         // SỬ DỤNG $section2_products
