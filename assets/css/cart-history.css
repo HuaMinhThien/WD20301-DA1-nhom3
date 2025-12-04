@@ -59,8 +59,7 @@ body {
 /* Order Item - 3 Cột Chính */
 .order-item {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    flex-direction: column;
     padding: 20px;
     margin-bottom: 15px;
     background-color: #fff;
@@ -72,12 +71,14 @@ body {
     justify-content: space-around;
 
 }
+.sec-order-show{
+    margin: 20px 10px;
+}
 /* Cột 1: Đơn hàng và thông tin biến thể (flex để chứa nhiều sản phẩm) */
 .product-info {
-    flex: 3; /* Chiếm nhiều không gian hơn để chứa nhiều sản phẩm */
     display: flex;
     flex-direction: column; /* Nếu nhiều sản phẩm, xếp dọc xuống hàng */
-    gap: 15px; /* Khoảng cách giữa các sản phẩm nếu nhiều */
+    gap: 20px; /* Khoảng cách giữa các sản phẩm nếu nhiều */
 }
 
 /* Mỗi sản phẩm trong đơn hàng (nếu nhiều, sẽ xuống hàng) */
@@ -88,11 +89,39 @@ body {
 }
 
 .o-sanpham-img-name{
+    display: grid;
+    gap: 20px;
+    background-color: #ffffff;
+    padding: 5px;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.o-sanpham-img-name:hover {
+    background-color: #f0efef75;
+}
+
+.cot1-product{
+    grid-column: 1/2;
+    width: 600px;
     display: flex;
     gap: 20px;
 }
+.cot3-product{
+    grid-column: 3/4;
+    color: #c82333;
+    font-size: 18px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.summary-total{
+    color: #000;
+    text-align: center;
+    font-size: 20px;
+}
 .product-thumb {
-    width: 80px;
+    width: 100px;
     height: 100px;
     background-color: #eee; /* Placeholder hình ảnh */
     border-radius: 4px;
@@ -108,9 +137,6 @@ body {
     border-radius: 4px;
 }
 
-.product-details {
-    flex: 1;
-}
 
 .product-name {
     font-weight: bold;
@@ -138,11 +164,21 @@ body {
 
 /* Cột 2: Ngày đặt hàng */
 .order-status-and-date {
-    flex: 1; /* Chiếm ít không gian hơn */
-    text-align: left;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr ;
     padding-top: 5px;
     color: #666;
     font-size: 0.9em;
+}
+
+.order-date{
+    grid-column: 2/3;
+    text-align: center;
+
+}
+.status-badge{
+    grid-column: 3/4;
+    text-align: end;
 }
 
 /* Cột 3: Trạng thái và nút */
