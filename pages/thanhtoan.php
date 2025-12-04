@@ -26,7 +26,7 @@
                     <?php foreach ($cart_items as $item): ?>
                     <div class="product-item">
                         <div class="product-thumb">
-                            <img src="assets/images/sanpham/<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>">
+                            <img style="width: 80px; height: 100px;" src="assets/images/sanpham/<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>">
                         </div>
                         <div class="product-details">
                             <p class="product-name"><?= htmlspecialchars($item['name']) ?></p>

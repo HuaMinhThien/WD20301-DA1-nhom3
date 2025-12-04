@@ -180,13 +180,18 @@ $full_description    = $product['description_full'] ?? $product['description'] ?
                 return;
             }
 
-            // Thêm vào giỏ hàng và redirect thẳng tới trang thanh toán
             form.action = 'index.php?page=cart&action=add&redirect=thanhtoan';
             form.submit();
         });
 
         // Đặt lại action mặc định cho nút "Thêm vào giỏ hàng" (tránh bị ghi đè)
         document.getElementById('add-to-cart-form').action = 'index.php?page=cart&action=add';
+
+        // 🚨 Sửa lỗi: Cần đảm bảo form không bị ghi đè action khi submit bằng nút mặc định
+        document.getElementById('add-to-cart-form').addEventListener('submit', function() {
+            // Đặt lại action mặc định, đảm bảo không có redirect
+            this.action = 'index.php?page=cart&action=add';
+        });
     });
 
     // Danh sách variant để lọc size theo màu

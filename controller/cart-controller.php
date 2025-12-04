@@ -86,12 +86,22 @@ class CartController {
             $this->jsRedirect('products_Details&id=' . $product_id, $this->userId);
         }
 
-        // Nếu OK, lưu vào cart
+        
         $result = $this->cartModel->saveItem($this->userId, $variant_id, $quantity);
-        $_SESSION['success_message'] = $result ? 'Đã thêm vào giỏ hàng!' : 'Lỗi hệ thống!';
-
-        $redirect = $_GET['redirect'] ?? 'cart';
-        $this->jsRedirect($redirect === 'checkout' ? 'checkout' : 'cart', $this->userId);
+        $_SESSION['success_message'] = $result ? 'Đã thêm vào giỏ hàng thành công!' : 'Lỗi hệ thống khi thêm vào giỏ hàng!';
+        
+        $redirect = $_GET['redirect'] ?? null;
+        
+        // 1. Nếu là nút Mua Ngay (redirect=thanhtoan/checkout), chuyển đến trang thanh toán
+        if ($redirect === 'thanhtoan' || $redirect === 'checkout') {
+            header('Location: index.php?page=thanhtoan&user_id=' . $this->userId);
+        } 
+        // 2. Nếu là nút Thêm vào giỏ hàng, chuyển hướng ngược lại trang chi tiết sản phẩm
+        else {
+            // Chuyển hướng về trang chi tiết sản phẩm hiện tại để hiển thị thông báo
+            header('Location: index.php?page=products_Details&id=' . $product_id);
+        }
+        exit;
     }
 
     public function remove() {
@@ -100,9 +110,10 @@ class CartController {
             $this->cartModel->removeItem($this->userId, (int)$variant_id);
             $_SESSION['success_message'] = 'Đã xóa sản phẩm!';
         }
-        $this->jsRedirect('cart', $this->userId);
+        // Thay thế: $this->jsRedirect('cart', $this->userId);
+        header('Location: index.php?page=cart&user_id=' . $this->userId); 
+        exit;
     }
-
     // THÊM HÀM NÀY ĐỂ UPDATE QUANTITY TỪ + / -
     public function update_quantity() {
         $variant_id = $_POST['variant_id'] ?? null;
@@ -113,7 +124,9 @@ class CartController {
         } else {
             $_SESSION['error_message'] = 'Số lượng không hợp lệ!';
         }
-        $this->jsRedirect('cart', $this->userId);
+        // Thay thế: $this->jsRedirect('cart', $this->userId);
+        header('Location: index.php?page=cart&user_id=' . $this->userId);
+        exit;
     }
 
     // HÀM GIÚP REDIRECT AN TOÀN 100% - KHÔNG BAO GIỜ LỖI HEADER
@@ -155,10 +168,13 @@ class CartController {
 
         if ($billId) {
             $_SESSION['success_message'] = 'Đơn hàng đã được đặt thành công!';
-            $this->jsRedirect('cart_history', $userId);
+            // Thay thế: $this->jsRedirect('cart_history', $userId);
+            header('Location: index.php?page=cart_history&user_id=' . $userId);
         } else {
             $_SESSION['error_message'] = 'Lỗi khi đặt hàng!';
-            $this->jsRedirect('thanhtoan', $userId);
+            // Thay thế: $this->jsRedirect('thanhtoan', $userId);
+            header('Location: index.php?page=thanhtoan&user_id=' . $userId);
         }
+        exit;
     }
 }

@@ -211,6 +211,7 @@ $current_size_id     = $_GET['size_id']     ?? null;
                         </div>
                     <?php endif; ?>
                 </div>
+                
             </div>
 
             <!-- ==================== KÍCH CỠ ==================== -->
