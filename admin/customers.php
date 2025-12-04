@@ -30,7 +30,9 @@
                                     <td><?php echo htmlspecialchars($user['name']); ?></td> 
                                     <td><?php echo htmlspecialchars($user['email']); ?></td>
                                     <td><?php echo htmlspecialchars($user['phone']); ?></td>
-                                    <td><?php echo htmlspecialchars($user['gender'] ?? 'Gay'); ?></td>
+                                    <td>
+                                        <?php echo ($user['gender'] == 1) ? 'Nam' : 'Nữ'; ?>
+                                    </td>
                                     <td>
                                         <span class="badge success">
                                             <?php echo htmlspecialchars($user['role']); ?>
