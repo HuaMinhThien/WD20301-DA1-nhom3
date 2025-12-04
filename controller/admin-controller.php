@@ -1,5 +1,7 @@
 <?php
 // FILE: controller/admin-controller.php
+require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../models/UserModel.php';
 
 class AdminController {
 
@@ -18,8 +20,18 @@ class AdminController {
         include_once 'admin/categories.php';
     }
 
-    public function customers(){
-        include_once 'admin/customers.php';
+    public function customers() {
+        // 1. Kết nối Database (Thường biến $db đã có sẵn trong controller này hoặc cần khởi tạo lại)
+        $database = new Database();
+        $db = $database->getConnection();
+
+        // 2. Gọi Model để lấy dữ liệu
+        $userModel = new UserModel($db);
+        $users = $userModel->getAllUsers(); // Lấy danh sách user
+
+        // 3. Nhúng View và truyền biến $users sang
+        // Lưu ý: Đường dẫn tính từ thư mục gốc (nơi chứa admin-index.php)
+        include 'admin/customers.php'; 
     }
 
     public function orders(){
