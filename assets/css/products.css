@@ -161,4 +161,16 @@
 /* -------------------------- */
 
 
-
+.pro-sec1-box-check-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #001F3E;
+    cursor: pointer;
+}
+.clear-filter {
+    color: red;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 10px;
+    display: inline-block;
+}

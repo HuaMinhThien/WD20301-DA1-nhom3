@@ -29,61 +29,91 @@ class HomeController {
         $categories = $this->productModel->getAllCategories();
         $genders    = $this->productModel->getAllGenders();
 
-        // Lấy tham số từ URL
-        $category_id = $_GET['category_id'] ?? null;
-        $gender_id   = $_GET['gender_id']   ?? null;
-        $price_range = $_GET['price_range'] ?? null;
-        $color_id    = $_GET['color_id'] ?? null;
-        $size_id     = $_GET['size_id']     ?? null;
+        // === PHẦN QUAN TRỌNG NHẤT – BẮT BUỘC PHẢI DÙNG CÁCH NÀY KHI DÙNG CHECKBOX ===
+        $uid = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2;
 
-        // Ép kiểu an toàn
-        $category_id = $category_id ? (int)$category_id : null;
-        $gender_id   = $gender_id   ? (int)$gender_id   : null;
-        $color_id    = $color_id    ? (int)$color_id    : null;
-        $size_id     = $size_id     ? (int)$size_id     : null;
-
-        // =========================================================
-        // XỬ LÝ category_id = 12 → hiện toàn bộ phụ kiện
-        // =========================================================
-        $filter_category_ids = null;
-        if ($category_id === 12) {
-            $filter_category_ids = [3, 4, 5, 6, 7, 8]; // Thắt lưng, Kính, Túi, Vớ, Balo, Ví
-        } elseif ($category_id !== null) {
-            $filter_category_ids = [$category_id];
-        }
-
-        // =========================================================
-        // XỬ LÝ KHOẢNG GIÁ
-        // =========================================================
-        $price_min = null;
-        $price_max = null;
-        if ($price_range) {
-            $parts = explode('_', $price_range);
-            if (count($parts) === 2) {
-                $price_min = (int)$parts[0];
-                $price_max = (int)$parts[1];
+        // 1. Danh mục – hỗ trợ nhiều (1,2,3 hoặc 1&category_id=2&category_id=3)
+        $category_ids = [];
+        if (isset($_GET['category_id'])) {
+            if (is_array($_GET['category_id'])) {
+                $category_ids = array_map('intval', $_GET['category_id']);
+            } else {
+                $category_ids = [intval($_GET['category_id'])];
             }
         }
 
-        // =========================================================
-        // GOM THAM SỐ GỬI QUA MODEL
-        // =========================================================
+        // Xử lý đặc biệt: nếu chọn Phụ kiện (id=12)
+        if (in_array(12, $category_ids)) {
+            $category_ids = [3,4,5,6,7,8];
+        }
+
+        // 2. Giới tính – hỗ trợ chọn cả Nam + Nữ
+        $gender_ids = [];
+        if (isset($_GET['gender_id'])) {
+            if (is_array($_GET['gender_id'])) {
+                $gender_ids = array_map('intval', $_GET['gender_id']);
+            } else {
+                $gender_ids = [intval($_GET['gender_id'])];
+            }
+        }
+
+        // 3. Màu sắc
+        $color_ids = [];
+        if (isset($_GET['color_id'])) {
+            $color_ids = is_array($_GET['color_id']) 
+                ? array_map('intval', $_GET['color_id']) 
+                : [intval($_GET['color_id'])];
+        }
+
+        // 4. Kích cỡ
+        $size_ids = [];
+        if (isset($_GET['size_id'])) {
+            $size_ids = is_array($_GET['size_id']) 
+                ? array_map('intval', $_GET['size_id']) 
+                : [intval($_GET['size_id'])];
+        }
+
+        // 5. Giá – hỗ trợ nhiều khoảng
+        $price_ranges = [];
+        if (isset($_GET['price_range'])) {
+            $price_ranges = is_array($_GET['price_range']) 
+                ? $_GET['price_range'] 
+                : [$_GET['price_range']];
+        }
+
+        $price_min = $price_max = null;
+        foreach ($price_ranges as $range) {
+            $parts = explode('_', $range);
+            if (count($parts) == 2) {
+                $min = (int)$parts[0];
+                $max = (int)$parts[1];
+                if ($price_min === null || $min < $price_min) $price_min = $min;
+                if ($price_max === null || $max > $price_max) $price_max = $max;
+            }
+        }
+
+        // === GỬI VÀO MODEL ===
         $filters = [
-            'category_ids' => $filter_category_ids,   // mảng hoặc null
-            'gender_id'    => $gender_id,           // 1 = Nam, 2 = Nữ, null = cả hai
+            'category_ids' => !empty($category_ids) ? $category_ids : null,
+            'gender_id'    => !empty($gender_ids)   ? $gender_ids   : null,
+            'color_id'     => !empty($color_ids)    ? $color_ids    : null,
+            'size_id'      => !empty($size_ids)     ? $size_ids     : null,
             'price_min'    => $price_min,
             'price_max'    => $price_max,
-            'color_id'     => $color_id,
-            'size_id'      => $size_id
         ];
 
-        // GỌI MODEL – BÂY GIỜ DÙNG pv.category_id và pv.gender_id
+        // === Biến để view hiển thị checked và nút "xóa" ===
+        $current_category_id = !empty($category_ids) ? implode(',', $category_ids) : null;
+        $current_gender_id   = !empty($gender_ids)   ? implode(',', $gender_ids)   : null;
+        $current_color_id    = !empty($color_ids)    ? implode(',', $color_ids)    : null;
+        $current_size_id     = !empty($size_ids)     ? implode(',', $size_ids)     : null;
+        $current_price_range = !empty($price_ranges) ? implode(',', $price_ranges) : null;
+
         $products = $this->productModel->getFilteredProducts($filters);
 
-        // Truyền ra view
         include_once 'pages/products.php';
     }
-        
+            
     public function home() {
         // Lấy 20 sản phẩm ngẫu nhiên để hiển thị ở View home
         $random_products = $this->productModel->getFeaturedProductsRandom(20); 
