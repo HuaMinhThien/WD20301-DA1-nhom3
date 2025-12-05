@@ -548,6 +548,7 @@ td {
 /* Căn giữa cột hình ảnh và hành động */
 td.product-image-cell, td.action-cell {
     text-align: center;
+    display: flex;
 }
 
 /* Số thứ tự trong bảng */
@@ -640,7 +641,6 @@ td .status {
     font-size: 1.1rem;
     cursor: pointer;
     margin-right: 5px; /* Giảm khoảng cách giữa các nút */
-    padding: 0.3rem;
 }
 .action-btn.edit { color: #333; } 
 .action-btn.hide { color: #333; } 

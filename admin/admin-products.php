@@ -211,7 +211,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) 
                                     <td><?php echo htmlspecialchars($p['name']); ?></td>
                                     <td><?php echo number_format($p['price']); ?>đ</td>
                                     <td>
-                                        <strong <?php echo ($p['total_quantity'] > 0 ? 'style="color:var(--success)"' : 'style="color:var(--danger)"'); ?>>
+                                        <strong <?php echo ($p['total_quantity'] > 0 ? : 'style="color:var(--danger)"'); ?>>
                                             <?php echo $p['total_quantity']; ?>
                                         </strong>
                                     </td>
