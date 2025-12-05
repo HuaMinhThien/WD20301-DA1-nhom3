@@ -1,10 +1,10 @@
 <link rel="stylesheet" href="assets/css/sale.css">
-<main style="padding-bottom: 100px;">
+<main style="margin-top: 100px  ;">
     <div class="sale-bannerfull">
         <img src="assets/images/img-banner/banner-chinh-3.jpg" alt="">
     </div>
 
-    <div class="container-sale container-center" >
+    <div class="container-sale container-center" style="margin-top: 50px  ;">
 
         <div class="box-sale">
             <img src="assets/images/img-banner/banner-con-9.png" alt="">

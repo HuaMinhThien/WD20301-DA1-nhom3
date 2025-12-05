@@ -2,6 +2,7 @@
     width: 100%;
     display: block;
     overflow: hidden; /* Ẩn phần ảnh vượt ra ngoài khung */
+    
 }
 
 .sale-bannerfull img {

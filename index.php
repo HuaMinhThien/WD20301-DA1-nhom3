@@ -9,6 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // 2. Bật output buffering để đảm bảo header() luôn hoạt động
 ob_start();
+include_once 'includes/header.php';
 
 $page = $_GET['page'] ?? 'home';
 
@@ -80,7 +81,6 @@ $controller->$method_to_call();
 // - Nếu đăng nhập thành công → đã redirect → không chạy tới đây
 // - Nếu chưa redirect (hiển thị trang) → lúc này mới được in header + footer
 
-include_once 'includes/header.php';
 
 // Xuất nội dung từ buffer (nếu có)
 ob_end_flush();
