@@ -4,10 +4,11 @@ $db = new Database();
 $conn = $db->getConnection();
 
 // ==================== TÌM KIẾM & BỘ LỌC ====================
+// (giữ nguyên hoàn toàn phần này)
 $search = trim($_GET['search'] ?? '');
 $category_filter = $_GET['category'] ?? '';
 $gender_filter = $_GET['gender'] ?? '';
-$stock_filter = $_GET['stock'] ?? 'all'; // all, in_stock, out_of_stock
+$stock_filter = $_GET['stock'] ?? 'all';
 
 $sql = "
     SELECT p.*, c.name AS category_name, g.name AS gender_name,
@@ -170,7 +171,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) 
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <div class=" |form-group">
                                 <select name="stock">
                                     <option value="all" <?php echo $stock_filter === 'all' ? 'selected' : ''; ?>>Tất cả tồn kho</option>
                                     <option value="in_stock" <?php echo $stock_filter === 'in_stock' ? 'selected' : ''; ?>>Còn hàng</option>
@@ -211,7 +212,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) 
                                     <td><?php echo htmlspecialchars($p['name']); ?></td>
                                     <td><?php echo number_format($p['price']); ?>đ</td>
                                     <td>
-                                        <strong <?php echo ($p['total_quantity'] > 0 ? 'style="color:var(--success)"' : 'style="color:var(--danger)"'); ?>>
+                                        <strong <?php echo ($p['total_quantity'] > 0 ? 'style="color:var(--main-color)"' : 'style="color:var(--danger)"'); ?>>
                                             <?php echo $p['total_quantity']; ?>
                                         </strong>
                                     </td>
@@ -230,13 +231,13 @@ if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) 
                 </div>
             </div>
 
-            <!-- ==================== FORM THÊM / SỬA ==================== -->
+            <!-- ==================== FORM THÊM / SỬA (ĐÃ CẬP NHẬT) ==================== -->
             <div class="card">
                 <div class="card-header">
                     <h3><?php echo $edit_product ? 'Sửa sản phẩm' : 'Thêm sản phẩm mới'; ?></h3>
                 </div>
                 <div class="card-body">
-                    <form class="admin-form" method="POST" enctype="multipart/form-data">
+                    <form class="admin-form" method="POST" enctype="multipart/form-data" id="productForm">
                         <input type="hidden" name="action" value="<?php echo $edit_product ? 'edit' : 'add'; ?>">
                         <?php if ($edit_product): ?>
                             <input type="hidden" name="id" value="<?php echo $edit_product['id']; ?>">
@@ -249,12 +250,13 @@ if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) 
 
                         <div class="form-group-row">
                             <div class="form-group">
-                                <label>Giá <span style="color:red;">*</span></label>
-                                <input type="number" name="price" value="<?php echo $edit_product['price'] ?? ''; ?>" min="0" required>
+                                <label>Giá bán <span style="color:red;">*</span></label>
+                                <input type="number" name="price" value="<?php echo $edit_product['price'] ?? ''; ?>" min="1000" required>
                             </div>
                             <div class="form-group">
                                 <label>Danh mục <span style="color:red;">*</span></label>
                                 <select name="category_id" required>
+                                    <option value="">-- Chọn danh mục --</option>
                                     <?php foreach ($categories as $c): ?>
                                         <option value="<?php echo $c['id']; ?>" <?php echo ($edit_product && $edit_product['category_id'] == $c['id']) ? 'selected' : ''; ?>>
                                             <?php echo htmlspecialchars($c['name']); ?>
@@ -267,6 +269,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) 
                         <div class="form-group">
                             <label>Giới tính <span style="color:red;">*</span></label>
                             <select name="gender_id" required>
+                                <option value="">-- Chọn giới tính --</option>
                                 <?php foreach ($genders as $g): ?>
                                     <option value="<?php echo $g['id']; ?>" <?php echo ($edit_product && $edit_product['gender_id'] == $g['id']) ? 'selected' : ''; ?>>
                                         <?php echo htmlspecialchars($g['name']); ?>
@@ -276,12 +279,12 @@ if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) 
                         </div>
 
                         <div class="form-group">
-                            <label>Hình ảnh chính</label>
-                            <input type="file" name="img" accept="image/*">
+                            <label>Hình ảnh chính <span style="color:red;">*</span></label>
+                            <input type="file" name="img" accept="image/*" <?php echo !$edit_product ? 'required' : ''; ?>>
                             <?php if ($edit_product && $edit_product['img']): ?>
                                 <div style="margin-top:8px;">
-                                    <img src="<?php echo htmlspecialchars($edit_product['img']); ?>" width="80" style="border-radius:4px;">
-                                    <small>Hiện tại</small>
+                                    <img src="assets/images/sanpham/<?php echo htmlspecialchars($edit_product['img']); ?>" width="100" style="border-radius:6px; border:1px solid #ddd;">
+                                    <small style="color:#27ae60; display:block;">Đã có ảnh (có thể thay đổi)</small>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -289,57 +292,81 @@ if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) 
                         <div class="form-group">
                             <label>Hình ảnh phụ</label>
                             <input type="file" name="img_child" accept="image/*">
+                            <?php if ($edit_product && $edit_product['img_child']): ?>
+                                <div style="margin-top:8px;">
+                                    <img src="assets/images/sanpham/<?php echo htmlspecialchars($edit_product['img_child']); ?>" width="80" style="border-radius:6px;">
+                                    <small>Hiện tại</small>
+                                </div>
+                            <?php endif; ?>
                         </div>
 
                         <div class="form-group">
-                            <label>Mô tả</label>
-                            <textarea name="description" rows="3"><?php echo htmlspecialchars($edit_product['description'] ?? ''); ?></textarea>
+                            <label>Mô tả sản phẩm <span style="color:red;">*</span></label>
+                            <textarea name="description" rows="4" required><?php echo htmlspecialchars($edit_product['description'] ?? ''); ?></textarea>
                         </div>
 
                         <div class="form-group">
-                            <label>Biến thể (Màu - Size - Số lượng)</label>
+                            <label>Biến thể (Màu + Size + Số lượng) <span style="color:red;">*</span></label>
                             <div id="variants">
                                 <?php if ($edit_variants): ?>
                                     <?php foreach ($edit_variants as $v): ?>
-                                        <div class="form-group-row variant-row" style="margin-bottom:10px;">
+                                        <div class="form-group-row variant-row" style="margin-bottom:12px; padding:10px; background:#f9f9f9; border-radius:8px; position:relative; border:1px dashed #ddd;">
                                             <div class="form-group">
-                                                <select name="colors[]">
+                                                <select name="colors[]" required>
+                                                    <option value="">Màu</option>
                                                     <?php foreach ($colors as $c): ?>
                                                         <option value="<?php echo $c['id']; ?>" <?php echo $v['color_id'] == $c['id'] ? 'selected' : ''; ?>><?php echo $c['name']; ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <select name="sizes[]">
+                                                <select name="sizes[]" required>
+                                                    <option value="">Size</option>
                                                     <?php foreach ($sizes as $s): ?>
                                                         <option value="<?php echo $s['id']; ?>" <?php echo $v['size_id'] == $s['id'] ? 'selected' : ''; ?>><?php echo $s['name']; ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <input type="number" name="quantities[]" value="<?php echo $v['quantity']; ?>" placeholder="SL" min="0">
+                                                <input type="number" name="quantities[]" value="<?php echo $v['quantity']; ?>" min="0" required placeholder="SL">
                                             </div>
+                                            <button type="button" class="btn-delete-variant" onclick="this.parentElement.remove()" title="Xóa biến thể">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
                                         </div>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <div class="form-group-row variant-row" style="margin-bottom:10px;">
+                                    <div class="form-group-row variant-row" style="margin-bottom:12px; padding:10px; background:#f9f9f9; border-radius:8px; position:relative; border:1px dashed #ddd;">
                                         <div class="form-group">
-                                            <select name="colors[]"><?php foreach ($colors as $c): ?><option value="<?php echo $c['id']; ?>"><?php echo $c['name']; ?></option><?php endforeach; ?></select>
+                                            <select name="colors[]" required>
+                                                <option value="">Màu</option>
+                                                <?php foreach ($colors as $c): ?>
+                                                    <option value="<?php echo $c['id']; ?>"><?php echo $c['name']; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
                                         </div>
                                         <div class="form-group">
-                                            <select name="sizes[]"><?php foreach ($sizes as $s): ?><option value="<?php echo $s['id']; ?>"><?php echo $s['name']; ?></option><?php endforeach; ?></select>
+                                            <select name="sizes[]" required>
+                                                <option value="">Size</option>
+                                                <?php foreach ($sizes as $s): ?>
+                                                    <option value="<?php echo $s['id']; ?>"><?php echo $s['name']; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
                                         </div>
                                         <div class="form-group">
-                                            <input type="number" name="quantities[]" placeholder="Số lượng" min="0">
+                                            <input type="number" name="quantities[]" min="0" required placeholder="Số lượng">
                                         </div>
+                                        <button type="button" class="btn-delete-variant" onclick="this.parentElement.remove()" title="Xóa">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
                                     </div>
                                 <?php endif; ?>
                             </div>
-                            <button type="button" class="btn-secondary" onclick="addVariant()" style="margin-top:8px;">+ Thêm biến thể</button>
+                            <button type="button" class="btn-secondary" onclick="addVariant()" style="margin-top:10px;">+ Thêm biến thể</button>
                         </div>
 
-                        <button type="submit" class="btn-primary" style="margin-top:20px;">
-                            <?php echo $edit_product ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm'; ?>
+                        <button type="submit" class="btn-primary" style="margin-top:25px; padding:12px 30px; font-size:16px;">
+                            <?php echo $edit_product ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm mới'; ?>
                         </button>
                     </form>
                 </div>
@@ -353,29 +380,65 @@ function addVariant() {
     const container = document.getElementById('variants');
     const row = document.createElement('div');
     row.className = 'form-group-row variant-row';
-    row.style.marginBottom = '10px';
+    row.style.cssText = 'margin-bottom:12px; padding:10px; background:#f9f9f9; border-radius:8px; position:relative; border:1px dashed #ddd;';
+
     row.innerHTML = `
         <div class="form-group">
-            <select name="colors[]">
+            <select name="colors[]" required>
+                <option value="">Màu</option>
                 <?php foreach ($colors as $c): ?>
                     <option value="<?php echo $c['id']; ?>"><?php echo htmlspecialchars($c['name']); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
         <div class="form-group">
-            <select name="sizes[]">
+            <select name="sizes[]" required>
+                <option value="">Size</option>
                 <?php foreach ($sizes as $s): ?>
                     <option value="<?php echo $s['id']; ?>"><?php echo htmlspecialchars($s['name']); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
         <div class="form-group">
-            <input type="number" name="quantities[]" placeholder="Số lượng" min="0">
+            <input type="number" name="quantities[]" min="0" required placeholder="Số lượng">
         </div>
+        <button type="button" class="btn-delete-variant" onclick="this.parentElement.remove()" title="Xóa biến thể">
+            <i class="fa-solid fa-trash"></i>
+        </button>
     `;
     container.appendChild(row);
 }
+
+// Không cho submit nếu không có biến thể nào
+document.getElementById('productForm').addEventListener('submit', function(e) {
+    const rows = document.querySelectorAll('#variants .variant-row');
+    if (rows.length === 0) {
+        e.preventDefault();
+        alert('Vui lòng thêm ít nhất 1 biến thể sản phẩm!');
+        return false;
+    }
+});
 </script>
+
+<style>
+.btn-delete-variant {
+    position: absolute;
+    top: 92px;
+    right: 12px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-delete-variant:hover { background: #c0392b; }
+</style>
 
 <style>
 .table-container { max-height: 65vh; overflow-y: auto; border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 8px 8px; }

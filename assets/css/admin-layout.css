@@ -260,7 +260,7 @@ td .status {
     background: none;
     font-size: 1.1rem;
     cursor: pointer;
-    margin-right: 10px;
+
 }
 .action-btn.edit { color: var(--warning); }
 .action-btn.delete { color: var(--danger); }
@@ -504,7 +504,7 @@ main {
     justify-content: space-between;
     align-items: center;
     background: var(--main-color);
-    color: var(--white); /* Đổi màu chữ sang trắng theo ảnh */
+    color: var(--accent-color); /* Đổi màu chữ sang trắng theo ảnh */
     border-radius: 8px 8px 0 0;
 }
 .card-header h3 {
@@ -548,6 +548,7 @@ td {
 /* Căn giữa cột hình ảnh và hành động */
 td.product-image-cell, td.action-cell {
     text-align: center;
+    display: inline-block;
 }
 
 /* Số thứ tự trong bảng */
@@ -616,7 +617,8 @@ td .status {
     border-radius: 4px;
     cursor: pointer;
     float: right; /* Đẩy nút Lưu/Cập nhật sang phải */
-    margin-top: 1rem;
+    margin-top: 30px;
+    margin-right: 42%;
 }
 .btn-secondary {
     background: #eee;
@@ -639,8 +641,7 @@ td .status {
     background: none;
     font-size: 1.1rem;
     cursor: pointer;
-    margin-right: 5px; /* Giảm khoảng cách giữa các nút */
-    padding: 0.3rem;
+    padding-right: 10px;
 }
 .action-btn.edit { color: #333; } 
 .action-btn.hide { color: #333; } 
