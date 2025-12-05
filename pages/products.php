@@ -25,7 +25,6 @@ $current_size_id     = $current_size_id     ?? null;
     <div class="products-container-1 container-center" style="padding-top: 100px;">
         <div class="pro-section-1">
 
-            <!-- DANH MỤC + GIỚI TÍNH -->
             <div class="pro-sec1-box1">
                 <h2>Danh mục</h2>
                 <div class="pro-sec1-box-checkbox">
@@ -34,18 +33,20 @@ $current_size_id     = $current_size_id     ?? null;
                     <?php foreach ($genders as $gender): 
                         $checked = $current_gender_id && in_array($gender['id'], explode(',', $current_gender_id));
                     ?>
-                    <div class="pro-sec1-box-check-label">
-                        <input type="checkbox"
-                               id="gender-<?php echo $gender['id']; ?>"
-                               data-filter="gender_id"
-                               value="<?php echo $gender['id']; ?>"
-                               <?php echo $checked ? 'checked' : ''; ?>>
-                        <label for="gender-<?php echo $gender['id']; ?>"><?php echo $gender['name']; ?></label>
-                    </div>
+                    <div class="pro-sec1-box-check-label" style="cursor: pointer;">
+                        <label class="container-prod-checkbox">
+                            <input type="checkbox"
+                                   id="gender-<?php echo $gender['id']; ?>"
+                                   data-filter="gender_id"
+                                   value="<?php echo $gender['id']; ?>"
+                                   <?php echo $checked ? 'checked' : ''; ?>>
+                            <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path-prod-checkbox"></path>
+                            </svg>
+                            <label style="cursor: pointer;" for="gender-<?php echo $gender['id']; ?>"><?php echo $gender['name']; ?></label>
+                        </label>
+                        </div>
                     <?php endforeach; ?>
-                    <?php if (!empty($current_gender_id)): ?>
-                    <div class="clear-filter" data-filter="gender_id">× Bỏ chọn giới tính</div>
-                    <?php endif; ?>
 
                     <hr>
 
@@ -53,22 +54,24 @@ $current_size_id     = $current_size_id     ?? null;
                     <?php foreach ($categories as $category): 
                         $checked = $current_category_id && in_array($category['id'], explode(',', $current_category_id));
                     ?>
-                    <div class="pro-sec1-box-check-label">
-                        <input type="checkbox"
-                               id="category-<?php echo $category['id']; ?>"
-                               data-filter="category_id"
-                               value="<?php echo $category['id']; ?>"
-                               <?php echo $checked ? 'checked' : ''; ?>>
-                        <label for="category-<?php echo $category['id']; ?>"><?php echo $category['name']; ?></label>
-                    </div>
+                    <div class="pro-sec1-box-check-label" style="cursor: pointer;">
+                        <label class="container-prod-checkbox">
+                            <input type="checkbox"
+                                   id="category-<?php echo $category['id']; ?>"
+                                   data-filter="category_id"
+                                   value="<?php echo $category['id']; ?>"
+                                   <?php echo $checked ? 'checked' : ''; ?>>
+                            <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path-prod-checkbox"></path>
+                            </svg>
+                            <label for="category-<?php echo $category['id']; ?>"><?php echo $category['name']; ?></label>
+                        </label>
+                        </div>
                     <?php endforeach; ?>
-                    <?php if (!empty($current_category_id)): ?>
-                    <div class="clear-filter" data-filter="category_id">× Bỏ chọn loại sản phẩm</div>
-                    <?php endif; ?>
+                    
                 </div>
             </div>
 
-            <!-- MÀU SẮC -->
             <div class="pro-sec1-box1">
                 <h2>Màu sắc</h2>
                 <div class="pro-sec1-box-checkbox">
@@ -79,25 +82,26 @@ $current_size_id     = $current_size_id     ?? null;
                     foreach ($colors as $color): 
                         $checked = $current_color_id && in_array($color['id'], explode(',', $current_color_id));
                     ?>
-                    <div class="pro-sec1-box-check-label">
-                        <input type="checkbox"
-                               id="color-<?php echo $color['id']; ?>"
-                               data-filter="color_id"
-                               value="<?php echo $color['id']; ?>"
-                               <?php echo $checked ? 'checked' : ''; ?>>
-                        <label for="color-<?php echo $color['id']; ?>">
-                            <span style="display:inline-block;width:15px;height:15px;background:#333;border-radius:50%;vertical-align:middle;margin-right:8px;border:1px solid #ccc;"></span>
-                            <?php echo $color['name']; ?>
+                    <div class="pro-sec1-box-check-label" style="cursor: pointer;">
+                        <label class="container-prod-checkbox">
+                            <input type="checkbox"
+                                   id="color-<?php echo $color['id']; ?>"
+                                   data-filter="color_id"
+                                   value="<?php echo $color['id']; ?>"
+                                   <?php echo $checked ? 'checked' : ''; ?>>
+                            <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path-prod-checkbox"></path>
+                            </svg>
+                            <label style="cursor: pointer;" for="color-<?php echo $color['id']; ?>">
+                                <?php echo $color['name']; ?>
+                            </label>
                         </label>
-                    </div>
+                        </div>
                     <?php endforeach; ?>
-                    <?php if (!empty($current_color_id)): ?>
-                    <div class="clear-filter" data-filter="color_id">× Bỏ chọn màu</div>
-                    <?php endif; ?>
+                    
                 </div>
             </div>
 
-            <!-- GIÁ TIỀN -->
             <div class="pro-sec1-box1">
                 <h2>Giá</h2>
                 <div class="pro-sec1-box-checkbox">
@@ -111,22 +115,24 @@ $current_size_id     = $current_size_id     ?? null;
                     foreach ($price_ranges as $range):
                         $checked = $current_price_range && in_array($range['value'], explode(',', $current_price_range));
                     ?>
-                    <div class="pro-sec1-box-check-label">
-                        <input type="checkbox"
-                               id="price-<?php echo $range['value']; ?>"
-                               data-filter="price_range"
-                               value="<?php echo $range['value']; ?>"
-                               <?php echo $checked ? 'checked' : ''; ?>>
-                        <label for="price-<?php echo $range['value']; ?>"><?php echo $range['label']; ?></label>
-                    </div>
+                    <div class="pro-sec1-box-check-label" style="cursor: pointer;">
+                        <label class="container-prod-checkbox">
+                            <input type="checkbox"
+                                   id="price-<?php echo $range['value']; ?>"
+                                   data-filter="price_range"
+                                   value="<?php echo $range['value']; ?>"
+                                   <?php echo $checked ? 'checked' : ''; ?>>
+                            <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path-prod-checkbox"></path>
+                            </svg>
+                            <label style="cursor: pointer;" for="price-<?php echo $range['value']; ?>"><?php echo $range['label']; ?></label>
+                        </label>
+                        </div>
                     <?php endforeach; ?>
-                    <?php if (!empty($current_price_range)): ?>
-                    <div class="clear-filter" data-filter="price_range">× Bỏ lọc giá</div>
-                    <?php endif; ?>
+                    
                 </div>
             </div>
 
-            <!-- KÍCH CỠ -->
             <div class="pro-sec1-box1">
                 <h2>Kích cỡ</h2>
                 <div class="pro-sec1-box-checkbox">
@@ -138,23 +144,25 @@ $current_size_id     = $current_size_id     ?? null;
                     foreach ($sizes as $size):
                         $checked = $current_size_id && in_array($size['id'], explode(',', $current_size_id));
                     ?>
-                    <div class="pro-sec1-box-check-label">
-                        <input type="checkbox"
-                               id="size-<?php echo $size['id']; ?>"
-                               data-filter="size_id"
-                               value="<?php echo $size['id']; ?>"
-                               <?php echo $checked ? 'checked' : ''; ?>>
-                        <label for="size-<?php echo $size['id']; ?>"><?php echo $size['name']; ?></label>
-                    </div>
+                    <div class="pro-sec1-box-check-label" style="cursor: pointer;">
+                        <label class="container-prod-checkbox">
+                            <input type="checkbox"
+                                   id="size-<?php echo $size['id']; ?>"
+                                   data-filter="size_id"
+                                   value="<?php echo $size['id']; ?>"
+                                   <?php echo $checked ? 'checked' : ''; ?>>
+                            <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path-prod-checkbox"></path>
+                            </svg>
+                            <label style="cursor: pointer;" for="size-<?php echo $size['id']; ?>"><?php echo $size['name']; ?></label>
+                        </label>
+                        </div>
                     <?php endforeach; ?>
-                    <?php if (!empty($current_size_id)): ?>
-                    <div class="clear-filter" data-filter="size_id">× Bỏ chọn kích cỡ</div>
-                    <?php endif; ?>
+                    
                 </div>
             </div>
         </div>
 
-        <!-- DANH SÁCH SẢN PHẨM -->
         <div class="pro-section-2">
             <div class="pro-section-2-box1">
                 <p>Có <?php echo isset($products) && is_array($products) ? count($products) : 0; ?> sản phẩm</p>
@@ -173,9 +181,46 @@ $current_size_id     = $current_size_id     ?? null;
                         </a>
                         <div class="pro-sec2-boxSP-miniBox">
                             <h3><?php echo number_format($product['price'], 0, ',', '.'); ?> ₫</h3>
-                            <div class="pro-sec2-boxSP-icon">
-                                <img src="assets/images/img-icon/heart.png" alt="Yêu thích">
-                            </div>
+
+                            
+                            <!-- From Uiverse.io by HuaMinhThien --> 
+                                <div title="Like" class="heart-container">
+                                <input id="Give-It-An-Id" class="checkbox" type="checkbox" />
+                                <div class="svg-container">
+                                    <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="svg-outline"
+                                    viewBox="0 0 24 24"
+                                    >
+                                    <path
+                                        d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"
+                                    ></path>
+                                    </svg>
+                                    <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="svg-filled"
+                                    viewBox="0 0 24 24"
+                                    >
+                                    <path
+                                        d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"
+                                    ></path>
+                                    </svg>
+                                    <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    height="100"
+                                    width="100"
+                                    class="svg-celebrate"
+                                    >
+                                    <polygon points="10,10 20,20"></polygon>
+                                    <polygon points="10,50 20,50"></polygon>
+                                    <polygon points="20,80 30,70"></polygon>
+                                    <polygon points="90,10 80,20"></polygon>
+                                    <polygon points="90,50 80,50"></polygon>
+                                    <polygon points="80,80 70,70"></polygon>
+                                    </svg>
+                                </div>
+                                </div>
+
                         </div>
                     </div>
                     <?php endforeach; ?>
@@ -191,7 +236,6 @@ $current_size_id     = $current_size_id     ?? null;
     </div>
 </main>
 
-<!-- JAVASCRIPT AJAX + HISTORY.PUSHSTATE -->
 <script>
 function updateFilters() {
     const params = new URLSearchParams();
@@ -228,25 +272,14 @@ function updateFilters() {
     });
 }
 
-function updateClearLinks() {
-    document.querySelectorAll('.clear-filter').forEach(link => {
-        link.onclick = function(e) {
-            e.preventDefault();
-            const filterName = this.dataset.filter;
-            document.querySelectorAll(`input[data-filter="${filterName}"]`).forEach(cb => {
-                cb.checked = false;
-            });
-            updateFilters();
-        };
-    });
-}
+
 
 document.addEventListener('change', e => {
-    if (e.target.matches('input[data-filter]')) {
+    // Chỉ cần lắng nghe sự kiện change từ input checkbox
+    if (e.target.matches('input[type="checkbox"][data-filter]')) {
         updateFilters();
     }
 });
 
 document.addEventListener('DOMContentLoaded', updateClearLinks);
 </script>
-

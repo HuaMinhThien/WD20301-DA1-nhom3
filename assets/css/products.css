@@ -1,6 +1,3 @@
-
-
-
 .products-container-1{
     display: flex;
     justify-content: space-between;
@@ -26,14 +23,23 @@
     gap: 10px;
     margin-top: 10px;
 }
-.pro-sec1-box-check-label input{
+.pro-sec1-box-check-label{
+    /* Thêm display flex để căn chỉnh checkbox mới và label */
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    padding-left: 30px; /* Thụt lề cho toàn bộ cụm */
+}
+/* Xóa CSS cũ cho input[type="checkbox"] */
+/* .pro-sec1-box-check-label input{
     margin-left: 30px;
     margin-right: 5px;
     border-radius: 50%;
-}
+} */
 
 .pro-sec1-box-check-label label{
     font-size: 18px;
+    /* Loại bỏ khoảng trắng giữa label và checkbox/svg mới */
+    margin-left: 10px; 
 }
 .pro-section-2{
     display: flex;
@@ -160,17 +166,141 @@
 
 /* -------------------------- */
 
-
-.pro-sec1-box-check-label input[type="checkbox"] {
+/* Xóa CSS cũ cho input[type="checkbox"] */
+/* .pro-sec1-box-check-label input[type="checkbox"] {
     width: 20px;
     height: 20px;
     accent-color: #001F3E;
     cursor: pointer;
+} */
+
+/* --------------------------
+   CSS MỚI CHO CHECKBOX SVG
+   -------------------------- */
+.container-prod-checkbox {
+  cursor: pointer;
+  /* Đảm bảo flex item được căn chỉnh */
+  display: flex; 
+  align-items: center;
 }
-.clear-filter {
-    color: red;
-    font-weight: bold;
-    font-size: 14px;
-    margin-top: 10px;
-    display: inline-block;
+.container-prod-checkbox input {
+  /* Ẩn checkbox gốc */
+  display: none;
+}
+/* Chỉnh kích thước SVG và căn giữa theo chiều dọc */
+.container-prod-checkbox svg {
+  overflow: visible;
+  width: 20px; /* Kích thước phù hợp hơn với form */
+  height: 20px;
+  /* Dùng translate để SVG không làm thay đổi vị trí của nó quá nhiều */
+  transform: translateY(-2px); 
+}
+.path-prod-checkbox {
+  /* Sử dụng màu tối hơn cho nền, ví dụ: #333 hoặc #000 */
+  fill: #fff;
+  stroke: #000; 
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease;
+  stroke-dasharray: 241 9999999;
+  stroke-dashoffset: 0;
+}
+/* Thay thế selector của bạn thành selector chính xác */
+.container-prod-checkbox input:checked ~ svg .path-prod-checkbox {
+  /* Đặt màu stroke cho dấu check, ví dụ: trắng, và màu nền cho hộp check */
+  fill: #fff;
+  stroke: rgb(0, 0, 0); /* Màu của dấu V */
+  stroke-dasharray: 70.5096664428711 9999999;
+  stroke-dashoffset: -262.2723388671875;
+}
+
+
+/* ===============yeu thich=================== */
+
+/* From Uiverse.io by HuaMinhThien */ 
+.heart-container {
+  --heart-color: rgb(253, 3, 3);
+  position: relative;
+  width: 25px;
+  height: 25px;
+  transition: 0.3s;
+}
+
+.heart-container .checkbox {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 20;
+  cursor: pointer;
+}
+
+.heart-container .svg-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heart-container .svg-outline,
+.heart-container .svg-filled {
+  fill: var(--heart-color);
+  position: absolute;
+}
+
+.heart-container .svg-filled {
+  animation: keyframes-svg-filled 1s;
+  display: none;
+}
+
+.heart-container .svg-celebrate {
+  position: absolute;
+  animation: keyframes-svg-celebrate 0.5s;
+  animation-fill-mode: forwards;
+  display: none;
+  stroke: var(--heart-color);
+  fill: var(--heart-color);
+  stroke-width: 2px;
+}
+
+.heart-container .checkbox:checked ~ .svg-container .svg-filled {
+  display: block;
+}
+
+.heart-container .checkbox:checked ~ .svg-container .svg-celebrate {
+  display: block;
+}
+
+@keyframes keyframes-svg-filled {
+  0% {
+    transform: scale(0);
+  }
+
+  25% {
+    transform: scale(1.2);
+  }
+
+  50% {
+    transform: scale(1);
+    filter: brightness(1.5);
+  }
+}
+
+@keyframes keyframes-svg-celebrate {
+  0% {
+    transform: scale(0);
+  }
+
+  50% {
+    opacity: 1;
+    filter: brightness(1.5);
+  }
+
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+    display: none;
+  }
 }
