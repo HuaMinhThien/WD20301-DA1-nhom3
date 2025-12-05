@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 01, 2025 lúc 05:29 PM
+-- Thời gian đã tạo: Th12 05, 2025 lúc 06:23 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -54,9 +54,12 @@ CREATE TABLE `bill` (
 --
 
 INSERT INTO `bill` (`id`, `user_id`, `voucher_id`, `order_date`, `status`, `total_pay`) VALUES
-(2, 2, 1, '2025-11-28 15:45:00', 'completed', 1197000),
-(3, 2, NULL, '2025-12-01 20:52:07', 'pending', 1100000),
-(4, 2, NULL, '2025-12-01 20:57:12', 'pending', 2640000);
+(2, 2, 1, '2025-11-28 15:45:00', 'Đã giao', 1197000),
+(3, 2, NULL, '2025-12-01 20:52:07', 'Chờ xác nhận', 1100000),
+(4, 2, NULL, '2025-12-01 20:57:12', 'Chờ xác nhận', 2640000),
+(5, 5, NULL, '2025-12-02 09:02:11', 'Đã giao', 3700000),
+(6, 2, NULL, '2025-12-04 09:03:28', 'Đã hủy', 3225000),
+(7, 2, NULL, '2025-12-04 09:14:54', 'Chờ xác nhận', 605000);
 
 -- --------------------------------------------------------
 
@@ -82,7 +85,22 @@ INSERT INTO `billdetail` (`id`, `productVariant_id`, `quantity`, `current_price`
 (3, 45, 2, 0, 3),
 (4, 679, 1, 0, 4),
 (5, 196, 2, 0, 4),
-(6, 496, 1, 0, 4);
+(6, 496, 1, 0, 4),
+(7, 526, 1, 0, 5),
+(8, 511, 1, 0, 5),
+(9, 676, 1, 0, 5),
+(10, 625, 1, 0, 5),
+(11, 226, 2, 0, 5),
+(12, 631, 1, 0, 6),
+(13, 680, 1, 0, 6),
+(14, 769, 1, 0, 6),
+(15, 500, 1, 0, 6),
+(16, 91, 1, 0, 6),
+(17, 922, 1, 0, 6),
+(18, 511, 1, 0, 6),
+(19, 594, 1, 0, 6),
+(20, 691, 1, 0, 7),
+(21, 766, 1, 0, 7);
 
 -- --------------------------------------------------------
 
@@ -102,7 +120,11 @@ CREATE TABLE `cart` (
 
 INSERT INTO `cart` (`id`, `user_id`, `date_create`) VALUES
 (1, 2, '2025-12-01 02:24:53'),
-(2, 1, '2025-12-01 16:21:29');
+(2, 1, '2025-12-01 16:21:29'),
+(4, 5, '2025-12-02 07:51:15'),
+(5, 7, '2025-12-02 09:04:15'),
+(6, 4, '2025-12-04 09:26:20'),
+(7, 3, '2025-12-04 09:26:24');
 
 -- --------------------------------------------------------
 
@@ -125,7 +147,7 @@ INSERT INTO `cartdetail` (`id`, `cart_id`, `productVariant_id`, `quantity`) VALU
 (22, 2, 211, 1),
 (25, 2, 514, 1),
 (26, 2, 529, 1),
-(30, 1, 679, 1);
+(55, 1, 514, 1);
 
 -- --------------------------------------------------------
 
@@ -1313,7 +1335,8 @@ INSERT INTO `user` (`id`, `name`, `email`, `password`, `role`, `phone`, `dob`, `
 (1, 'Admin User', 'admin@gmail.com', '123456', 'admin', '0123456789', NULL, NULL, '2025-11-26 00:00:00'),
 (2, 'Test User', 'test@example.com', '123456', 'user', '0987654321', NULL, NULL, '2025-11-25 00:00:00'),
 (3, 'Liêm Trần', 'liemtran3107@gmail.com', '123', 'user', '', NULL, NULL, '2025-12-01 16:53:27'),
-(5, 'Hứa Minh Thiên', 'thien@gmail.com', '123456', 'user', '0906761390', '2006-12-04', 1, '2025-12-01 23:19:15');
+(5, 'Hứa Minh Thiên', 'thien@gmail.com', '123456', 'user', '0906761390', '2006-12-04', 1, '2025-12-01 23:19:15'),
+(7, 'tuan', 'tuan@gmail.com', '123456', 'user', '0906761390', '2006-12-22', 1, '2025-12-02 09:03:14');
 
 -- --------------------------------------------------------
 
@@ -1466,25 +1489,25 @@ ALTER TABLE `address`
 -- AUTO_INCREMENT cho bảng `bill`
 --
 ALTER TABLE `bill`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `billdetail`
 --
 ALTER TABLE `billdetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT cho bảng `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `cartdetail`
 --
 ALTER TABLE `cartdetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT cho bảng `category`
@@ -1538,7 +1561,7 @@ ALTER TABLE `size`
 -- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `voucher`

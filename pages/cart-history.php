@@ -24,7 +24,12 @@
 
                     <div class="order-status-and-date">
                         <span class="order-date">Ngày đặt: <?= date('d/m/Y', strtotime($firstItem['order_date'])) ?></span>
-                        <span class="status-badge <?= strtolower($firstItem['status']) ?>"><?= ucfirst($firstItem['status']) ?></span>
+
+                        <?php if ($firstItem['status'] == 'Đã hủy' || $firstItem['status'] == 'Chờ xác nhận'):?>
+                            <span style="color: red; font-size: 16px;" class="status-badge <?= strtolower($firstItem['status']) ?>"><?= ucfirst($firstItem['status']) ?></span>
+                        <?php elseif ($firstItem['status'] == 'Đã giao' ): ?>
+                            <span style="color: green; font-size: 16px;" class="status-badge <?= strtolower($firstItem['status']) ?>"><?= ucfirst($firstItem['status']) ?></span>
+                        <?php endif; ?>
                     </div>
                     <div class="sec-order-show">
 
@@ -48,7 +53,7 @@
                                 </div>
 
                                 <div class="cot3-product">
-                                    <p><?= number_format($item['price'], 0, ',', '.') ?>₫</p>
+                                    <p>Đơn giá: <?= number_format($item['price'], 0, ',', '.') ?>₫</p>
                                 </div>
                             </a>
                             <hr style="border: 1px solid #00000027;">
@@ -59,15 +64,14 @@
                     <!-- Hiển thị tổng tiền của TỪNG ĐƠN HÀNG -->
                     <div class="summary-total">
                         <span class="label">Tổng tiền:</span>
-                        <span class="total-price"><?= number_format($order_total, 0, ',', '.') ?>₫</span>
+                        <h3 class="total-price"><?= number_format($order_total, 0, ',', '.') ?>₫</h3>
                     </div>
 
                     <div class="order-actions">
                         <div class="action-buttons">
-                            <?php if ($firstItem['status'] == 'pending'): ?>
+                            <?php if ($firstItem['status'] == 'Chờ xác nhận'): ?>
                                 <button class="action-btn cancel-btn">Hủy đơn</button>
-                            <?php elseif ($firstItem['status'] == 'completed'): ?>
-                                <button class="action-btn review-btn">Đánh giá</button>
+                            <?php elseif ($firstItem['status'] == 'Đã hủy' || $firstItem['status'] == 'Đã giao' ): ?>
                                 <button class="action-btn buy-again-btn">Mua lại</button>
                             <?php endif; ?>
                         </div>
