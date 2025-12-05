@@ -1332,6 +1332,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `name`, `email`, `password`, `role`, `phone`, `dob`, `gender`, `login_day`) VALUES
+(0, 'name', 'email@gmail.com', '000000', 'user', '0000000000', NULL, NULL, '2025-11-26 00:00:00'),
 (1, 'Admin User', 'admin@gmail.com', '123456', 'admin', '0123456789', NULL, NULL, '2025-11-26 00:00:00'),
 (2, 'Test User', 'test@example.com', '123456', 'user', '0987654321', NULL, NULL, '2025-11-25 00:00:00'),
 (3, 'Liêm Trần', 'liemtran3107@gmail.com', '123', 'user', '', NULL, NULL, '2025-12-01 16:53:27'),

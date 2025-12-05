@@ -154,16 +154,14 @@ $current_size_id     = $_GET['size_id']     ?? null;
                 </div>
             </div>
 
+            <!-- ======================= Giá tiền ============================== -->
             <div class="pro-sec1-box1">
                 <h2>Giá</h2>
 
                 <div class="pro-sec1-box-checkbox">
                     <?php
                     $price_ranges = [
-                        ['min' => 0, 'max' => 200000, 'label' => 'Dưới 200.000đ', 'value' => '0_200000'],
-                        ['min' => 200000, 'max' => 300000, 'label' => '200.000đ - 300.000đ', 'value' => '200000_300000'],
-                        ['min' => 300000, 'max' => 400000, 'label' => '300.000đ - 400.000đ', 'value' => '300000_400000'],
-                        ['min' => 400000, 'max' => 500000, 'label' => '400.000đ - 500.000đ', 'value' => '400000_500000'],
+                        ['min' => 0, 'max' => 500000, 'label' => 'Dưới 500.000đ', 'value' => '0_200000'],
                         ['min' => 500000, 'max' => 600000, 'label' => '500.000đ - 600.000đ', 'value' => '500000_600000'],
                         ['min' => 600000, 'max' => 700000, 'label' => '600.000đ - 700.000đ', 'value' => '600000_700000'],
                         ['min' => 700000, 'max' => 999999999, 'label' => 'Trên 700.000đ', 'value' => '700000_999999999'],
@@ -291,14 +289,7 @@ $current_size_id     = $_GET['size_id']     ?? null;
                     ?> sản phẩm
                 </p>
 
-                <select name="" id="">
-                    <option value="">Mặc định</option>
-                    <option value="">Giá: Thấp đến cao</option>
-                    <option value="">Giá: Cao đến thấp</option>
-                    <option value="">Tên: A đến Z</option>
-                    <option value="">Tên: Z đến A</option>
-                    <option value="">Hàng mới về</option>
-                </select>
+                
             </div>
 
             <div class="pro-section-2-box2">
@@ -320,49 +311,16 @@ $current_size_id     = $_GET['size_id']     ?? null;
                     </a>
                     
                     <div class="pro-sec2-boxSP-miniBox">
-                        <p>
+                        <h3>
                             <?php echo number_format($product['price'], 0, ',', '.'); ?> ₫
-                        </p>
+                        </h3>
 
-                        <form action="index.php?page=cart&action=add&user_id=<?php echo $uid; ?>" method="POST" id="add-form-<?php echo $product['id']; ?>" style="display:inline;"> 
-                            <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
-                            <input type="hidden" name="quantity" value="1"> 
-
-                            <?php
-                                // Lấy variant đầu tiên còn hàng (dùng cho mọi sản phẩm: áo, quần, phụ kiện)
-                                $stmt = $pdo->prepare("
-                                    SELECT id 
-                                    FROM product_variant 
-                                    WHERE product_id = ? 
-                                    AND quantity > 0 
-                                    LIMIT 1
-                                ");
-                                $stmt->execute([$product['id']]);
-                                $available_variant_id = $stmt->fetchColumn();
-
-                                $can_add_to_cart = ($available_variant_id !== false && $available_variant_id > 0);
-
-                                if ($can_add_to_cart) {
-                                    echo '<input type="hidden" name="variant_id" value="' . $available_variant_id . '">';
-                                }
-                                ?>
-
-                                <!-- Icon giỏ hàng -->
-                                <div class="pro-sec2-boxSP-icon">
-                                    <img src="assets/images/img-icon/heart.png" alt="Yêu thích">
-                                    <img 
-                                        src="assets/images/img-icon/online-shopping.png" 
-                                        alt="Thêm vào giỏ"
-                                        style="cursor: pointer;"
-                                        <?php if ($can_add_to_cart): ?>
-                                            onclick="event.preventDefault(); document.getElementById('add-form-<?php echo $product['id']; ?>').submit();"
-                                        <?php else: ?>
-                                            onclick="alert('Sản phẩm tạm hết hàng!'); return false;"
-                                            style="opacity:0.5; cursor:not-allowed;"
-                                        <?php endif; ?>
-                                    >
-                                </div>
-                        </form>
+                        <!-- Icon giỏ hàng -->
+                        <div class="pro-sec2-boxSP-icon">
+                            <img src="assets/images/img-icon/heart.png" alt="Yêu thích">
+                            
+                        </div>
+                        
                     </div>
                 </div>
                 <?php endforeach; // Đóng foreach ?>

@@ -221,22 +221,16 @@ $imagePath = 'assets/images/sanpham/';
              </a>
             
             <div class="pro-sec2-boxSP-miniBox">
-                <p>
+                <h3>
                     <?php echo number_format($product['price'], 0, ',', '.'); ?> ₫
-                </p>
+                </h3>
 
+                <!-- Icon giỏ hàng -->
                 <div class="pro-sec2-boxSP-icon">
                     <img src="assets/images/img-icon/heart.png" alt="Yêu thích">
                     
-                    <form action="index.php?page=cart&action=add" method="POST" style="display: inline;">
-                        <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
-                        <input type="hidden" name="quantity" value="1">
-                        
-                        <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
-                            <img src="assets/images/img-icon/online-shopping.png" alt="Thêm vào giỏ">
-                        </button>
-                    </form>
                 </div>
+                
             </div>
         </div>
 
@@ -280,22 +274,16 @@ $imagePath = 'assets/images/sanpham/';
              </a>
             
             <div class="pro-sec2-boxSP-miniBox">
-                <p>
+                <h3>
                     <?php echo number_format($product['price'], 0, ',', '.'); ?> ₫
-                </p>
+                </h3>
 
+                <!-- Icon giỏ hàng -->
                 <div class="pro-sec2-boxSP-icon">
                     <img src="assets/images/img-icon/heart.png" alt="Yêu thích">
                     
-                    <form action="index.php?page=cart&action=add" method="POST" style="display: inline;">
-                        <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
-                        <input type="hidden" name="quantity" value="1">
-                        
-                        <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
-                            <img src="assets/images/img-icon/online-shopping.png" alt="Thêm vào giỏ">
-                        </button>
-                    </form>
                 </div>
+                
             </div>
         </div>
 

@@ -101,7 +101,7 @@ class HomeController {
     }
 
     public function thanhtoan() {
-        $userId = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2;
+        $userId = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 0;
         $cart_items = $this->cartModel->getCartItemsByUserId($userId);
 
         $grand_total = 0;
@@ -112,7 +112,7 @@ class HomeController {
         include_once 'pages/thanhtoan.php'; 
     }
     public function cart_history() {
-        $userId = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2;
+        $userId = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 0;
         $bills = $this->billModel->getBillsByUserId($userId); 
 
         include_once 'pages/cart-history.php'; 

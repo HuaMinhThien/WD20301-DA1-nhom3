@@ -538,10 +538,10 @@ h6{
 .pro-sec2-boxSP-icon img:hover {
     transform: scale(1.1);
 }
-.pro-sec2-boxSP-miniBox p {
+.pro-sec2-boxSP-miniBox h3{
     color: red;
     font-size: 16px;
-    font-weight: bold;
+    text-decoration: none;
 }
 
 
