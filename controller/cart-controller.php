@@ -1,7 +1,6 @@
 <?php
 // File: /controller/cart-controller.php
 // ĐÃ SỬA HOÀN CHỈNH: KHÔNG CÒN LỖI HEADER + THÔNG BÁO ĐẸP + AN TOÀN
-
 $root_path = dirname(__DIR__);
 require_once($root_path . '/models/ProductModel.php');
 require_once($root_path . '/models/CartModels.php');
@@ -25,9 +24,14 @@ class CartController {
         $this->cartModel = new CartModel($this->db);
         $this->billModel    = new BillModel($this->db);
 
-
-        $this->userId = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2;
+        $this->userId = $_SESSION['user_id'] ?? 2;  // Chỉ dùng session, fallback 2
         $this->userId = (int)$this->userId;
+
+        // Buộc đăng nhập cho toàn bộ cart (nhạy cảm)
+        if ($this->userId === 2) {
+            header('Location: index.php?page=login');
+            exit;
+        }
     }
 
     public function index() {
@@ -94,7 +98,7 @@ class CartController {
         
         // 1. Nếu là nút Mua Ngay (redirect=thanhtoan/checkout), chuyển đến trang thanh toán
         if ($redirect === 'thanhtoan' || $redirect === 'checkout') {
-            header('Location: index.php?page=thanhtoan&user_id=' . $this->userId);
+            header('Location: index.php?page=thanhtoan');
         } 
         // 2. Nếu là nút Thêm vào giỏ hàng, chuyển hướng ngược lại trang chi tiết sản phẩm
         else {
@@ -143,7 +147,7 @@ class CartController {
         // Nếu trang không hợp lệ → mặc định về giỏ hàng
         $page = $valid_pages[$page] ?? 'cart';
 
-        $url = "index.php?page={$page}&user_id={$user_id}";
+        $url = "index.php?page={$page}";  // Xóa &user_id
 
         // Lấy thông báo (nếu có)
         $msg = $_SESSION['success_message'] ?? $_SESSION['error_message'] ?? 'Đã thêm vào giỏ hàng thành công!';
@@ -158,7 +162,7 @@ class CartController {
         exit;
     }
     public function checkout() {
-        $userId = $_SESSION['user_id'] ?? $_GET['user_id'] ?? 2; // Ưu tiên session
+        $userId = $_SESSION['user_id'] ?? 2;  // Ưu tiên session
         $totalPay = $_POST['total_pay'] ?? 0; // Lấy từ form (tính lại để an toàn)
 
         // Giả định form gửi thêm thông tin giao hàng (address, phone, email...)
@@ -169,12 +173,13 @@ class CartController {
         if ($billId) {
             $_SESSION['success_message'] = 'Đơn hàng đã được đặt thành công!';
             // Thay thế: $this->jsRedirect('cart_history', $userId);
-            header('Location: index.php?page=cart_history&user_id=' . $userId);
+            header('Location: index.php?page=cart_history');  // Xóa &user_id
         } else {
             $_SESSION['error_message'] = 'Lỗi khi đặt hàng!';
             // Thay thế: $this->jsRedirect('thanhtoan', $userId);
-            header('Location: index.php?page=thanhtoan&user_id=' . $userId);
+            header('Location: index.php?page=thanhtoan');  // Xóa &user_id
         }
         exit;
     }
 }
+?>

@@ -70,16 +70,16 @@ $active_tab = $_GET['tab'] ?? 'info'; // info | address | history
                 <nav class="user-menu">
                     <ul class="sidebar-menu">
                         <li class="menu-item <?= $active_tab === 'info' ? 'active' : '' ?>">
-                            <a href="?page=user&tab=info&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 0; ?>"">Thông tin cá nhân</a>
+                            <a href="?page=user&tab=info">Thông tin cá nhân</a>
                         </li>
                         <li class="menu-item <?= $active_tab === 'address' ? 'active' : '' ?>">
-                            <a href="?page=user&tab=address&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 0; ?>"">Địa chỉ</a>
+                            <a href="?page=user&tab=address">Địa chỉ</a>
                         </li>
                         <li class="menu-item <?= $active_tab === 'history' ? 'active' : '' ?>">
-                            <a href="?page=cart_history&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 0; ?>">Lịch sử đặt hàng</a>
+                            <a href="?page=cart_history>Lịch sử đặt hàng"</a>
                         </li>
                         <li class="menu-item logout">
-                            <a href="?page=logout&user_id=<?php echo $_GET['user_id'] ?? $_SESSION['user_id'] ?? 0; ?>"">Đăng xuất</a>
+                            <a href="?page=logout">Đăng xuất</a>
                         </li>
                     </ul>
                 </nav>

@@ -15,9 +15,9 @@
                     <input type="email" name="email" placeholder="Nhập email" required>
                     <input type="text" name="address" placeholder="Địa chỉ, tên đường" required>
                     <input type="text" name="city_district_ward" placeholder="Tỉnh/TP, Quận/Huyện, Phường/Xã" required>
-                    <!-- Thêm hidden để gửi total -->
+                    <!-- Thêm hidden để gửi total và user_id -->
                     <input type="hidden" name="total_pay" value="<?= $grand_total ?>">
-                    <!-- Các phần khác giữ nguyên -->
+                    <input type="hidden" name="user_id" value="<?= $_SESSION['user_id'] ?? 0 ?>">
             </div>
 
             <div class="checkout-right">

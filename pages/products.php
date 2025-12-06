@@ -174,7 +174,7 @@ $current_size_id     = $current_size_id     ?? null;
                         $productImagePath = 'assets/images/sanpham/';
                     ?>
                     <div class="pro-section-2-boxSP">
-                        <a href="?page=products_Details&id=<?php echo $product['id']; ?>&user_id=<?php echo $uid; ?>">
+                        <a href="?page=products_Details&id=<?php echo $product['id']; ?>">
                             <img src="<?php echo htmlspecialchars($productImagePath . $product['image']); ?>" 
                                  alt="<?php echo htmlspecialchars($product['name']); ?>">
                             <p class="pro-sec2-boxSP-name"><?php echo htmlspecialchars($product['name']); ?></p>

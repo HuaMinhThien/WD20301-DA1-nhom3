@@ -1,6 +1,5 @@
 <?php
 // File: controller/HomeController.php (Sửa lỗi session trong hàm login)
-
 require_once('models/ProductModel.php'); 
 require_once('models/UserModel.php');
 require_once('models/CartModels.php'); 
@@ -30,7 +29,7 @@ class HomeController {
         $genders    = $this->productModel->getAllGenders();
 
         // === PHẦN QUAN TRỌNG NHẤT – BẮT BUỘC PHẢI DÙNG CÁCH NÀY KHI DÙNG CHECKBOX ===
-        $uid = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2;
+        $uid = $_SESSION['user_id'] ?? 2;  // Chỉ dùng session, fallback 2
 
         // 1. Danh mục – hỗ trợ nhiều (1,2,3 hoặc 1&category_id=2&category_id=3)
         $category_ids = [];
@@ -287,7 +286,7 @@ class HomeController {
                 ];
 
                 if ($this->userModel->registerUser($data)) {
-                    // Đăng ký thành công → chuyển về trang login với thông báo
+                // Đăng ký thành công → chuyển về trang login với thông báo (xóa &user_id nếu có)
                     header("Location: index.php?page=login&register=success");
                     exit;
                 } else {

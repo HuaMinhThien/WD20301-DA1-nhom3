@@ -42,7 +42,7 @@
         </li>
 
         <li class="logout">
-            <a href="index.php?page=home"><i class="fa-solid fa-right-from-bracket"></i> <span>Đăng Xuất</span></a>
+            <a href="index.php?page=logout"><i class="fa-solid fa-right-from-bracket"></i> <span>Đăng Xuất</span></a>
         </li>
     </ul>
 </div>

@@ -21,8 +21,7 @@ class UserController {
         include 'admin/customers.php'; 
     }
 
-    @return array
-     */
+    // @return array
     public function getAllUsers() {
         // Lấy tất cả user, sắp xếp người mới nhất lên đầu
         $query = "SELECT * FROM " . $this->table_name . " ORDER BY id ";

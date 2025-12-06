@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 05, 2025 lúc 06:23 AM
+-- Thời gian đã tạo: Th12 06, 2025 lúc 05:11 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -59,7 +59,8 @@ INSERT INTO `bill` (`id`, `user_id`, `voucher_id`, `order_date`, `status`, `tota
 (4, 2, NULL, '2025-12-01 20:57:12', 'Chờ xác nhận', 2640000),
 (5, 5, NULL, '2025-12-02 09:02:11', 'Đã giao', 3700000),
 (6, 2, NULL, '2025-12-04 09:03:28', 'Đã hủy', 3225000),
-(7, 2, NULL, '2025-12-04 09:14:54', 'Chờ xác nhận', 605000);
+(7, 2, NULL, '2025-12-04 09:14:54', 'Chờ xác nhận', 605000),
+(8, 2, NULL, '2025-12-06 23:04:43', 'pending', 640000);
 
 -- --------------------------------------------------------
 
@@ -100,7 +101,10 @@ INSERT INTO `billdetail` (`id`, `productVariant_id`, `quantity`, `current_price`
 (18, 511, 1, 0, 6),
 (19, 594, 1, 0, 6),
 (20, 691, 1, 0, 7),
-(21, 766, 1, 0, 7);
+(21, 766, 1, 0, 7),
+(22, 514, 1, 0, 8),
+(23, 212, 1, 0, 8),
+(24, 215, 1, 0, 8);
 
 -- --------------------------------------------------------
 
@@ -124,7 +128,8 @@ INSERT INTO `cart` (`id`, `user_id`, `date_create`) VALUES
 (4, 5, '2025-12-02 07:51:15'),
 (5, 7, '2025-12-02 09:04:15'),
 (6, 4, '2025-12-04 09:26:20'),
-(7, 3, '2025-12-04 09:26:24');
+(7, 3, '2025-12-04 09:26:24'),
+(8, 0, '2025-12-05 12:35:28');
 
 -- --------------------------------------------------------
 
@@ -147,7 +152,7 @@ INSERT INTO `cartdetail` (`id`, `cart_id`, `productVariant_id`, `quantity`) VALU
 (22, 2, 211, 1),
 (25, 2, 514, 1),
 (26, 2, 529, 1),
-(55, 1, 514, 1);
+(56, 2, 676, 1);
 
 -- --------------------------------------------------------
 
@@ -333,7 +338,7 @@ INSERT INTO `products` (`id`, `name`, `price`, `description`, `img`, `img_child`
 (63, 'Mắt Kính FWSG23SS01G', 310000, 'Mẫu kính FWSG23SS01G mang hơi hướng Retro cổ điển nhưng không kém phần hiện đại. Thiết kế Oversize giúp che chắn bụi bẩn hiệu quả và tạo hiệu ứng khuôn mặt thon gọn hơn.', 'kinh-nu3-Mắt Kính FWSG23SS01G.jpg', 'kinh-nu3.1-Mắt Kính FWSG23SS01G.jpg', 4, 2),
 (64, 'Mắt Kính Nữ FWSG23SS02G', 330000, 'Phiên bản đặc biệt FWSG23SS02G dành riêng cho nữ giới với các đường bo cong mềm mại. Gọng kim loại mạ vàng sáng bóng kết hợp cùng tròng kính Gradient chuyển màu thời trang.', 'kinh-nu4-Mắt Kính Nữ FWSG23SS02G.jpg', 'kinh-nu4.1-Mắt Kính Nữ FWSG23SS02G.jpg', 4, 2),
 (65, 'Túi Xách Nữ Tiện Dụng FWBA24SS02', 650000, 'Túi xách nữ FWBA24SS02 là sự kết hợp hoàn hảo giữa tính tiện dụng và thời trang. Kích thước túi rộng rãi, chia nhiều ngăn thông minh giúp nàng thoải mái mang theo cả thế giới.', 'tui-nu1-Túi Xách Nữ Tiện Dụng FWBA24SS02.jpg', 'tui-nu1.1-Túi Xách Nữ Tiện Dụng FWBA24SS02.jpg', 5, 2),
-(66, 'Túi Tote Nữ Thời Trang FWBA24SS01', 550000, 'Trẻ trung và năng động với mẫu túi Tote FWBA24SS01. Thiết kế form túi đứng cứng cáp, không bị mất dáng khi để ít đồ. Quai đeo vai chắc chắn, độ dài vừa phải.', 'tui.nu2-Túi Tote Nữ Thời Trang FWBA24SS01.jpg', 'tui.nu2.1-Túi Tote Nữ Thời Trang FWBA24SS01.jpg', 5, 2);
+(67, 'test', 111, 'test', 'uploads/1764947047_160_blazer_007-13_51e7520a0d8d43b6bc38e22130452dad_large.jpg', '', 5, 1);
 
 -- --------------------------------------------------------
 
@@ -1046,21 +1051,6 @@ INSERT INTO `product_variant` (`id`, `product_id`, `color_id`, `category_id`, `g
 (688, 65, 4, 1, 1, 5, 62),
 (689, 65, 5, 1, 1, 5, 88),
 (690, 65, 9, 1, 1, 5, 63),
-(691, 66, 4, 1, 1, 1, 40),
-(692, 66, 5, 1, 1, 1, 93),
-(693, 66, 9, 1, 1, 1, 65),
-(694, 66, 4, 1, 1, 2, 35),
-(695, 66, 5, 1, 1, 2, 63),
-(696, 66, 9, 1, 1, 2, 18),
-(697, 66, 4, 1, 1, 3, 73),
-(698, 66, 5, 1, 1, 3, 29),
-(699, 66, 9, 1, 1, 3, 98),
-(700, 66, 4, 1, 1, 4, 32),
-(701, 66, 5, 1, 1, 4, 35),
-(702, 66, 9, 1, 1, 4, 71),
-(703, 66, 4, 1, 1, 5, 60),
-(704, 66, 5, 1, 1, 5, 75),
-(705, 66, 9, 1, 1, 5, 93),
 (706, 56, 4, 1, 1, 1, 52),
 (707, 56, 5, 1, 1, 1, 59),
 (708, 56, 9, 1, 1, 1, 42),
@@ -1285,7 +1275,8 @@ INSERT INTO `product_variant` (`id`, `product_id`, `color_id`, `category_id`, `g
 (927, 55, 9, 1, 1, 4, 40),
 (928, 55, 4, 1, 1, 5, 31),
 (929, 55, 5, 1, 1, 5, 25),
-(930, 55, 9, 1, 1, 5, 22);
+(930, 55, 9, 1, 1, 5, 22),
+(1024, 67, 9, 5, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -1332,12 +1323,13 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `name`, `email`, `password`, `role`, `phone`, `dob`, `gender`, `login_day`) VALUES
-(0, 'name', 'email@gmail.com', '000000', 'user', '0000000000', NULL, NULL, '2025-11-26 00:00:00'),
+(0, 'name', 'email@gmail.com', '000000', 'user', '0000000000', NULL, 1, '2025-12-05 06:35:40'),
 (1, 'Admin User', 'admin@gmail.com', '123456', 'admin', '0123456789', NULL, NULL, '2025-11-26 00:00:00'),
 (2, 'Test User', 'test@example.com', '123456', 'user', '0987654321', NULL, NULL, '2025-11-25 00:00:00'),
 (3, 'Liêm Trần', 'liemtran3107@gmail.com', '123', 'user', '', NULL, NULL, '2025-12-01 16:53:27'),
 (5, 'Hứa Minh Thiên', 'thien@gmail.com', '123456', 'user', '0906761390', '2006-12-04', 1, '2025-12-01 23:19:15'),
-(7, 'tuan', 'tuan@gmail.com', '123456', 'user', '0906761390', '2006-12-22', 1, '2025-12-02 09:03:14');
+(7, 'tuan', 'tuan@gmail.com', '123456', 'user', '0906761390', '2006-12-22', 1, '2025-12-02 09:03:14'),
+(8, 'name', 'email@gmail.com', '000000', 'user', '0000000000', NULL, 1, '2025-12-05 06:35:40');
 
 -- --------------------------------------------------------
 
@@ -1490,25 +1482,25 @@ ALTER TABLE `address`
 -- AUTO_INCREMENT cho bảng `bill`
 --
 ALTER TABLE `bill`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT cho bảng `billdetail`
 --
 ALTER TABLE `billdetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT cho bảng `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT cho bảng `cartdetail`
 --
 ALTER TABLE `cartdetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT cho bảng `category`
@@ -1544,13 +1536,13 @@ ALTER TABLE `payment`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT cho bảng `product_variant`
 --
 ALTER TABLE `product_variant`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1024;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1025;
 
 --
 -- AUTO_INCREMENT cho bảng `size`
@@ -1562,7 +1554,7 @@ ALTER TABLE `size`
 -- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT cho bảng `voucher`

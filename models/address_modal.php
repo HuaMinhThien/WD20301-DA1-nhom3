@@ -45,10 +45,10 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
             <select name="province" required>
                 <option value="">Tỉnh / Thành phố</option>
                 <?php
-                $provinces = ['TP. Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng', 'An Giang', 'Bình Dương', 'Đồng Nai', 'Cần Thơ', 'Khánh Hòa', 'Hải Phòng'];
-                foreach ($provinces as $p) {
-                    $selected = ($edit_addr && strpos($edit_addr['address'], $p) !== false) ? 'selected' : '';
-                    echo "<option value='$p' $selected>$p</option>";
+                $provinces = ['TP. Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng'];  // Ví dụ, load thực từ API nếu cần
+                foreach ($provinces as $prov) {
+                    $selected = ($edit_addr && $edit_addr['province'] == $prov) ? 'selected' : '';
+                    echo "<option value='$prov' $selected>$prov</option>";
                 }
                 ?>
             </select>
@@ -77,13 +77,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
 </div>
 
 <!-- CSS riêng (được tách thành file address-modal.css rồi, nhưng vẫn giữ inline làm backup) -->
-<style>
-/* Backup nếu chưa có file CSS riêng */
-.modal-overlay{opacity:0;visibility:hidden;transition:all .3s;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);display:flex;justify-content:center;align-items:center;z-index:9999}
-.modal-overlay.show{opacity:1;visibility:visible}
-.modal-content{background:#fff;width:92%;max-width:560px;border-radius:16px;overflow:hidden;box-shadow:0 15px 50px rgba(0,0,0,.2);transform:scale(.9);transition:transform .3s}
-.modal-overlay.show .modal-content{transform:scale(1)}
-</style>
+
 
 <!-- JavaScript xử lý mở/đóng modal mượt -->
 <script>
@@ -150,7 +144,7 @@ if (isset($_POST['save_address'])) {
 if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
     $id = (int)$_GET['id'];
     $db->prepare("DELETE FROM address WHERE id = ? AND user_id = ?")->execute([$id, $user_id]);
-    echo "<script>alert('Đã xóa địa chỉ!'); location.href='?page=user&tab=address';</script>";
+    echo "<script>alert('Đã xóa địa chỉ!'); location.href='?page=user&tab=address';</script>";  // Xóa &user_id
     exit;
 }
 
@@ -159,7 +153,7 @@ if (isset($_GET['set_default'])) {
     $id = (int)$_GET['set_default'];
     $db->prepare("UPDATE address SET is_default = 0 WHERE user_id = ?")->execute([$user_id]);
     $db->prepare("UPDATE address SET is_default = 1 WHERE id = ? AND user_id = ?")->execute([$id, $user_id]);
-    echo "<script>location.href='?page=user&tab=address';</script>";
+    echo "<script>location.href='?page=user&tab=address';</script>";  // Xóa &user_id
     exit;
 }
 ?>

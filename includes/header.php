@@ -18,7 +18,7 @@ $user_id = is_numeric($user_id) ? (int)$user_id : 0;
 <header>
     <div class="hd-container1-bg">
         <div class="hd-container1-content container-center">
-            <a href="?page=home&user_id=<?php echo $user_id; ?>">
+            <a href="?page=home">
                 <div class="hd-logo">
                     <img src="assets/images/img-logo/logo.jpg" alt="">
                 </div>
@@ -32,12 +32,12 @@ $user_id = is_numeric($user_id) ? (int)$user_id : 0;
             </div>
             
             <div class="hd-container-icon">
-                <a href="?page=cart_history&user_id=<?php echo $user_id; ?>">
+                <a href="?page=cart_history">
                     <div class="hd-icon"><img src="assets/images/img-icon/clock.png" alt=""></div>
                 </a>
                 
                 <?php if ($user_id != 0): ?>
-                    <a href="?page=user&user_id=<?php echo $user_id; ?>">
+                    <a href="?page=user">
                         <div class="hd-icon"><img src="assets/images/img-icon/user.png" alt=""></div>
                     </a>
                 <?php else: ?>
@@ -46,7 +46,7 @@ $user_id = is_numeric($user_id) ? (int)$user_id : 0;
                     </a>
                 <?php endif; ?>
                 
-                <a href="?page=cart&user_id=<?php echo $user_id; ?>">
+                <a href="?page=cart">
                     <div class="hd-icon"><img src="assets/images/img-icon/grocery-store.png" alt=""></div>
                 </a>
             </div>
@@ -55,12 +55,12 @@ $user_id = is_numeric($user_id) ? (int)$user_id : 0;
 
     <div class="hd-container2-bg">
         <div class="hd-container2-content container-center">
-            <a class="hd-a-cate" href="?page=home&user_id=<?php echo $user_id; ?>">
+            <a class="hd-a-cate" href="?page=home">
                 <div class="hd-categories"><p>Trang Chủ</p></div>
             </a>
             
             <div class="hd-a-cate-wrapper">
-                <a class="hd-a-cate" href="?page=products&category_id=1&user_id=<?php echo $user_id; ?>">
+                <a class="hd-a-cate" href="?page=products&category_id=1">
                     <div class="hd-categories">
                         <p>Áo</p>
                         <img style="height: 10px; width: 10px; margin-top: 5px;" src="assets/images/img-icon/down-arrow.png" alt="">
@@ -69,7 +69,7 @@ $user_id = is_numeric($user_id) ? (int)$user_id : 0;
             </div>
 
             <div class="hd-a-cate-wrapper">
-                <a class="hd-a-cate" href="?page=products&category_id=2&user_id=<?php echo $user_id; ?>">
+                <a class="hd-a-cate" href="?page=products&category_id=2">
                     <div class="hd-categories">
                         <p>Quần</p>
                         <img style="height: 10px; width: 10px; margin-top: 5px;" src="assets/images/img-icon/down-arrow.png" alt="">
@@ -78,7 +78,7 @@ $user_id = is_numeric($user_id) ? (int)$user_id : 0;
             </div>
 
             <div class="hd-a-cate-wrapper">
-                <a class="hd-a-cate" href="?page=products&category_id=12&user_id=<?php echo $user_id; ?>">
+                <a class="hd-a-cate" href="?page=products&category_id=12">
                     <div class="hd-categories">
                         <p>Phụ Kiện</p>
                         <img style="height: 10px; width: 10px; margin-top: 5px;" src="assets/images/img-icon/down-arrow.png" alt="">
@@ -86,10 +86,10 @@ $user_id = is_numeric($user_id) ? (int)$user_id : 0;
                 </a>
             </div>
             
-            <a class="hd-a-cate" href="?page=sale&user_id=<?php echo $user_id; ?>">
+            <a class="hd-a-cate" href="?page=sale">
                 <div class="hd-categories"><p>Khuyến Mãi</p></div>
             </a>
-            <a class="hd-a-cate" href="?page=shop&user_id=<?php echo $user_id; ?>">
+            <a class="hd-a-cate" href="?page=shop">
                 <div class="hd-categories"><p>Cửa Hàng</p></div>
             </a>
         </div>

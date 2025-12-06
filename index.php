@@ -6,7 +6,11 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
+if (isset($_GET['page']) && $_GET['page'] === 'logout') {
+    session_destroy();
+    header("Location: index.php");
+    exit;
+}
 // 2. Bật output buffering để đảm bảo header() luôn hoạt động
 ob_start();
 include_once 'includes/header.php';

@@ -66,7 +66,7 @@
                                 </div>
 
                                 <!-- Form cập nhật số lượng -->
-                                <form action="index.php?page=cart&action=update&user_id=<?php echo $current_user_id; ?>" method="POST" style="display:inline;">
+                                <form action="index.php?page=cart&action=update" method="POST" style="display:inline;">
                                     <input type="hidden" name="variant_id" value="<?php echo $item['variant_id']; ?>">
                                     <div class="item-quantity">
                                         <button type="button" class="qty-btn" onclick="this.parentNode.querySelector('input[name=quantity]').stepDown(); this.form.submit();">-</button>
@@ -77,7 +77,7 @@
 
                                 <!-- Nút xóa -->
                                 <div class="item-remove">
-                                    <a href="index.php?page=cart&action=remove&key=<?php echo $item['variant_id']; ?>&user_id=<?php echo $current_user_id; ?>" 
+                                    <a href="index.php?page=cart&action=remove&key=<?php echo $item['variant_id']; ?>" 
                                     onclick="return confirm('Xóa sản phẩm này khỏi giỏ hàng?')">
                                         <i class="fas fa-times"></i>
                                     </a>
@@ -93,8 +93,8 @@
                         <span class="total-price"><?php echo number_format($grand_total, 0, ',', '.'); ?>₫</span>
                     </div>
                     <div class="o-btn">
-                        <a href="index.php?page=thanhtoan&user_id=<?php echo $current_user_id; ?>" class="btn-checkout">THANH TOÁN</a>
-                        <a href="index.php?page=home&user_id=<?php echo $current_user_id; ?>" class="btn-continue">Tiếp tục mua hàng</a>
+                        <a href="index.php?page=thanhtoan" class="btn-checkout">THANH TOÁN</a>
+                        <a href="index.php?page=home" class="btn-continue">Tiếp tục mua hàng</a>
                     </div>
                     
                 </div>
@@ -105,7 +105,7 @@
         <?php else: ?>
             <div style="text-align: center; padding: 50px 0;">
                 <p>Giỏ hàng của bạn hiện đang trống.</p>
-                <a href="index.php?page=products&user_id=<?php echo $current_user_id; ?>" class="btn-continue" style="display: inline-block; margin-top: 20px;">Quay về mua sắm</a>
+                <a href="index.php?page=products" class="btn-continue" style="display: inline-block; margin-top: 20px;">Quay về mua sắm</a>
             </div>
         <?php endif; ?>
     </div>
