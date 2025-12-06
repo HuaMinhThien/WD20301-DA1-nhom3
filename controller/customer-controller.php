@@ -25,7 +25,7 @@ class UserController {
      */
     public function getAllUsers() {
         // Lấy tất cả user, sắp xếp người mới nhất lên đầu
-        $query = "SELECT * FROM " . $this->table_name . " ORDER BY id DESC";
+        $query = "SELECT * FROM " . $this->table_name . " ORDER BY id ";
         
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
