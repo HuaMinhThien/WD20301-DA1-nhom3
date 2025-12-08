@@ -648,12 +648,19 @@ td .status {
 .action-btn.delete { color: #333; }
 
 
+/* --- ĐIỀU CHỈNH VAI TRÒ (Badge) ĐỂ ĐỒNG BỘ KÍCH CỠ --- */
 .badge {
-    padding: 5px 10px;
+    padding-right:  10px;
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: bold;
+    display: inline-block; 
+    /* Bổ sung: Định nghĩa kích thước đồng bộ */
+    width: 60px; /* Hoặc 70px tùy bạn muốn lớn đến đâu */
+    text-align: center; 
 }
+
+/* Các styles khác của badge (Success/Warning) giữ nguyên */
 .badge.warning { background: #fff3cd; color: #856404; }
 .badge.success { background: #d4edda; color: #155724; }
 
@@ -673,3 +680,35 @@ td .status {
     header { left: 70px; width: calc(100% - 70px); }
 }
 
+/* --- LOCK CHECKBOX (Hành động Khóa/Mở khóa User) --- */
+.lock-checkbox {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; 
+    height: 30px;
+    /* margin: 0 auto; Căn giữa trong ô table */
+}
+
+.lock-checkbox input[type="checkbox"] {
+    display: none; /* Ẩn checkbox mặc định */
+}
+
+.lock-icon {
+    display: block;
+    width: 24px;
+    height: 24px;
+    color: var(--success); /* Màu mặc định: Mở khóa (Xanh lá) */
+    transition: color 0.2s ease-in-out;
+}
+
+.lock-checkbox input:checked + .lock-icon {
+    color: var(--danger); /* Khi checked: Khóa (Đỏ) */
+}
+
+.lock-icon svg {
+    fill: currentColor; /* Dùng màu của parent */
+    width: 100%;
+    height: 100%;
+}
