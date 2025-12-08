@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 06, 2025 lúc 05:11 PM
+-- Thời gian đã tạo: Th12 08, 2025 lúc 03:45 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -60,7 +60,10 @@ INSERT INTO `bill` (`id`, `user_id`, `voucher_id`, `order_date`, `status`, `tota
 (5, 5, NULL, '2025-12-02 09:02:11', 'Đã giao', 3700000),
 (6, 2, NULL, '2025-12-04 09:03:28', 'Đã hủy', 3225000),
 (7, 2, NULL, '2025-12-04 09:14:54', 'Chờ xác nhận', 605000),
-(8, 2, NULL, '2025-12-06 23:04:43', 'pending', 640000);
+(8, 2, NULL, '2025-12-06 23:04:43', 'Chờ xác nhận', 640000),
+(9, 5, NULL, '2025-12-06 23:23:37', 'Chờ xác nhận', 900000),
+(10, 5, NULL, '2025-12-06 23:25:31', 'Chờ xác nhận', 770000),
+(11, 7, NULL, '2025-12-06 23:36:50', 'Chờ xác nhận', 650000);
 
 -- --------------------------------------------------------
 
@@ -104,7 +107,10 @@ INSERT INTO `billdetail` (`id`, `productVariant_id`, `quantity`, `current_price`
 (21, 766, 1, 0, 7),
 (22, 514, 1, 0, 8),
 (23, 212, 1, 0, 8),
-(24, 215, 1, 0, 8);
+(24, 215, 1, 0, 8),
+(25, 229, 1, 0, 9),
+(26, 197, 1, 0, 10),
+(27, 679, 1, 0, 11);
 
 -- --------------------------------------------------------
 
@@ -152,7 +158,11 @@ INSERT INTO `cartdetail` (`id`, `cart_id`, `productVariant_id`, `quantity`) VALU
 (22, 2, 211, 1),
 (25, 2, 514, 1),
 (26, 2, 529, 1),
-(56, 2, 676, 1);
+(56, 2, 676, 1),
+(63, 4, 526, 1),
+(64, 4, 511, 1),
+(65, 4, 676, 1),
+(66, 4, 625, 1);
 
 -- --------------------------------------------------------
 
@@ -337,8 +347,7 @@ INSERT INTO `products` (`id`, `name`, `price`, `description`, `img`, `img_child`
 (62, 'Mắt Kính FWSG23SS02G', 320000, 'Phong cách thời thượng với mẫu kính FWSG23SS02G. Gọng kính được làm từ nhựa Acetate cao cấp, bền bỉ và an toàn cho da. Màu sắc tròng kính dịu nhẹ, giúp quan sát rõ ràng.', 'kinh-nu2-Mắt Kính FWSG23SS02G.jpg', 'kinh-nu2.1-Mắt Kính FWSG23SS02G.jpg', 4, 2),
 (63, 'Mắt Kính FWSG23SS01G', 310000, 'Mẫu kính FWSG23SS01G mang hơi hướng Retro cổ điển nhưng không kém phần hiện đại. Thiết kế Oversize giúp che chắn bụi bẩn hiệu quả và tạo hiệu ứng khuôn mặt thon gọn hơn.', 'kinh-nu3-Mắt Kính FWSG23SS01G.jpg', 'kinh-nu3.1-Mắt Kính FWSG23SS01G.jpg', 4, 2),
 (64, 'Mắt Kính Nữ FWSG23SS02G', 330000, 'Phiên bản đặc biệt FWSG23SS02G dành riêng cho nữ giới với các đường bo cong mềm mại. Gọng kim loại mạ vàng sáng bóng kết hợp cùng tròng kính Gradient chuyển màu thời trang.', 'kinh-nu4-Mắt Kính Nữ FWSG23SS02G.jpg', 'kinh-nu4.1-Mắt Kính Nữ FWSG23SS02G.jpg', 4, 2),
-(65, 'Túi Xách Nữ Tiện Dụng FWBA24SS02', 650000, 'Túi xách nữ FWBA24SS02 là sự kết hợp hoàn hảo giữa tính tiện dụng và thời trang. Kích thước túi rộng rãi, chia nhiều ngăn thông minh giúp nàng thoải mái mang theo cả thế giới.', 'tui-nu1-Túi Xách Nữ Tiện Dụng FWBA24SS02.jpg', 'tui-nu1.1-Túi Xách Nữ Tiện Dụng FWBA24SS02.jpg', 5, 2),
-(67, 'test', 111, 'test', 'uploads/1764947047_160_blazer_007-13_51e7520a0d8d43b6bc38e22130452dad_large.jpg', '', 5, 1);
+(65, 'Túi Xách Nữ Tiện Dụng FWBA24SS02', 650000, 'Túi xách nữ FWBA24SS02 là sự kết hợp hoàn hảo giữa tính tiện dụng và thời trang. Kích thước túi rộng rãi, chia nhiều ngăn thông minh giúp nàng thoải mái mang theo cả thế giới.', 'tui-nu1-Túi Xách Nữ Tiện Dụng FWBA24SS02.jpg', 'tui-nu1.1-Túi Xách Nữ Tiện Dụng FWBA24SS02.jpg', 5, 2);
 
 -- --------------------------------------------------------
 
@@ -1275,8 +1284,7 @@ INSERT INTO `product_variant` (`id`, `product_id`, `color_id`, `category_id`, `g
 (927, 55, 9, 1, 1, 4, 40),
 (928, 55, 4, 1, 1, 5, 31),
 (929, 55, 5, 1, 1, 5, 25),
-(930, 55, 9, 1, 1, 5, 22),
-(1024, 67, 9, 5, 1, 1, 1);
+(930, 55, 9, 1, 1, 5, 22);
 
 -- --------------------------------------------------------
 
@@ -1482,13 +1490,13 @@ ALTER TABLE `address`
 -- AUTO_INCREMENT cho bảng `bill`
 --
 ALTER TABLE `bill`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT cho bảng `billdetail`
 --
 ALTER TABLE `billdetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT cho bảng `cart`
@@ -1500,7 +1508,7 @@ ALTER TABLE `cart`
 -- AUTO_INCREMENT cho bảng `cartdetail`
 --
 ALTER TABLE `cartdetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT cho bảng `category`

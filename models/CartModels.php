@@ -136,7 +136,7 @@ class CartModel {
     }
 
     public function clearCart($userId) {
-        if ($userId === 2) {  // Guest
+        if ($userId === 0) {  // Guest
             unset($_SESSION['guest_cart']);
             return;
         }

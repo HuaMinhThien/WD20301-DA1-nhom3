@@ -67,4 +67,18 @@ class BillModel {
         $stmt->execute([$userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+        // Hàm lấy bill theo ID và user (để kiểm tra quyền)
+    public function getBillByIdAndUser($billId, $userId) {
+        $sql = "SELECT id, status FROM bill WHERE id = ? AND user_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$billId, $userId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // Hàm update status (an toàn với userId để tránh hack)
+    public function updateStatus($billId, $newStatus, $userId) {
+        $sql = "UPDATE bill SET status = ? WHERE id = ? AND user_id = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$newStatus, $billId, $userId]);
+    }
 }

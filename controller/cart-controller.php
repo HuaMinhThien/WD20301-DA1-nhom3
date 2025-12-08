@@ -60,6 +60,8 @@ class CartController {
             case 'remove':  $this->remove(); break;
             case 'update':  $this->update_quantity(); break;  
             case 'checkout':      $this->checkout(); break;
+            case 'buy_again':     $this->buyAgain(); break;
+            case 'cancel':        $this->cancelOrder(); break;
             default:        $this->index();
         }
     }
@@ -168,7 +170,7 @@ class CartController {
         // Giả định form gửi thêm thông tin giao hàng (address, phone, email...)
         // Bạn có thể thêm xử lý lưu vào bảng address nếu cần
 
-        $billId = $this->billModel->createBillFromCart($userId, null, $totalPay, 'pending');
+        $billId = $this->billModel->createBillFromCart($userId, null, $totalPay, 'Chờ xác nhận');
 
         if ($billId) {
             $_SESSION['success_message'] = 'Đơn hàng đã được đặt thành công!';
@@ -179,6 +181,94 @@ class CartController {
             // Thay thế: $this->jsRedirect('thanhtoan', $userId);
             header('Location: index.php?page=thanhtoan');  // Xóa &user_id
         }
+        exit;
+    }
+    public function buyAgain() {
+        // Lấy bill_id từ URL
+        $billId = $_GET['bill_id'] ?? null;
+        if (!$billId || !is_numeric($billId)) {
+            $_SESSION['error_message'] = 'Đơn hàng không hợp lệ!';
+            header('Location: index.php?page=cart_history');
+            exit;
+        }
+
+        // Lấy chi tiết đơn hàng từ billdetail + variant
+        $sql = "SELECT 
+                    bd.quantity,
+                    pv.id AS variant_id
+                FROM billdetail bd
+                JOIN product_variant pv ON bd.productVariant_id = pv.id
+                WHERE bd.bill_id = ?";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$billId]);
+        $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($items)) {
+            $_SESSION['error_message'] = 'Không tìm thấy sản phẩm trong đơn hàng này!';
+            header('Location: index.php?page=cart_history');
+            exit;
+        }
+
+        $addedCount = 0;
+        foreach ($items as $item) {
+            $variantId = $item['variant_id'];
+            $quantity = $item['quantity'];
+
+            // Kiểm tra còn hàng không (tùy chọn, nên có để tránh lỗi)
+            $variantDetail = $this->productModel->getVariantDetails($variantId);
+            if ($variantDetail && $variantDetail['quantity'] >= $quantity) {
+                $this->cartModel->saveItem($this->userId, $variantId, $quantity);
+                $addedCount++;
+            }
+            // Nếu hết hàng → vẫn thêm nhưng số lượng = 1 (hoặc bỏ qua)
+            elseif ($variantDetail) {
+                $this->cartModel->saveItem($this->userId, $variantId, 1);
+                $addedCount++;
+            }
+        }
+
+        if ($addedCount > 0) {
+            $_SESSION['success_message'] = "Đã thêm lại $addedCount sản phẩm vào giỏ hàng!";
+        } else {
+            $_SESSION['error_message'] = 'Không thể thêm lại sản phẩm (có thể đã hết hàng).';
+        }
+
+        // Chuyển về giỏ hàng để xem kết quả
+        header('Location: index.php?page=cart');
+        exit;
+    }
+    public function cancelOrder() {
+        $billId = $_GET['bill_id'] ?? null;
+        if (!$billId || !is_numeric($billId)) {
+            $_SESSION['error_message'] = 'Đơn hàng không hợp lệ!';
+            header('Location: index.php?page=cart_history');
+            exit;
+        }
+
+        // Kiểm tra bill tồn tại và thuộc user, và status có thể hủy
+        $bill = $this->billModel->getBillByIdAndUser($billId, $this->userId);
+        if (!$bill) {
+            $_SESSION['error_message'] = 'Không tìm thấy đơn hàng hoặc bạn không có quyền hủy!';
+            header('Location: index.php?page=cart_history');
+            exit;
+        }
+
+        if ($bill['status'] !== 'Chờ xác nhận') {  // Hoặc 'pending' nếu dùng tiếng Anh trong DB
+            $_SESSION['error_message'] = 'Đơn hàng này không thể hủy!';
+            header('Location: index.php?page=cart_history');
+            exit;
+        }
+
+        // Update status
+        $updated = $this->billModel->updateStatus($billId, 'Đã hủy', $this->userId);
+        if ($updated) {
+            $_SESSION['success_message'] = 'Đơn hàng đã được hủy thành công!';
+        } else {
+            $_SESSION['error_message'] = 'Lỗi khi hủy đơn hàng!';
+        }
+
+        header('Location: index.php?page=cart_history');
         exit;
     }
 }

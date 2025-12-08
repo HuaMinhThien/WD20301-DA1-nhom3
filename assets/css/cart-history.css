@@ -265,3 +265,24 @@ body {
     justify-content: flex-end; /* Chỉ có một nút */
     width: 100%;
 }
+
+
+.product-item.hidden {
+    display: none;
+}
+.view-more-btn {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 10px;
+    align-self: flex-start; /* Đặt ở đầu product-info */
+}
+.view-more-btn:hover {
+    background-color: #e0e0e0;
+}

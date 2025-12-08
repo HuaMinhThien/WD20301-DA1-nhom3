@@ -360,7 +360,7 @@
 
 .btn2:hover {
   border: 2px solid #000000;
-  
+  color: red;
 }
 
 .btn2 .spn2 {
