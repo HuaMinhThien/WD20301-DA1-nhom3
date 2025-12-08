@@ -7,7 +7,7 @@ require_once __DIR__ . '/../config/Database.php';
 $pdo = (new Database())->getConnection();
 
 // === LẤY USER_ID VÀ CÁC BỘ LỌC HIỆN TẠI (ĐÃ ĐƯỢC CONTROLLER XỬ LÝ SẴN) ===
-$uid = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 2;
+$uid = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 0;
 
 // Các biến này sẽ được controller truyền vào (bắt buộc phải có)
 $current_category_id = $current_category_id ?? null;
