@@ -23,7 +23,7 @@ $current_size_id     = $current_size_id     ?? null;
     </div>
 
     <div class="products-container-1 container-center" style="padding-top: 100px;">
-        <div class="pro-section-1">
+        <div class="pro-section-1">            
 
             <div class="pro-sec1-box1">
                 <h2>Danh mục</h2>
@@ -161,6 +161,10 @@ $current_size_id     = $current_size_id     ?? null;
                     
                 </div>
             </div>
+            <button id="clear-all-checkboxes" class="btn2" style="margin-top: 10px;">
+                <span class="spn2" style="font-size: 16px;">Bỏ chọn tất cả</span>
+            </button>
+            
         </div>
 
         <div class="pro-section-2">
@@ -234,6 +238,7 @@ $current_size_id     = $current_size_id     ?? null;
     <div class="products-container-2">
         <img src="assets/images/img-logo/aura clothes xoa nen 1.png" alt="">
     </div>
+    
 </main>
 
 <script>
@@ -273,6 +278,17 @@ function updateFilters() {
 }
 
 
+
+// THÊM JS ĐỂ XỬ LÝ NÚT BỎ CHỌN TẤT CẢ
+document.getElementById('clear-all-checkboxes').addEventListener('click', function() {
+    // Bỏ chọn tất cả checkbox có data-filter
+    document.querySelectorAll('input[data-filter]').forEach(cb => {
+        cb.checked = false;
+    });
+
+    // Cập nhật lại lọc ngay lập tức
+    updateFilters();
+});
 
 document.addEventListener('change', e => {
     // Chỉ cần lắng nghe sự kiện change từ input checkbox
