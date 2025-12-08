@@ -4,11 +4,10 @@ $db = new Database();
 $conn = $db->getConnection();
 
 // ==================== TÌM KIẾM & BỘ LỌC ====================
-// (giữ nguyên hoàn toàn phần này)
-$search = trim($_GET['search'] ?? '');
+$search          = trim($_GET['search'] ?? '');
 $category_filter = $_GET['category'] ?? '';
-$gender_filter = $_GET['gender'] ?? '';
-$stock_filter = $_GET['stock'] ?? 'all';
+$gender_filter   = $_GET['gender'] ?? '';
+$stock_filter    = $_GET['stock'] ?? 'all';
 
 $sql = "
     SELECT p.*, c.name AS category_name, g.name AS gender_name,
@@ -17,6 +16,7 @@ $sql = "
     JOIN category c ON p.category_id = c.id
     JOIN gender g ON p.gender_id = g.id
     WHERE 1=1
+    /* HIỂN THỊ TẤT CẢ SẢN PHẨM TRONG ADMIN → ĐÃ BỎ DÒNG NOT LIKE '[ẨN] %' */
 ";
 $params = [];
 
@@ -59,6 +59,11 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
     $stmt->execute([$id]);
     $edit_product = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    // Loại bỏ [ẨN] khi vào form sửa
+    if (strpos($edit_product['name'], '[ẨN] ') === 0) {
+        $edit_product['name'] = substr($edit_product['name'], 6);
+    }
+
     $stmt = $conn->prepare("
         SELECT pv.*, c.name AS color_name, s.name AS size_name
         FROM product_variant pv
@@ -70,16 +75,41 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
     $edit_variants = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// ==================== XỬ LÝ THÊM / SỬA ====================
+// ==================== HÀM REDIRECT SẠCH (không lỗi vòng lặp) ====================
+function redirect_clean() {
+    $query = $_GET;
+    unset($query['hide'], $query['show'], $query['id'], $query['action']);
+    $url = "admin-index.php?admin=products";
+    if (!empty($query)) $url .= "&" . http_build_query($query);
+    header("Location: " . $url);
+    exit;
+}
+
+// ==================== ẨN SẢN PHẨM ====================
+if (isset($_GET['hide']) && isset($_GET['id'])) {
+    $id = (int)$_GET['id'];
+    $conn->prepare("UPDATE products SET name = CONCAT('[ẨN] ', name) WHERE id = ? AND name NOT LIKE '[ẨN] %'")->execute([$id]);
+    redirect_clean();
+}
+
+// ==================== HIỆN LẠI SẢN PHẨM ====================
+if (isset($_GET['show']) && isset($_GET['id'])) {
+    $id = (int)$_GET['id'];
+    $conn->prepare("UPDATE products SET name = REPLACE(name, '[ẨN] ', '') WHERE id = ?")->execute([$id]);
+    redirect_clean();
+}
+
+// ==================== THÊM / SỬA SẢN PHẨM ====================
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? 'add';
-    $name = trim($_POST['name'] ?? '');
-    $price = (int)($_POST['price'] ?? 0);
+    $action      = $_POST['action'] ?? 'add';
+    $name        = trim($_POST['name'] ?? '');
+    $price       = (int)($_POST['price'] ?? 0);
     $description = $_POST['description'] ?? '';
     $category_id = (int)($_POST['category_id'] ?? 0);
-    $gender_id = (int)($_POST['gender_id'] ?? 0);
+    $gender_id   = (int)($_POST['gender_id'] ?? 0);
 
-    // Upload ảnh (nếu có)
+    $name = preg_replace('/^\[ẨN\] \s*/', '', $name);
+
     $img = $edit_product['img'] ?? '';
     if (!empty($_FILES['img']['name']) && $_FILES['img']['error'] == 0) {
         $img = 'uploads/' . time() . '_' . basename($_FILES['img']['name']);
@@ -119,21 +149,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $conn->commit();
-        header("Location: admin-index.php?admin=products" . ($search || $category_filter || $gender_filter || $stock_filter !== 'all' ? '&' . http_build_query(['search'=>$search,'category'=>$category_filter,'gender'=>$gender_filter,'stock'=>$stock_filter]) : ''));
-        exit;
+        redirect_clean();
     } catch (Exception $e) {
         $conn->rollBack();
         echo "Lỗi: " . $e->getMessage();
     }
-}
-
-// ==================== XỬ LÝ ẨN SẢN PHẨM ====================
-if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) {
-    $id = (int)$_GET['id'];
-    $conn->prepare("DELETE FROM product_variant WHERE product_id = ?")->execute([$id]);
-    $conn->prepare("DELETE FROM products WHERE id = ?")->execute([$id]);
-    header("Location: admin-index.php?admin=products" . ($search || $category_filter || $gender_filter || $stock_filter !== 'all' ? '&' . http_build_query(['search'=>$search,'category'=>$category_filter,'gender'=>$gender_filter,'stock'=>$stock_filter]) : ''));
-    exit;
 }
 ?>
 
@@ -143,11 +163,11 @@ if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) 
     <main>
         <div class="recent-grid">
 
-            <!-- ==================== DANH SÁCH + TÌM KIẾM ==================== -->
+            <!-- DANH SÁCH SẢN PHẨM (HIỂN THỊ TẤT CẢ, KỂ CẢ ĐÃ ẨN) -->
             <div class="card">
                 <div class="card-header"><h3>Danh sách sản phẩm</h3></div>
 
-                <!-- Thanh tìm kiếm & bộ lọc -->
+                <!-- Tìm kiếm & lọc -->
                 <div class="card-body" style="padding-bottom:0;">
                     <form method="GET" action="admin-index.php">
                         <input type="hidden" name="admin" value="products">
@@ -171,7 +191,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) 
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class=" |form-group">
+                            <div class="form-group">
                                 <select name="stock">
                                     <option value="all" <?php echo $stock_filter === 'all' ? 'selected' : ''; ?>>Tất cả tồn kho</option>
                                     <option value="in_stock" <?php echo $stock_filter === 'in_stock' ? 'selected' : ''; ?>>Còn hàng</option>
@@ -188,7 +208,6 @@ if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) 
                     </form>
                 </div>
 
-                <!-- Bảng sản phẩm -->
                 <div class="card-body" style="padding-top:0;">
                     <div class="table-container">
                         <table width="100%">
@@ -199,17 +218,25 @@ if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) 
                                     <td>Tên sản phẩm</td>
                                     <td width="120">Giá</td>
                                     <td width="100">Tồn kho</td>
-                                    <td width="100">Hành động</td>
+                                    <td width="120">Hành động</td>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($products as $i => $p): ?>
-                                <tr>
+                                <?php foreach ($products as $i => $p): 
+                                    $is_hidden    = strpos($p['name'], '[ẨN] ') === 0;
+                                    $display_name = $is_hidden ? substr($p['name'], 6) : $p['name'];
+                                ?>
+                                <tr <?php if ($is_hidden) echo 'style="opacity:0.75; background:#fff5f5;"'; ?>>
                                     <td class="product-index"><?php echo $i + 1; ?></td>
                                     <td class="product-image-cell">
                                         <img src="assets/images/sanpham/<?php echo htmlspecialchars($p['img'] ?: 'https://via.placeholder.com/60'); ?>" class="product-img" alt="">
                                     </td>
-                                    <td><?php echo htmlspecialchars($p['name']); ?></td>
+                                    <td>
+                                        <?php echo htmlspecialchars($display_name); ?>
+                                        <?php if ($is_hidden): ?>
+                                            <span style="color:#e74c3c; font-weight:600; font-size:0.9em;"> (đã ẩn)</span>
+                                        <?php endif; ?>
+                                    </td>
                                     <td><?php echo number_format($p['price']); ?>đ</td>
                                     <td>
                                         <strong <?php echo ($p['total_quantity'] > 0 ? 'style="color:var(--main-color)"' : 'style="color:var(--danger)"'); ?>>
@@ -217,13 +244,44 @@ if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) 
                                         </strong>
                                     </td>
                                     <td class="action-cell">
-                                        <a href="?admin=products&action=edit&id=<?php echo $p['id']; ?>&<?php echo http_build_query($_GET); ?>" class="action-btn edit" title="Sửa"><i class="fa-solid fa-pen"></i></a>
-                                        <a href="?admin=products&action=hide&id=<?php echo $p['id']; ?>&<?php echo http_build_query($_GET); ?>" class="action-btn hide" title="Ẩn" onclick="return confirm('Ẩn sản phẩm này?')"><i class="fa-solid fa-eye-slash"></i></a>
+                                        <!-- NÚT SỬA ĐÃ ĐƯỢC FIX HOÀN TOÀN -->
+                                        <a href="<?php 
+                                            $link = $_GET;
+                                            unset($link['action'], $link['hide'], $link['show'], $link['id']);
+                                            $link['action'] = 'edit';
+                                            $link['id'] = $p['id'];
+                                            echo 'admin-index.php?' . http_build_query($link);
+                                        ?>" class="action-btn edit" title="Sửa">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </a>
+
+                                        <?php if (!$is_hidden): ?>
+                                            <a href="<?php 
+                                                $link = $_GET;
+                                                unset($link['action'], $link['hide'], $link['show'], $link['id']);
+                                                $link['hide'] = 1;
+                                                $link['id'] = $p['id'];
+                                                echo 'admin-index.php?' . http_build_query($link);
+                                            ?>" class="action-btn hide" title="Ẩn sản phẩm" 
+                                               onclick="return confirm('Ẩn sản phẩm này khỏi khách hàng?')">
+                                                <i class="fa-solid fa-eye-slash"></i>
+                                            </a>
+                                        <?php else: ?>
+                                            <a href="<?php 
+                                                $link = $_GET;
+                                                unset($link['action'], $link['hide'], $link['show'], $link['id']);
+                                                $link['show'] = 1;
+                                                $link['id'] = $p['id'];
+                                                echo 'admin-index.php?' . http_build_query($link);
+                                            ?>" style="color:#27ae60; font-size:1.4rem;" title="Hiện lại sản phẩm">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
                                 <?php if (empty($products)): ?>
-                                <tr><td colspan="6" style="text-align:center; padding:3rem; color:#888;">Không tìm thấy sản phẩm nào</td></tr>
+                                <tr><td colspan="6" style="text-align:center; padding:3rem; color:#888;">Không có sản phẩm nào</td></tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>
@@ -231,7 +289,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'hide' && isset($_GET['id'])) 
                 </div>
             </div>
 
-            <!-- ==================== FORM THÊM / SỬA (ĐÃ CẬP NHẬT) ==================== -->
+            <!-- FORM THÊM/SỬA SẢN PHẨM (giữ nguyên như cũ) -->
             <div class="card">
                 <div class="card-header">
                     <h3><?php echo $edit_product ? 'Sửa sản phẩm' : 'Thêm sản phẩm mới'; ?></h3>
@@ -409,13 +467,11 @@ function addVariant() {
     container.appendChild(row);
 }
 
-// Không cho submit nếu không có biến thể nào
 document.getElementById('productForm').addEventListener('submit', function(e) {
     const rows = document.querySelectorAll('#variants .variant-row');
     if (rows.length === 0) {
         e.preventDefault();
         alert('Vui lòng thêm ít nhất 1 biến thể sản phẩm!');
-        return false;
     }
 });
 </script>
@@ -438,11 +494,27 @@ document.getElementById('productForm').addEventListener('submit', function(e) {
     justify-content: center;
 }
 .btn-delete-variant:hover { background: #c0392b; }
-</style>
 
-<style>
-.table-container { max-height: 65vh; overflow-y: auto; border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 8px 8px; }
-.table-container thead { position: sticky; top: 0; background: var(--main-color); z-index: 10; }
-.table-container thead td { color: #FDFACF !important; font-weight: 600; padding: 1rem !important; }
+.action-btn.hide { color: var(--main-color); }
+.action-btn.hide:hover { color: var(--danger); }
+
+.table-container { 
+    max-height: 65vh; 
+    overflow-y: auto; 
+    border: 1px solid #e0e0e0; 
+    border-top: none; 
+    border-radius: 0 0 8px 8px; 
+}
+.table-container thead { 
+    position: sticky; 
+    top: 0; 
+    background: var(--main-color); 
+    z-index: 10; 
+}
+.table-container thead td { 
+    color: #FDFACF !important; 
+    font-weight: 600; 
+    padding: 1rem !important; 
+}
 .table-container tbody tr:hover { background-color: #f8f9fa; }
 </style>
