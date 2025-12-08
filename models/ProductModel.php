@@ -251,4 +251,14 @@ class ProductModel {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getCategoryById($id) {
+        $sql = "SELECT name FROM category WHERE id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id]);
+        $name = $stmt->fetchColumn();
+        
+        // Trả về tên nếu tìm thấy, иначе fallback về null (sẽ xử lý ở header)
+        return $name ? $name : null;
+    }
 }
