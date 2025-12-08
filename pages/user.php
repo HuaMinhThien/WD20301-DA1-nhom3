@@ -76,7 +76,7 @@ $active_tab = $_GET['tab'] ?? 'info'; // info | address | history
                             <a href="?page=user&tab=address">Địa chỉ</a>
                         </li>
                         <li class="menu-item <?= $active_tab === 'history' ? 'active' : '' ?>">
-                            <a href="?page=cart_history>Lịch sử đặt hàng"</a>
+                            <a href="?page=cart_history">Lịch sử đặt hàng</a>
                         </li>
                         <li class="menu-item logout">
                             <a href="?page=logout">Đăng xuất</a>
