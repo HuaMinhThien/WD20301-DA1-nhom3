@@ -43,6 +43,7 @@ switch ($page) {
     case 'sale':
     case 'shop':
     case 'thanhtoan':
+    case 'successthanhtoan':
         $controller_name = 'HomeController';
         $controller_file = 'controller/home-controller.php';
         $method_to_call = $page;
