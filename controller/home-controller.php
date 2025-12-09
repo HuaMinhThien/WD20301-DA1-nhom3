@@ -297,4 +297,10 @@ class HomeController {
         // Hiển thị form đăng ký
         include_once 'pages/register.php';
     }
+
+
+
+    public function successthanhtoan(){
+        include_once 'pages/successPage.php';
+    }
 }
