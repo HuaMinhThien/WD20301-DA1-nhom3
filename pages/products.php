@@ -22,7 +22,7 @@ $current_size_id     = $current_size_id     ?? null;
         <img src="assets/images/img-banner/banner-chinh-4.jpg" alt="">
     </div>
 
-    <div class="products-container-1 container-center" style="padding-top: 100px;">
+    <div class="products-container-1 container-center" >
         <div class="pro-section-1">            
 
             <div class="pro-sec1-box1">
