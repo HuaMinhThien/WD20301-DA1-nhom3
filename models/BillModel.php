@@ -9,7 +9,7 @@ class BillModel {
 
     // Lưu đơn hàng mới từ giỏ hàng
     // === HÀM TẠO ĐƠN HÀNG MỚI ===
-    public function createBillFromCart($userId, $voucherId = null, $totalPay, $status = 'pending') {
+    public function createBillFromCart($userId, $totalPay, $voucherId = null, $status = 'pending') {
         // 1. Lấy giỏ hàng
         $cartSql = "SELECT cd.quantity, cd.productVariant_id, pv.product_id, pv.color_id, pv.size_id, p.price, p.name, p.img
                     FROM cartdetail cd
@@ -81,4 +81,29 @@ class BillModel {
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$newStatus, $billId, $userId]);
     }
+
+
+// === HÀM LẤY TẤT CẢ ĐƠN HÀNG (Dùng cho Admin) ===
+    public function getAllBills($status = null) {
+        // Tên bảng: bill, user
+        $sql = "SELECT 
+                    b.id, b.order_date, b.status, b.total_pay, b.user_id,
+                    u.name AS customer_name -- Giả sử có bảng user và cột username
+                FROM bill b
+                JOIN user u ON b.user_id = u.id";
+        
+        $params = [];
+        
+        if ($status) {
+            $sql .= " WHERE b.status = ?";
+            $params[] = $status;
+        }
+
+        $sql .= " ORDER BY b.order_date DESC";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
