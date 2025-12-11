@@ -1,12 +1,17 @@
 :root {
-    --main-color: #001F3E;       /* Xanh đậm chủ đạo */
-    --accent-color: #FDFACF;     /* Vàng kem phụ */
+    --main-color: #001F3E; /* Xanh đậm chủ đạo */
+    --accent-color: #FDFACF; /* Vàng kem phụ */
     --text-grey: #8390A2;
     --bg-grey: #f1f5f9;
     --white: #fff;
     --danger: #e74c3c;
     --success: #2ecc71;
     --warning: #f1c40f;
+
+    /* Thêm biến màu cho trạng thái đơn hàng */
+    --order-pending: #ffc107; 
+    --order-shipped: #28a745; 
+    --order-cancelled: #dc3545; 
 }
 
 * {
@@ -23,332 +28,6 @@ body {
 }
 
 /* --- SIDEBAR FIXED (Đã sửa lỗi nhảy layout) --- */
-.sidebar {
-    width: 280px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100%;
-    background: var(--main-color);
-    z-index: 100;
-    transition: width 300ms;
-    overflow-y: auto;
-}
-
-.sidebar .logo {
-    height: 90px;
-    padding: 1rem 0rem 1rem 2rem;
-    color: var(--accent-color);
-    display: flex;
-    align-items: center;
-}
-
-.sidebar .menu {
-    margin-top: 1rem;
-}
-
-.sidebar .menu li {
-    width: 100%;
-    margin-bottom: 0.5rem;
-    padding-left: 1rem;
-}
-
-.sidebar .menu li a {
-    display: block;
-    color: var(--white);
-    font-size: 1.1rem;
-    /* Padding cố định để không bị nhảy khi hover */
-    padding: 1rem 0rem 1rem 1rem; 
-    border-radius: 30px 0px 0px 30px;
-    transition: all 0.3s ease;
-    font-weight: 500; 
-}
-
-/* Active & Hover State */
-.sidebar .menu li.active a, 
-.sidebar .menu li a:hover {
-    background: var(--accent-color);
-    color: var(--main-color);
-    font-weight: 600;
-}
-
-.sidebar .menu li a i {
-    padding-right: 1rem;
-    width: 40px; 
-    text-align: center;
-}
-
-/* --- MAIN CONTENT --- */
-.main-content {
-    margin-left: 280px;
-    transition: margin-left 300ms;
-}
-
-/* --- HEADER --- */
-header {
-    background: var(--white);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-    position: fixed;
-    left: 280px;
-    width: calc(100% - 280px);
-    top: 0;
-    z-index: 100;
-}
-
-.user-wrapper {
-    display: flex;
-    align-items: center;
-}
-
-.user-wrapper img {
-    border-radius: 50%;
-    margin-right: 1rem;
-}
-
-/* --- MAIN BODY --- */
-main {
-    margin-top: 85px;
-    padding: 2rem 1.5rem;
-    background: var(--bg-grey);
-    min-height: calc(100vh - 90px);
-}
-
-/* --- CARDS DASHBOARD --- */
-.cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 2rem;
-    margin-bottom: 1rem;
-}
-
-.card-single {
-    display: flex;
-    justify-content: space-between;
-    background: var(--white);
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
-    border-left: 5px solid var(--main-color);
-}
-
-.card-single div:last-child span {
-    font-size: 3rem;
-    color: var(--main-color);
-}
-
-/* --- LAYOUT GRIDS (Table + Form) --- */
-.recent-grid {
-    display: grid;
-    grid-template-columns: 65% auto;
-    grid-gap: 2rem;
-}
-
-.card {
-    background: var(--white);
-    border-radius: 8px;
-    box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
-    margin-bottom: 2rem;
-}
-
-.card-header {
-    padding: 1rem;
-    border-bottom: 1px solid #f0f0f0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--main-color);
-    color: var(--accent-color);
-    border-radius: 8px 8px 0 0;
-}
-
-.card-header button {
-    background: var(--accent-color);
-    color: var(--main-color);
-    border: none;
-    padding: .5rem 1rem;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.card-body {
-    padding: 1rem;
-}
-
-/* --- TABLE STYLES --- */
-table {
-    border-collapse: collapse;
-}
-
-thead tr {
-    border-bottom: 1px solid #f0f0f0;
-}
-
-thead td {
-    font-weight: 700;
-}
-
-td {
-    padding: .5rem 1rem;
-    font-size: .9rem;
-    color: #222;
-}
-
-td .status {
-    display: inline-block;
-    height: 10px;
-    width: 10px;
-    border-radius: 50%;
-    margin-right: 5px;
-}
-.status.green { background: var(--success); }
-.status.yellow { background: var(--warning); }
-.status.red { background: var(--danger); }
-.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 1px solid #ccc; margin-right: 5px;}
-
-/* --- FORM STYLES --- */
-.admin-form .form-group {
-    margin-bottom: 1rem;
-}
-.admin-form label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #444;
-}
-.admin-form input, .admin-form select, .admin-form textarea {
-    width: 100%;
-    padding: 0.7rem;
-    border: 1px solid #c9c9c9;
-    border-radius: 5px;
-    outline: none;
-}
-.admin-form input:focus { border-color: var(--main-color); }
-.form-group-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-/* --- BUTTONS --- */
-.btn-primary {
-    background: var(--main-color);
-    color: var(--white);
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-.btn-secondary {
-    background: #eee;
-    color: #333;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-.btn-danger {
-    background: var(--danger);
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-.action-btn {
-    border: none;
-    background: none;
-    font-size: 1.1rem;
-    cursor: pointer;
-
-}
-.action-btn.edit { color: var(--warning); }
-.action-btn.delete { color: var(--danger); }
-.badge {
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: bold;
-}
-.badge.warning { background: #fff3cd; color: #856404; }
-.badge.success { background: #d4edda; color: #155724; }
-
-/* --- RESPONSIVE --- */
-@media only screen and (max-width: 960px) {
-    .cards { grid-template-columns: repeat(2, 1fr); }
-    .recent-grid { grid-template-columns: 100%; }
-}
-@media only screen and (max-width: 768px) {
-    .cards { grid-template-columns: 100%; }
-    .sidebar { width: 70px; }
-    .sidebar .logo h2 { display: none; }
-    .sidebar .menu li a span { display: none; }
-    .sidebar .menu li a { padding-left: 0; text-align: center; }
-    .sidebar .menu li a i { padding-right: 0; }
-    .main-content { margin-left: 70px; }
-    header { left: 70px; width: calc(100% - 70px); }
-}
-
-/* --- FORM STYLES --- */
-/* Thêm style cho input[type="color"] để trông giống hình ảnh hơn */
-.admin-form input, .admin-form select, .admin-form textarea {
-    width: 100%;
-    padding: 0.7rem; /* Giữ padding mặc định cho các input khác */
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    outline: none;
-}
-/* Sửa đổi style cho input[type="color"] */
-.admin-form input[type="color"] {
-    /* Loại bỏ padding mặc định để chỉ hiển thị ô màu */
-    padding: 0; 
-    /* Đảm bảo chiều cao hợp lý (đã set inline trong HTML, nhưng thêm ở đây để đồng bộ) */
-    height: 45px; 
-    /* Thêm căn chỉnh dọc nếu cần (tùy thuộc browser) */
-    box-sizing: border-box; 
-    cursor: pointer;
-}
-.admin-form input:focus { border-color: var(--main-color); }
-.form-group-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-/* ... (các style khác giữ nguyên) */
-
-.product-img {
-    width: 50px; /* Kích thước nhỏ cho hình ảnh đại diện */
-    height: 50px; 
-    object-fit: cover; 
-    border-radius: 4px; 
-}
-td {
-    padding: .75rem 1rem; /* Tăng padding dọc cho td để hình ảnh vừa vặn hơn */
-    font-size: .9rem;
-    color: #222;
-}
-
-:root {
-    --main-color: #001F3E;       /* Xanh đậm chủ đạo */
-    --accent-color: #FDFACF;     /* Vàng kem phụ */
-    --text-grey: #8390A2;
-    --bg-grey: #f1f5f9;
-    --white: #fff;
-    --danger: #e74c3c;
-    --success: #2ecc71;
-    --warning: #f1c40f;
-}
-
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    list-style-type: none;
-    text-decoration: none;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-    background-color: var(--bg-grey);
-}
-
-/* --- SIDEBAR FIXED --- */
 .sidebar {
     width: 280px;
     position: fixed;
@@ -528,6 +207,7 @@ main {
 /* --- TABLE STYLES --- */
 table {
     border-collapse: collapse;
+    width: 100%;
 }
 
 thead tr {
@@ -537,6 +217,7 @@ thead tr {
 thead td {
     font-weight: 700;
     color: #444; /* Màu chữ đậm hơn cho tiêu đề cột */
+    padding: 1rem; /* Bổ sung padding */
 }
 
 td {
@@ -548,7 +229,7 @@ td {
 /* Căn giữa cột hình ảnh và hành động */
 td.product-image-cell, td.action-cell {
     text-align: center;
-    display: inline-block;
+    /* Dùng table cell mặc định, loại bỏ inline-block nếu không cần */
 }
 
 /* Số thứ tự trong bảng */
@@ -616,9 +297,7 @@ td .status {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    float: right; /* Đẩy nút Lưu/Cập nhật sang phải */
-    margin-top: 30px;
-    margin-right: 42%;
+    /* Gỡ float và margin không cần thiết nếu dùng cho form chung */
 }
 .btn-secondary {
     background: #eee;
@@ -650,13 +329,12 @@ td .status {
 
 /* --- ĐIỀU CHỈNH VAI TRÒ (Badge) ĐỂ ĐỒNG BỘ KÍCH CỠ --- */
 .badge {
-    padding-right:  10px;
+    padding: 5px 10px;
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: bold;
     display: inline-block; 
-    /* Bổ sung: Định nghĩa kích thước đồng bộ */
-    width: 60px; /* Hoặc 70px tùy bạn muốn lớn đến đâu */
+    min-width: 90px; /* Đảm bảo kích thước đồng bộ */
     text-align: center; 
 }
 
@@ -688,27 +366,90 @@ td .status {
     justify-content: center;
     width: 30px; 
     height: 30px;
-    /* margin: 0 auto; Căn giữa trong ô table */
 }
 
 .lock-checkbox input[type="checkbox"] {
-    display: none; /* Ẩn checkbox mặc định */
+    display: none; 
 }
 
 .lock-icon {
     display: block;
     width: 24px;
     height: 24px;
-    color: var(--success); /* Màu mặc định: Mở khóa (Xanh lá) */
+    color: var(--success); 
     transition: color 0.2s ease-in-out;
 }
 
 .lock-checkbox input:checked + .lock-icon {
-    color: var(--danger); /* Khi checked: Khóa (Đỏ) */
+    color: var(--danger); 
 }
 
 .lock-icon svg {
-    fill: currentColor; /* Dùng màu của parent */
+    fill: currentColor; 
     width: 100%;
     height: 100%;
+}
+
+/* =================================================
+--- STYLE CHO TRANG QUẢN LÝ ĐƠN HÀNG (ORDER MANAGEMENT) ---
+=================================================
+*/
+
+/* Nút Lọc Trạng Thái */
+.btn-filter {
+    padding: 8px 15px; 
+    border-radius: 4px; 
+    text-decoration: none; 
+    margin-right: 10px; 
+    border: none; 
+    cursor: pointer; 
+    transition: background-color 0.2s;
+    display: inline-block; 
+    font-weight: 500;
+}
+
+.btn-filter.btn-primary { 
+    background-color: var(--main-color); 
+    color: var(--white); 
+}
+.btn-filter.btn-secondary { 
+    background-color: #e9ecef; 
+    color: #495057; 
+}
+
+/* Badge Trạng thái Đơn hàng */
+.badge.pending { 
+    background-color: var(--order-pending); 
+    color: #333; 
+} 
+.badge.shipped { 
+    background-color: var(--order-shipped); 
+    color: var(--white); 
+} 
+.badge.cancelled { 
+    background-color: var(--order-cancelled); 
+    color: var(--white); 
+}
+
+/* Điều chỉnh lại nút Hành động trong bảng đơn hàng (Duyệt/Hủy/Chi tiết) */
+.card-body button {
+    padding: 6px 10px; 
+    border-radius: 4px; 
+    border: none; 
+    cursor: pointer; 
+    margin-right: 5px; 
+    font-size: 0.9rem;
+}
+
+.card-body .btn-primary { 
+    background-color: var(--success); 
+    color: var(--white); 
+} 
+.card-body .btn-secondary { 
+    background-color: #001F3E; 
+    color: var(--white); 
+} 
+.card-body .btn-danger { 
+    background-color: var(--danger); 
+    color: var(--white); 
 }
