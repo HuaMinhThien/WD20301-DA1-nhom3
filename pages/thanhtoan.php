@@ -41,7 +41,7 @@
 
             <div class="checkout-right">
                 <section class="product-summary">
-                    <h2 class="section-title">Giá</h2>
+                    <h2 class="section-title">Giỏ hàng</h2>
                     <?php foreach ($cart_items as $item): ?>
                     <div class="product-item">
                         <div class="product-thumb">
