@@ -83,18 +83,33 @@ class BillModel {
     }
 
 
+// === HÀM CẬP NHẬT TRẠNG THÁI ĐƠN HÀNG (Dùng cho Admin) ===
+    public function adminUpdateStatus($billId, $newStatus) {
+        // Hạn chế trạng thái có thể cập nhật để đảm bảo an toàn
+        $validStatuses = ['Đã giao', 'Đã hủy', 'Chờ xác nhận'];
+        if (!in_array($newStatus, $validStatuses)) {
+            return false;
+        }
+
+        $sql = "UPDATE bill SET status = ? WHERE id = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$newStatus, $billId]);
+    }
+
 // === HÀM LẤY TẤT CẢ ĐƠN HÀNG (Dùng cho Admin) ===
     public function getAllBills($status = null) {
-        // Tên bảng: bill, user
+        // Sử dụng LEFT JOIN để đảm bảo đơn hàng vẫn được hiển thị nếu user bị xóa
+        // COALESCE được dùng để gán 'Người dùng đã xóa' nếu u.name là NULL
         $sql = "SELECT 
                     b.id, b.order_date, b.status, b.total_pay, b.user_id,
-                    u.name AS customer_name -- Giả sử có bảng user và cột username
+                    COALESCE(u.name, 'Người dùng đã xóa') AS customer_name 
                 FROM bill b
-                JOIN user u ON b.user_id = u.id";
+                LEFT JOIN user u ON b.user_id = u.id"; 
         
         $params = [];
         
         if ($status) {
+            // $status ở đây là giá trị tiếng Việt (Chờ xác nhận, Đã giao) từ orders.php
             $sql .= " WHERE b.status = ?";
             $params[] = $status;
         }

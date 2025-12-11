@@ -2,7 +2,6 @@
 // === LOGIC CONTROLLER (Cần chạy trước khi hiển thị HTML) ===
 
 // 1. Kết nối CSDL và khởi tạo Model
-// Sử dụng __DIR__ để xác định đường dẫn tương đối từ thư mục admin/
 if (!class_exists('Database')) {
     require_once __DIR__ . '/../config/Database.php'; 
 }
@@ -14,25 +13,39 @@ $database = new Database();
 $db = $database->getConnection();
 $billModel = new BillModel($db);
 
-// 2. Lấy trạng thái lọc từ URL và khởi tạo biến
-$filter_status = $_GET['status'] ?? null; 
-
+// 2. Định nghĩa Ánh xạ Trạng thái
 $status_map = [
+    'pending' => 'Chờ xác nhận',
+    'shipped' => 'Đã giao',
+    'cancelled' => 'Đã hủy',
+    'all' => 'Tất cả', 
+];
+
+// Ánh xạ ngược: Dùng để chuyển trạng thái từ URL (tiếng Anh) thành giá trị trong CSDL (tiếng Việt)
+$model_status_map = [
     'pending' => 'Chờ xác nhận',
     'shipped' => 'Đã giao',
     'cancelled' => 'Đã hủy',
 ];
 
-// Khởi tạo $current_status_text
+$filter_status = $_GET['status'] ?? null; 
 $current_status_text = $status_map[$filter_status] ?? 'Tất cả';
 
-// 3. Lấy dữ liệu 
-$status_for_model = ($filter_status == 'all' || $filter_status == null) ? null : $filter_status;
+// 3. Lấy dữ liệu (Điều chỉnh logic ánh xạ)
+if ($filter_status == 'all' || $filter_status == null) {
+    // Nếu là 'Tất cả' hoặc không có tham số, truyền null để lấy tất cả
+    $status_for_model = null;
+} else {
+    // Ánh xạ trạng thái tiếng Anh (pending) sang tiếng Việt (Chờ xác nhận)
+    $status_for_model = $model_status_map[$filter_status] ?? null;
+}
+
 $orders = $billModel->getAllBills($status_for_model);
 
 // === KIỂM TRA REQUEST AJAX ===
-// Nếu request là AJAX, chỉ hiển thị nội dung bảng rồi thoát.
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+    // Để gỡ lỗi (DEBUG) dễ dàng, ta có thể tạm thời hiển thị biến ở đây trước khi include
+    // Ví dụ: echo $status_for_model; exit; // (Tắt khi code chạy chính thức)
     include 'orders_table_content.php'; 
     exit;
 }
@@ -49,45 +62,32 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     </header>
 
     <main>
-        <div style="margin-bottom:1rem;">
-            <?php 
-// ...
-// 3. Lấy dữ liệu 
-$status_for_model = ($filter_status == 'all' || $filter_status == null) ? null : $filter_status;
-$orders = $billModel->getAllBills($status_for_model);
+        
+        <?php 
+        // === Xây dựng Base URL linh hoạt và chính xác (ĐÃ SỬA LỖI URL) ===
+        $get_params = $_GET;
+        if (isset($get_params['status'])) {
+            unset($get_params['status']);
+        }
+        if (!isset($get_params['page']) && basename($_SERVER['PHP_SELF']) == 'index.php') {
+            $get_params['page'] = 'orders'; 
+        }
 
-// === Xác định Base URL linh hoạt ===
-// Lấy đường dẫn URL hiện tại
-$current_url = $_SERVER['REQUEST_URI'];
+        $query_string = http_build_query($get_params);
+        $path = strtok($_SERVER["REQUEST_URI"], '?');
+        $base_url = $path . ($query_string ? '?' . $query_string : '');
+        $base_url .= ($query_string ? '&' : '?');
+        ?>
 
-// Xóa tham số status hiện tại khỏi URL để tạo Base URL
-$base_url = preg_replace('/&status=[^&]*/', '', $current_url);
-$base_url = preg_replace('/\?status=[^&]*(&|$)/', '?', $base_url);
-$base_url = rtrim($base_url, '?'); // Xóa dấu '?' thừa nếu không còn tham số nào
-
-// Đảm bảo URL kết thúc bằng ? hoặc &
-if (strpos($base_url, '?') === false) {
-    $base_url .= '?'; // Bắt đầu chuỗi tham số
-} else {
-    $base_url .= '&'; // Thêm tham số tiếp theo
-}
-$base_url .= 'page=orders'; // Thêm lại tham số page=orders
-
-// Loại bỏ tham số status nếu nó vẫn còn do lỗi logic trước đó
-$base_url = preg_replace('/&status=[^&]*/', '', $base_url); 
-$base_url = preg_replace('/\?status=[^&]*/', '?', $base_url);
-$base_url = rtrim($base_url, '?');
-
-// Bây giờ $base_url chỉ chứa đường dẫn chính (ví dụ: /local/admin/index.php?page=orders)
-?>
-            <a href="<?php echo $base_url; ?>" class="btn-filter <?php echo (empty($filter_status) || $filter_status == 'all') ? 'btn-primary' : 'btn-secondary'; ?>">Tất cả</a>
-            <a href="<?php echo $base_url; ?>&status=pending" class="btn-filter <?php echo ($filter_status == 'pending') ? 'btn-primary' : 'btn-secondary'; ?>">Chờ xác nhận</a>
-            <a href="<?php echo $base_url; ?>&status=shipped" class="btn-filter <?php echo ($filter_status == 'shipped') ? 'btn-primary' : 'btn-secondary'; ?>">Đã giao</a>
-            <a href="<?php echo $base_url; ?>&status=cancelled" class="btn-filter <?php echo ($filter_status == 'cancelled') ? 'btn-primary' : 'btn-secondary'; ?>">Đã hủy</a>
+        <div class="filter-controls" style="margin-bottom: 1.5rem; display: flex; gap: 10px;">
+            <a href="<?php echo $base_url; ?>status=all" class="btn-filter <?php echo ($filter_status == 'all' || $filter_status == null) ? 'btn-primary' : 'btn-secondary'; ?>">Tất cả</a>
+            <a href="<?php echo $base_url; ?>status=pending" class="btn-filter <?php echo ($filter_status == 'pending') ? 'btn-primary' : 'btn-secondary'; ?>">Chờ xác nhận</a>
+            <a href="<?php echo $base_url; ?>status=shipped" class="btn-filter <?php echo ($filter_status == 'shipped') ? 'btn-primary' : 'btn-secondary'; ?>">Đã giao</a>
+            <a href="<?php echo $base_url; ?>status=cancelled" class="btn-filter <?php echo ($filter_status == 'cancelled') ? 'btn-primary' : 'btn-secondary'; ?>">Đã hủy</a>
         </div>
         
         <div class="card">
-            <div class="card-header"><h3>Danh Sách Đơn</h3></div>
+            <div class="card-header"><h3>Danh Sách Đơn Hàng</h3></div>
             <div class="card-body">
                 <table width="100%">
                     <thead>
@@ -151,7 +151,6 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => {
                 if (!response.ok) {
-                    // Nếu lỗi HTTP (404, 500), response.text() sẽ lấy nội dung lỗi từ server
                     return response.text().then(text => { 
                         throw new Error(`Server returned HTTP ${response.status}: ${text.substring(0, 100)}...`);
                     });
@@ -159,12 +158,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.text(); 
             })
             .then(htmlContent => {
-                // Thay thế nội dung bảng bằng HTML mới
                 tableBody.innerHTML = htmlContent;
             })
             .catch(error => {
                 console.error('Lỗi AJAX:', error);
-                // Hiển thị thông báo lỗi chi tiết hơn (bao gồm lỗi PHP nếu có)
                 tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red; padding: 30px;">LỖI: Không thể tải đơn hàng. Vui lòng kiểm tra Console/Network Tab (F12) để xem chi tiết lỗi PHP hoặc lỗi mạng.</td></tr>';
             });
         });
