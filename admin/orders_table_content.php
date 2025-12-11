@@ -32,11 +32,10 @@ if (!empty($orders)): ?>
             <td><span class="badge <?php echo $status_class; ?>"><?php echo $status_text; ?></span></td>
             <td>
                 <?php if ($status_class == 'pending'): ?>
-                    <button class="btn-primary">Duyệt</button> 
-                    <button class="btn-danger">Hủy</button>
-                <?php else: ?>
-                    <button class="btn-secondary">Chi tiết</button>
+                    <button class="btn-primary action-btn" data-id="<?php echo htmlspecialchars($order['id']); ?>" data-action="shipped">Duyệt</button> 
+                    <button class="btn-danger action-btn" data-id="<?php echo htmlspecialchars($order['id']); ?>" data-action="cancelled">Hủy</button>
                 <?php endif; ?>
+                <button class="btn-secondary detail-btn" data-id="<?php echo htmlspecialchars($order['id']); ?>">Chi tiết</button>
             </td>
         </tr>
     <?php endforeach; ?>
