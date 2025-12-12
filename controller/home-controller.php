@@ -72,24 +72,41 @@ class HomeController {
                 : [intval($_GET['size_id'])];
         }
 
-        // 5. Giá – hỗ trợ nhiều khoảng
+        // 5. Giá – Xử lý ưu tiên Range Min/Max mới
+        $price_min = null;
+        $price_max = null;
         $price_ranges = [];
-        if (isset($_GET['price_range'])) {
-            $price_ranges = is_array($_GET['price_range']) 
-                ? $_GET['price_range'] 
-                : [$_GET['price_range']];
+
+        // === ƯU TIÊN LỌC THEO RANGE MIN/MAX (từ thanh trượt) ===
+        if (isset($_GET['price_min']) && is_numeric($_GET['price_min'])) {
+            $price_min = (int)$_GET['price_min'];
+        }
+        if (isset($_GET['price_max']) && is_numeric($_GET['price_max'])) {
+            $price_max = (int)$_GET['price_max'];
         }
 
-        $price_min = $price_max = null;
-        foreach ($price_ranges as $range) {
-            $parts = explode('_', $range);
-            if (count($parts) == 2) {
-                $min = (int)$parts[0];
-                $max = (int)$parts[1];
-                if ($price_min === null || $min < $price_min) $price_min = $min;
-                if ($price_max === null || $max > $price_max) $price_max = $max;
+        // === XỬ LÝ LỌC THEO MỨC CỐ ĐỊNH CHỈ KHI KHÔNG CÓ LỌC RANGE MIN/MAX ===
+        if ($price_min === null && $price_max === null) {
+            if (isset($_GET['price_range'])) {
+                $price_ranges = is_array($_GET['price_range']) 
+                    ? $_GET['price_range'] 
+                    : [$_GET['price_range']];
+            }
+
+            foreach ($price_ranges as $range) {
+                $parts = explode('_', $range);
+                if (count($parts) == 2) {
+                    $min = (int)$parts[0];
+                    $max = (int)$parts[1];
+                    // Logic cũ: tìm min chung nhỏ nhất và max chung lớn nhất
+                    if ($price_min === null || $min < $price_min) $price_min = $min;
+                    if ($price_max === null || $max > $price_max) $price_max = $max;
+                }
             }
         }
+        // *Lưu ý*: Nếu có cả price_range và price_min/price_max, logic này sẽ ưu tiên price_min/price_max.
+        // Code JS trong products.php đã đảm bảo rằng nếu chọn price_range thì sẽ xóa price_min/price_max.
+
 
         // === GỬI VÀO MODEL ===
         $filters = [
@@ -106,7 +123,7 @@ class HomeController {
         $current_gender_id   = !empty($gender_ids)   ? implode(',', $gender_ids)   : null;
         $current_color_id    = !empty($color_ids)    ? implode(',', $color_ids)    : null;
         $current_size_id     = !empty($size_ids)     ? implode(',', $size_ids)     : null;
-        $current_price_range = !empty($price_ranges) ? implode(',', $price_ranges) : null;
+        $current_price_range = !empty($price_ranges) ? implode(',', $price_ranges) : null; // Giữ lại cho checkbox
 
         $products = $this->productModel->getFilteredProducts($filters);
 
