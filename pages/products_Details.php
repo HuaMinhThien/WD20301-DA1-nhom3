@@ -137,7 +137,6 @@ $full_description    = $product['description_full'] ?? $product['description'] ?
 
                     <div class="pro-sec2-boxSP-icon">
                         <img src="assets/images/img-icon/heart.png" alt="Yêu thích">
-                        <img src="assets/images/img-icon/online-shopping.png" alt="Thêm vào giỏ">
                     </div>
                 </div>
             </a>
