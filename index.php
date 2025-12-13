@@ -1,17 +1,66 @@
 <?php
-// File: index.php - ĐÃ SỬA HOÀN HẢO CHO DỰ ÁN CỦA BẠN
-// Chỉ cần thay thế file này → đăng nhập + redirect hoạt động ngon lành!
-
-// 1. BẮT BUỘC: Bắt đầu session TRƯỚC MỌI OUTPUT
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// === XỬ LÝ ĐẶT HÀNG THÀNH CÔNG TRƯỚC KHI ROUTING ===
+if (isset($_GET['page']) && $_GET['page'] === 'cart' && isset($_GET['action']) && $_GET['action'] === 'checkout' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    // Lấy dữ liệu từ form thanh toán
+    $full_name      = trim($_POST['full_name'] ?? '');
+    $phone          = trim($_POST['phone'] ?? '');
+    $email          = trim($_POST['email'] ?? '');
+    $address        = trim($_POST['address'] ?? '');
+    $province_name  = trim($_POST['province_name'] ?? '');
+    $district_name  = trim($_POST['district_name'] ?? '');
+    $total_pay      = (int)($_POST['total_pay'] ?? 0);
+    $user_id        = (int)($_POST['user_id'] ?? $_SESSION['user_id'] ?? 0);
+
+    // Validate cơ bản
+    if (empty($full_name) || empty($phone) || empty($province_name) || empty($district_name) || $total_pay <= 0 || $user_id <= 0) {
+        $_SESSION['checkout_error'] = 'Vui lòng điền đầy đủ thông tin giao hàng.';
+        header('Location: index.php?page=thanhtoan');
+        exit;
+    }
+
+    // Kết nối DB và tạo bill
+    require_once 'config/Database.php';
+    require_once 'models/BillModel.php';
+    
+    $database = new Database();
+    $db = $database->getConnection();
+    $billModel = new BillModel($db);
+
+    $bill_id = $billModel->createBillFromCart($user_id, $total_pay);
+
+    if ($bill_id) {
+        // Lưu thông tin đơn hàng vào session để hiển thị ở trang thành công
+        $_SESSION['order_success'] = [
+            'bill_id'    => $bill_id,
+            'full_name'  => $full_name,
+            'phone'      => $phone,
+            'total_pay'  => $total_pay,
+            'email'      => $email,
+            'address'    => $address . ', ' . $district_name . ', ' . $province_name
+        ];
+
+        // Chuyển hướng đến trang thành công
+        header('Location: index.php?page=successthanhtoan');
+        exit;
+    } else {
+        $_SESSION['checkout_error'] = 'Đặt hàng thất bại. Vui lòng thử lại.';
+        header('Location: index.php?page=thanhtoan');
+        exit;
+    }
+}
+
+// === XỬ LÝ LOGOUT ===
 if (isset($_GET['page']) && $_GET['page'] === 'logout') {
     session_destroy();
     header("Location: index.php");
     exit;
 }
-// 2. Bật output buffering để đảm bảo header() luôn hoạt động
+
 ob_start();
 include_once 'includes/header.php';
 
@@ -79,15 +128,9 @@ if (!method_exists($controller, $method_to_call)) {
     exit;
 }
 
-// QUAN TRỌNG NHẤT: GỌI CONTROLLER TRƯỚC (để header("Location: ...") hoạt động)
+// Gọi method tương ứng
 $controller->$method_to_call();
 
-// SAU KHI CONTROLLER XỬ LÝ XONG:
-// - Nếu đăng nhập thành công → đã redirect → không chạy tới đây
-// - Nếu chưa redirect (hiển thị trang) → lúc này mới được in header + footer
-
-
-// Xuất nội dung từ buffer (nếu có)
 ob_end_flush();
 
 include_once 'includes/footer.php';
