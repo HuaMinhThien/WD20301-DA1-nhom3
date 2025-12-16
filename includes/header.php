@@ -70,7 +70,7 @@ try {
                 
                 <?php if ($user_id != 0): ?>
                     <a href="?page=user">
-                        <div class="hd-icon"><img src="assets/images/img-icon/user.png" alt=""></div>
+                        <div class="hd-icon"><img src="assets/images/img-icon/green-user.png" alt=""></div>
                     </a>
                 <?php else: ?>
                     <a href="?page=login">
