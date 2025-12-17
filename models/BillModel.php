@@ -9,7 +9,7 @@ class BillModel {
 
     // Lưu đơn hàng mới từ giỏ hàng
     // === HÀM TẠO ĐƠN HÀNG MỚI ===
-    public function createBillFromCart($userId, $totalPay, $voucherId = null, $status = 'pending') {
+    public function createBillFromCart($userId, $totalPay, $voucherId = null, $status = 'Chờ xác nhận') {
         // 1. Lấy giỏ hàng
         $cartSql = "SELECT cd.quantity, cd.productVariant_id, pv.product_id, pv.color_id, pv.size_id, p.price, p.name, p.img
                     FROM cartdetail cd
