@@ -4,7 +4,7 @@
         <img src="assets/images/img-banner/banner-chinh-3.jpg" alt="">
     </div>
 
-    <div class="container-sale container-center" style="margin-top: 50px  ;">
+    <div class="container-sale container-center" style="margin-top: 50px  ;margin-bottom: 50px  ;">
 
         <div class="box-sale">
             <img src="assets/images/img-banner/banner-con-9.png" alt="">
