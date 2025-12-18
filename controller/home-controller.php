@@ -131,8 +131,12 @@ class HomeController {
     }
             
     public function home() {
-        // Lấy 20 sản phẩm ngẫu nhiên để hiển thị ở View home
-        $random_products = $this->productModel->getFeaturedProductsRandom(20); 
+        // Lấy 10 sản phẩm mới nhất (ID cao nhất)
+        $newest_products = $this->productModel->getNewestProducts(10);
+        // Lấy 10 sản phẩm có tồn kho cao nhất
+        $highest_stock_products = $this->productModel->getHighestStockProducts(10);
+        // Kết hợp thành mảng 20 sản phẩm để giữ nguyên logic View
+        $random_products = array_merge($newest_products, $highest_stock_products);
 
         // Truyền $random_products sang View
         include_once 'pages/home.php';

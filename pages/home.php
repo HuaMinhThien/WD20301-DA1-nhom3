@@ -2,7 +2,7 @@
 <main class="container-center">
 
 <?php 
-// GIẢ ĐỊNH: Biến $random_products đã được Controller truyền sang và chứa TẤT CẢ các sản phẩm ngẫu nhiên (>= 20 SP)
+// GIẢ ĐỊNH: Biến $random_products đã được Controller truyền sang và chứa TẤT CẢ các sản phẩm theo tiêu chí mới (>= 20 SP)
 
 // Kiểm tra và đảm bảo rằng $random_products tồn tại, là mảng và có ít nhất 20 sản phẩm
 if (!empty($random_products) && is_array($random_products)) {
@@ -195,7 +195,7 @@ $imagePath = 'assets/images/sanpham/';
     </div>
     
     <section class="product-grid-section">
-    <h2 class="section-title-highlight">🔥 SẢN PHẨM NỔI BẬT</h2>
+    <h2 class="section-title-highlight">SẢN PHẨM NỔI BẬT</h2>
     <div class="pro-section-2-box2" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;">
         <?php 
         // SỬ DỤNG $section1_products
@@ -248,7 +248,7 @@ $imagePath = 'assets/images/sanpham/';
     </div>
 
     <section class="product-grid-section">
-    <h2 class="section-title-highlight">⭐ XU HƯỚNG MỚI</h2>
+    <h2 class="section-title-highlight">XU HƯỚNG MỚI</h2>
     <div class="pro-section-2-box2" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;">
         <?php 
         // SỬ DỤNG $section2_products
