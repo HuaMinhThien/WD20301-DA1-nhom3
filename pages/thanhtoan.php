@@ -153,6 +153,24 @@ $(document).ready(function() {
         console.log('Đã chọn quận/huyện:', districtName);
     });
 
+    // Real-time formatting cho số điện thoại (chỉ format, không validate)
+    $('input[name="phone"]').on('input', function() {
+        var value = $(this).val();
+        
+        // Chỉ cho phép nhập số
+        $(this).val(value.replace(/[^\d]/g, ''));
+        
+        // Tự động thêm số 0 nếu người dùng chưa nhập
+        if (value.length === 1 && value !== '0') {
+            $(this).val('0' + value);
+        }
+        
+        // Giới hạn 10 số
+        if ($(this).val().length > 10) {
+            $(this).val($(this).val().slice(0, 10));
+        }
+    });
+
     // 4. Xử lý submit form
     $('#checkoutForm').submit(function(e) {
         // Kiểm tra đã chọn đầy đủ địa chỉ chưa (chỉ cần Tỉnh và Quận/Huyện)
@@ -161,6 +179,21 @@ $(document).ready(function() {
             e.preventDefault();
             return false;
         }
+        
+        // VALIDATION CHO SỐ ĐIỆN THOẠI
+        var phoneInput = $('input[name="phone"]');
+        var phoneValue = phoneInput.val().trim();
+        
+        // Kiểm tra định dạng số điện thoại
+        var phoneRegex = /^0\d{9}$/; // Bắt đầu bằng 0 và có đúng 10 số
+        
+        if (!phoneRegex.test(phoneValue)) {
+            alert('Số điện thoại phải bắt đầu bằng số 0 và có đúng 10 chữ số.');
+            phoneInput.focus();
+            e.preventDefault();
+            return false;
+        }
+        
         return true;
     });
 });
