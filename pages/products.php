@@ -46,8 +46,13 @@ if (!isset($_GET['price_min']) && !isset($_GET['price_max']) && empty($current_p
 ?>
 
 <main>
-    <div class="sale-bannerfull" style="padding-top: 100px;">
-        <img src="assets/images/img-banner/banner-chinh-4.jpg" alt="">
+    <div class="banner-content-hero">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>AURA CLOTHES</h1>
+                <p>Nâng tầm phong cách cùng Aura. Khẳng định dấu ấn cá nhân khác biệt qua những mẫu đồ mới.</p>
+            </div>
+        </section>
     </div>
 
     <div class="products-container-1 container-center" style="padding-top: 100px;">
