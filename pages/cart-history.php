@@ -27,10 +27,8 @@
                     <div class="order-status-and-date">
                         <span class="order-date">Ngày đặt: <?= date('d/m/Y', strtotime($firstItem['order_date'])) ?></span>
 
-                        <?php if ($firstItem['status'] == 'Đã hủy'):?>
+                        <?php if ($firstItem['status'] == 'Đã hủy' || $firstItem['status'] == 'Chờ xác nhận'):?>
                             <span style="color: red; font-size: 16px;" class="status-badge <?= strtolower($firstItem['status']) ?>"><?= ucfirst($firstItem['status']) ?></span>
-                        <?php elseif ($firstItem['status'] == 'Chờ xác nhận'):?>
-                            <span style="color: #4290DD; font-size: 16px;" class="status-badge <?= strtolower($firstItem['status']) ?>"><?= ucfirst($firstItem['status']) ?></span>
                         <?php elseif ($firstItem['status'] == 'Đã giao' ): ?>
                             <span style="color: green; font-size: 16px;" class="status-badge <?= strtolower($firstItem['status']) ?>"><?= ucfirst($firstItem['status']) ?></span>
                         <?php endif; ?>
