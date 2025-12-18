@@ -27,7 +27,7 @@
                     <div class="store-job-list">
                         
                         <div class="store-job-card">
-                            <img src="assets/images/img-logo/logo.jpg" alt="Aura Clothes Logo" class="store-job-logo">
+                            <img src="images/logo-aura-mini.png" alt="Aura Clothes Logo" class="store-job-logo">
                             <h4>IT Developer</h4>
                             <p>Thừa hưởng: **Hồ Chí Minh**</p>
                             <div class="store-job-tags">
@@ -39,7 +39,7 @@
                         </div>
 
                         <div class="store-job-card">
-                            <img src="assets/images/img-logo/logo.jpg" alt="Aura Clothes Logo" class="store-job-logo">
+                            <img src="images/logo-aura-mini.png" alt="Aura Clothes Logo" class="store-job-logo">
                             <h4>Data Scientist</h4>
                             <p>Từ 20 triệu VNĐ: **Hồ Chí Minh**</p>
                             <div class="store-job-tags">
@@ -56,6 +56,7 @@
                 <section class="contact-section-about">
                     <h2>Giới thiệu chung</h2>
                     <div class="contact-img-wrapper">
+                        <img src="images/about-image.jpg" alt="Aura Clothes Showroom">
                         <p class="contact-copyright">Copyright © 2025 Aura Clothes & Korolmoh</p>
                     </div>
                     <p class="contact-about-text">
@@ -76,7 +77,7 @@
                         <p>Hẻm nào đó</p>
                     </div>
                     <div class="contact-map-placeholder">
-                        <img src="assets/images/img-map/map.png" alt="Bản đồ vị trí công ty">
+                        <img src="images/map-placeholder.png" alt="Bản đồ vị trí công ty">
                     </div>
                 </section>
 
