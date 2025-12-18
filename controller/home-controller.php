@@ -235,7 +235,7 @@ class HomeController {
                 if ($user['role'] === 'admin') {
                     header('Location: admin-index.php');
                 } else {
-                    header('Location: index.php?page=user&user_id=' . $user['id']);
+                    header('Location: index.php?page=home');
                 }
                 exit;
             } else {
