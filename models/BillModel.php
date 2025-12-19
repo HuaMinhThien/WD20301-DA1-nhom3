@@ -83,22 +83,8 @@ class BillModel {
     }
 
 
-// === HÀM CẬP NHẬT TRẠNG THÁI ĐƠN HÀNG (Dùng cho Admin) ===
-    public function adminUpdateStatus($billId, $newStatus) {
-        // Hạn chế trạng thái có thể cập nhật để đảm bảo an toàn
-        $validStatuses = ['Đã giao', 'Đã hủy', 'Chờ xác nhận'];
-        if (!in_array($newStatus, $validStatuses)) {
-            return false;
-        }
-
-        $sql = "UPDATE bill SET status = ? WHERE id = ?";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$newStatus, $billId]);
-    }
-
-// === HÀM LẤY TẤT CẢ ĐƠN HÀNG (Dùng cho Admin) ===
-public function getAllBills($status = null) {
-    // Chú ý: Phải có dấu phẩy trước COALESCE
+// === HÀM LẤY TẤT CẢ ĐƠN HÀNG (Dùng cho Admin) - CẬP NHẬT ===
+public function getAllBills($status = null, $payment_status = null) {
     $sql = "SELECT 
                 b.id, b.order_date, b.status, b.total_pay, b.user_id, b.payment_status,
                 COALESCE(u.name, 'Người dùng đã xóa') AS customer_name 
@@ -106,10 +92,22 @@ public function getAllBills($status = null) {
             LEFT JOIN user u ON b.user_id = u.id"; 
     
     $params = [];
-    if ($status) {
-        $sql .= " WHERE b.status = ?";
+    $whereConditions = [];
+    
+    if ($status && $status !== 'all') {
+        $whereConditions[] = "b.status = ?";
         $params[] = $status;
     }
+    
+    if ($payment_status && $payment_status !== 'all') {
+        $whereConditions[] = "b.payment_status = ?";
+        $params[] = $payment_status;
+    }
+    
+    if (!empty($whereConditions)) {
+        $sql .= " WHERE " . implode(" AND ", $whereConditions);
+    }
+    
     $sql .= " ORDER BY b.order_date DESC";
 
     $stmt = $this->db->prepare($sql);
@@ -117,10 +115,43 @@ public function getAllBills($status = null) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-    public function adminUpdatePaymentStatus($id, $status) {
+// Cập nhật phương thức adminUpdatePaymentStatus
+public function adminUpdatePaymentStatus($id, $status) {
     $query = "UPDATE bill SET payment_status = :status WHERE id = :id";
     $stmt = $this->db->prepare($query); 
-    return $stmt->execute(['status' => $status, 'id' => $id]);
+    $success = $stmt->execute(['status' => $status, 'id' => $id]);
+    
+    // Nếu xác nhận đã thu tiền, kiểm tra điều kiện chuyển sang Đã giao
+    if ($success && $status === 'Đã thanh toán') {
+        $bill = $this->getBillById($id);
+        // Kiểm tra cả hai điều kiện: đã thu tiền VÀ đã xác nhận
+        if ($bill && $bill['status'] === 'Đã xác nhận') {
+            $this->adminUpdateStatus($id, 'Đã giao');
+        }
+    }
+    
+    return $success;
+}
+
+// Cập nhật phương thức adminUpdateStatus để thêm trạng thái 'Đã xác nhận'
+public function adminUpdateStatus($billId, $newStatus) {
+    // Hạn chế trạng thái có thể cập nhật để đảm bảo an toàn
+    $validStatuses = ['Đã xác nhận', 'Đã giao', 'Đã hủy', 'Chờ xác nhận'];
+    if (!in_array($newStatus, $validStatuses)) {
+        return false;
+    }
+
+    $sql = "UPDATE bill SET status = ? WHERE id = ?";
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute([$newStatus, $billId]);
+}
+
+// === HÀM LẤY THÔNG TIN ĐƠN HÀNG THEO ID ===
+public function getBillById($billId) {
+    $sql = "SELECT * FROM bill WHERE id = ?";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$billId]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 }
