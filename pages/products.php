@@ -86,7 +86,7 @@ $current_price_max = min($PRICE_RANGE_MAX, $current_price_max);
                             <input type="range" id="min-price-slider" min="0" max="1000000" step="10000" value="<?php echo $current_price_min; ?>">
                             <input type="range" id="max-price-slider" min="0" max="1000000" step="10000" value="<?php echo $current_price_max; ?>">
                         </div>
-                        <button id="apply-price-range" class="btn2" style="margin-top: 20px; width: 100%;"><span class="spn2">Áp dụng lọc giá</span></button>
+                        <button id="apply-price-range" class="btn2" style="margin-top: 20px; width: 100%;"><span class="spn2">Áp dụng giá</span></button>
                     </div>
                 </div>
             </div>
