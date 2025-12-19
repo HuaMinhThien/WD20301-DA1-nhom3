@@ -453,3 +453,61 @@ td .status {
     background-color: var(--danger); 
     color: var(--white); 
 }
+
+/* =================================================
+--- CÁC CLASS BỔ SUNG CHO TRẠNG THÁI & THANH TOÁN ---
+================================================= */
+
+/* 1. Bổ sung màu cho trạng thái "Đang giao" (Processing) */
+:root {
+    --order-processing: #cce5ff; /* Màu xanh dương nhạt */
+}
+
+.badge.processing { 
+    background-color: var(--order-processing); 
+    color: #004085; 
+    border: 1px solid #b8daff;
+}
+
+/* 2. Style cho cột Trạng thái thanh toán */
+.payment-status-text {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* 3. Hiệu ứng cho nút Xác nhận tiền (payment-btn) */
+.payment-btn {
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.payment-btn:hover {
+    background-color: #218838 !important; /* Xanh lá đậm hơn khi hover */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+}
+
+/* 4. Căn chỉnh bảng để không bị tràn khi thêm cột */
+.card-body {
+    overflow-x: auto; /* Cho phép cuộn ngang trên thiết bị nhỏ */
+}
+
+table thead td {
+    white-space: nowrap; /* Giữ tiêu đề trên một dòng */
+}
+
+/* 5. Cải thiện hiển thị cho Badge tổng quát */
+.badge {
+    text-transform: capitalize;
+    letter-spacing: 0.3px;
+}
+
+/* 6. Trạng thái hoàn tất (Dấu tích xanh) */
+.text-success-bold {
+    color: var(--success);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}

@@ -1,118 +1,64 @@
 <?php
-// === LOGIC CONTROLLER (Cần chạy trước khi hiển thị HTML) ===
-
-// 1. Kết nối CSDL và khởi tạo Model
-if (!class_exists('Database')) {
-    require_once __DIR__ . '/../config/Database.php'; 
-}
-if (!class_exists('BillModel')) {
-    require_once __DIR__ . '/../models/BillModel.php'; 
-}
+// === 1. LOGIC CONTROLLER ===
+if (!class_exists('Database')) { require_once __DIR__ . '/../config/Database.php'; }
+if (!class_exists('BillModel')) { require_once __DIR__ . '/../models/BillModel.php'; }
 
 $database = new Database();
 $db = $database->getConnection();
 $billModel = new BillModel($db);
 
-// 2. Định nghĩa Ánh xạ Trạng thái
-$status_map = [
-    'pending' => 'Chờ xác nhận',
-    'shipped' => 'Đã giao',
-    'cancelled' => 'Đã hủy',
-    'all' => 'Tất cả', 
-];
+// Cấu hình trạng thái
+$status_map = ['pending' => 'Chờ xác nhận', 'shipped' => 'Đã giao', 'cancelled' => 'Đã hủy', 'all' => 'Tất cả'];
+$model_status_map = ['pending' => 'Chờ xác nhận', 'shipped' => 'Đã giao', 'cancelled' => 'Đã hủy'];
+$action_to_status = ['shipped' => 'Đã giao', 'cancelled' => 'Đã hủy', 'pending' => 'Chờ xác nhận'];
 
-// Ánh xạ ngược: Dùng để chuyển trạng thái từ URL (tiếng Anh) thành giá trị trong CSDL (tiếng Việt)
-$model_status_map = [
-    'pending' => 'Chờ xác nhận',
-    'shipped' => 'Đã giao',
-    'cancelled' => 'Đã hủy',
-];
-
-// Ánh xạ ngược từ action (tiếng Anh) sang trạng thái CSDL (tiếng Việt)
-$action_to_status = [
-    'shipped' => 'Đã giao',
-    'cancelled' => 'Đã hủy',
-    // Nếu muốn cho phép chuyển lại về Chờ xác nhận (pending)
-    'pending' => 'Chờ xác nhận', 
-];
-
-// === XỬ LÝ HÀNH ĐỘNG CẬP NHẬT TRẠNG THÁI BẰNG AJAX (POST/GET) ===
+// Lấy tham số từ URL
 $action = $_GET['action'] ?? null;
 $bill_id_to_update = $_GET['bill_id'] ?? null;
+$payment_action = $_GET['payment_action'] ?? null; // Tham số xác nhận tiền
 
+// === XỬ LÝ CẬP NHẬT TRẠNG THÁI ĐƠN HÀNG ===
 if ($action && $bill_id_to_update && isset($action_to_status[$action])) {
-    // Chỉ xử lý nếu có ID và action hợp lệ
-    $new_status = $action_to_status[$action];
-    $success = $billModel->adminUpdateStatus($bill_id_to_update, $new_status);
-
+    $success = $billModel->adminUpdateStatus($bill_id_to_update, $action_to_status[$action]);
     header('Content-Type: application/json');
-    if ($success) {
-        // Cập nhật thành công, trả về trạng thái mới
-        echo json_encode(['success' => true, 'new_status_text' => $new_status]);
-    } else {
-        http_response_code(500); // Lỗi máy chủ hoặc cập nhật thất bại
-        echo json_encode(['success' => false, 'message' => 'Lỗi: Không thể cập nhật trạng thái đơn hàng. Có thể do ID không tồn tại hoặc trạng thái không hợp lệ.']);
-    }
+    echo json_encode(['success' => $success]);
     exit;
 }
-// === END XỬ LÝ HÀNH ĐỘNG ===
 
-
-$filter_status = $_GET['status'] ?? null; 
-$current_status_text = $status_map[$filter_status] ?? 'Tất cả';
-
-// 3. Lấy dữ liệu (Điều chỉnh logic ánh xạ)
-if ($filter_status == 'all' || $filter_status == null) {
-    // Nếu là 'Tất cả' hoặc không có tham số, truyền null để lấy tất cả
-    $status_for_model = null;
-} else {
-    // Ánh xạ trạng thái tiếng Anh (pending) sang tiếng Việt (Chờ xác nhận)
-    $status_for_model = $model_status_map[$filter_status] ?? null;
+// === XỬ LÝ XÁC NHẬN THANH TOÁN ===
+$payment_action = $_GET['payment_action'] ?? null;
+if ($payment_action === 'paid' && $bill_id_to_update) {
+    $success = $billModel->adminUpdatePaymentStatus($bill_id_to_update, 'Đã thanh toán');
+    header('Content-Type: application/json');
+    echo json_encode(['success' => $success]);
+    exit;
 }
 
+
+// Lấy dữ liệu hiển thị
+$filter_status = $_GET['status'] ?? null; 
+$current_status_text = $status_map[$filter_status] ?? 'Tất cả';
+$status_for_model = ($filter_status == 'all' || $filter_status == null) ? null : ($model_status_map[$filter_status] ?? null);
 $orders = $billModel->getAllBills($status_for_model);
 
-// === KIỂM TRA REQUEST AJAX (Lấy nội dung bảng) ===
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
     include 'orders_table_content.php'; 
     exit;
 }
-// === END KIỂM TRA AJAX ===
 ?>
 
 <div class="main-content">
     <header>
         <h1>Quản Lý Đơn Hàng - <?php echo htmlspecialchars($current_status_text); ?></h1>
-        <div class="user-wrapper">
-            <img src="https://via.placeholder.com/40" alt="Admin">
-            <div><h4>Admin</h4><small>Super Admin</small></div>
-        </div>
     </header>
 
     <main>
-        
         <?php 
-        // === Xây dựng Base URL linh hoạt và chính xác ===
         $get_params = $_GET;
-        // Loại bỏ tham số 'status' và 'action', 'bill_id' khỏi chuỗi query để xây dựng URL mới
-        if (isset($get_params['status'])) {
-            unset($get_params['status']);
-        }
-        if (isset($get_params['action'])) {
-            unset($get_params['action']);
-        }
-        if (isset($get_params['bill_id'])) {
-            unset($get_params['bill_id']);
-        }
-        
-        if (!isset($get_params['page']) && basename($_SERVER['PHP_SELF']) == 'index.php') {
-            $get_params['page'] = 'orders'; 
-        }
-
+        unset($get_params['action'], $get_params['bill_id'], $get_params['payment_action']);
         $query_string = http_build_query($get_params);
-        $path = strtok($_SERVER["REQUEST_URI"], '?');
-        $base_url = $path . ($query_string ? '?' . $query_string : '');
-        $base_url .= ($query_string ? '&' : '?');
+        $base_url = strtok($_SERVER["REQUEST_URI"], '?') . ($query_string ? '?' . $query_string : '');
+        $base_url .= (strpos($base_url, '?') !== false ? '&' : '?');
         ?>
 
         <div class="filter-controls" style="margin-bottom: 1.5rem; display: flex; gap: 10px;">
@@ -132,9 +78,9 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                             <td>Khách</td>
                             <td>Ngày</td>
                             <td>Tổng tiền</td>
-                            <td>TT</td>
-                            <td>Hành động</td>
-                        </tr>
+                            <td>Trạng thái ĐH</td>
+                            <td>Thanh toán</td> <td>Hành động</td>
+                            <td>Xác nhận tiền</td> </tr>
                     </thead>
                     <tbody>
                         <?php include 'orders_table_content.php'; ?>
@@ -147,133 +93,46 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const cardBody = document.querySelector('.card-body');
-    const tableBody = cardBody ? cardBody.querySelector('tbody') : null;
-    const statusLinks = document.querySelectorAll('.btn-filter');
-    const cardHeaderH1 = document.querySelector('header h1');
-    const baseH1Text = 'Quản Lý Đơn Hàng'; 
+    const tableBody = document.querySelector('tbody');
 
-    if (!tableBody || statusLinks.length === 0) {
-        return;
-    }
+    if (tableBody) {
+        tableBody.addEventListener('click', function(e) {
+            // Nhận diện cả nút hành động đơn hàng và nút thanh toán
+            const target = e.target.closest('.action-btn, .payment-btn');
+            if (!target) return;
 
-    // === 1. Xử lý Lọc bằng AJAX ===
-    statusLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault(); 
-
-            const url = this.href;
-            
-            // Cập nhật class active cho nút
-            statusLinks.forEach(btn => {
-                btn.classList.remove('btn-primary');
-                btn.classList.add('btn-secondary');
-            });
-            this.classList.remove('btn-secondary');
-            this.classList.add('btn-primary');
-
-            // Cập nhật tiêu đề H1
-            let statusText = this.textContent.trim();
-            cardHeaderH1.textContent = `${baseH1Text} - ${statusText}`;
-
-            // Hiển thị thông báo đang tải
-            tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 30px; color: #007bff;">Đang tải dữ liệu...</td></tr>';
-
-
-            // Thực hiện AJAX
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest' 
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => { 
-                        throw new Error(`Server returned HTTP ${response.status}: ${text.substring(0, 100)}...`);
-                    });
-                }
-                return response.text(); 
-            })
-            .then(htmlContent => {
-                tableBody.innerHTML = htmlContent;
-            })
-            .catch(error => {
-                console.error('Lỗi AJAX Lọc:', error);
-                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red; padding: 30px;">LỖI: Không thể tải đơn hàng. Vui lòng kiểm tra Console/Network Tab (F12) để xem chi tiết lỗi PHP hoặc lỗi mạng.</td></tr>';
-            });
-        });
-    });
-    
-    // === 2. Xử lý sự kiện Duyệt/Hủy (AJAX) ===
-    tableBody.addEventListener('click', function(e) {
-        const target = e.target;
-        // Kiểm tra xem nút được click có class 'action-btn' không
-        if (target.classList.contains('action-btn')) {
             e.preventDefault();
-            
             const billId = target.getAttribute('data-id');
-            const action = target.getAttribute('data-action'); // 'shipped' hoặc 'cancelled'
-            const actionText = target.textContent.trim(); // "Duyệt" hoặc "Hủy"
+            const action = target.getAttribute('data-action');
+            const paymentAction = target.getAttribute('data-payment');
             
-            if (!confirm(`Bạn có chắc chắn muốn thực hiện hành động "${actionText}" cho đơn hàng #${billId}?`)) {
-                return;
-            }
+            const confirmMsg = paymentAction ? "Xác nhận đã nhận tiền cho đơn hàng này?" : "Bạn có chắc chắn muốn thực hiện hành động này?";
 
-            // Lấy Base URL hiện tại (loại bỏ action/bill_id nếu có)
-            const currentUrl = window.location.href.split('?')[0];
-            const currentQuery = window.location.search.substring(1).split('&').filter(param => 
-                !param.startsWith('action=') && !param.startsWith('bill_id=')
-            ).join('&');
-            
-            // Xây dựng URL để gọi logic cập nhật ở phía PHP
-            const separator = currentQuery ? '&' : '?';
-            const updateUrl = currentUrl + (currentQuery ? '?' + currentQuery : '') + 
-                              separator + `action=${action}&bill_id=${billId}`;
+            if (confirm(confirmMsg)) {
+                const url = new URL(window.location.href);
+                url.searchParams.set('bill_id', billId);
+                
+                if (paymentAction) {
+                    url.searchParams.set('payment_action', paymentAction);
+                } else if (action) {
+                    url.searchParams.set('action', action);
+                }
 
-            fetch(updateUrl, {
-                method: 'GET', 
-                headers: {
-                    'Accept': 'application/json', // Báo cho server biết mong muốn nhận JSON
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    // Cố gắng đọc JSON lỗi
-                    return response.json().catch(() => {
-                        // Nếu không phải JSON, trả về lỗi text
-                        return response.text().then(text => ({ success: false, message: `Server returned error (${response.status}): ${text.substring(0, 50)}...` }));
-                    }).then(errorData => {
-                         throw new Error(`Cập nhật thất bại: ${errorData.message || 'Lỗi không xác định'}`);
-                    });
-                }
-                return response.json(); 
-            })
-            .then(data => {
-                if (data.success) {
-                    alert(`Đã cập nhật trạng thái đơn hàng #${billId} thành: ${data.new_status_text}`);
-                    
-                    // Sau khi cập nhật thành công, reload lại nội dung bảng
-                    // Tìm link filter đang active (btn-primary) và click vào nó
-                    const currentFilterLink = document.querySelector('.btn-filter.btn-primary');
-                    if (currentFilterLink) {
-                        currentFilterLink.click();
+                fetch(url.href, { headers: { 'Accept': 'application/json' } })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload(); // Tải lại trang sau khi cập nhật thành công
+                    } else {
+                        alert('Cập nhật thất bại. Vui lòng kiểm tra lại Database!');
                     }
-                } else {
-                    alert(data.message || 'Cập nhật thất bại.');
-                }
-            })
-            .catch(error => {
-                console.error('Lỗi AJAX Cập nhật Status:', error);
-                alert('LỖI: Không thể cập nhật trạng thái. Vui lòng kiểm tra Console/Network Tab (F12).');
-            });
-        }
-        
-        // Xử lý nút Chi tiết (Chỉ là placeholder)
-        if (target.classList.contains('detail-btn')) {
-            const billId = target.getAttribute('data-id');
-            alert(`Chức năng xem chi tiết đơn hàng #${billId} sẽ được triển khai tại đây.`);
-        }
-    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    window.location.reload();
+                });
+            }
+        });
+    }
 });
 </script>
