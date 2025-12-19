@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 08, 2025 lúc 03:45 PM
+-- Thời gian đã tạo: Th12 19, 2025 lúc 01:44 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -46,24 +46,49 @@ CREATE TABLE `bill` (
   `voucher_id` int(11) DEFAULT NULL,
   `order_date` datetime NOT NULL,
   `status` varchar(50) NOT NULL,
-  `total_pay` int(11) NOT NULL
+  `total_pay` int(11) NOT NULL,
+  `payment_status` varchar(50) DEFAULT 'Chờ thanh toán'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `bill`
 --
 
-INSERT INTO `bill` (`id`, `user_id`, `voucher_id`, `order_date`, `status`, `total_pay`) VALUES
-(2, 2, 1, '2025-11-28 15:45:00', 'Đã giao', 1197000),
-(3, 2, NULL, '2025-12-01 20:52:07', 'Chờ xác nhận', 1100000),
-(4, 2, NULL, '2025-12-01 20:57:12', 'Chờ xác nhận', 2640000),
-(5, 5, NULL, '2025-12-02 09:02:11', 'Đã giao', 3700000),
-(6, 2, NULL, '2025-12-04 09:03:28', 'Đã hủy', 3225000),
-(7, 2, NULL, '2025-12-04 09:14:54', 'Chờ xác nhận', 605000),
-(8, 2, NULL, '2025-12-06 23:04:43', 'Chờ xác nhận', 640000),
-(9, 5, NULL, '2025-12-06 23:23:37', 'Chờ xác nhận', 900000),
-(10, 5, NULL, '2025-12-06 23:25:31', 'Chờ xác nhận', 770000),
-(11, 7, NULL, '2025-12-06 23:36:50', 'Chờ xác nhận', 650000);
+INSERT INTO `bill` (`id`, `user_id`, `voucher_id`, `order_date`, `status`, `total_pay`, `payment_status`) VALUES
+(2, 2, 1, '2025-11-28 15:45:00', 'Đã giao', 1197000, 'Chờ thanh toán'),
+(3, 2, NULL, '2025-12-01 20:52:07', 'Chờ xác nhận', 1100000, 'Chờ thanh toán'),
+(4, 2, NULL, '2025-12-01 20:57:12', 'Chờ xác nhận', 2640000, 'Chờ thanh toán'),
+(5, 5, NULL, '2025-12-02 09:02:11', 'Đã giao', 3700000, 'Chờ thanh toán'),
+(6, 2, NULL, '2025-12-04 09:03:28', 'Đã hủy', 3225000, 'Chờ thanh toán'),
+(7, 2, NULL, '2025-12-04 09:14:54', 'Chờ xác nhận', 605000, 'Chờ thanh toán'),
+(8, 2, NULL, '2025-12-06 23:04:43', 'Chờ xác nhận', 640000, 'Chờ thanh toán'),
+(9, 5, NULL, '2025-12-06 23:23:37', 'Đã hủy', 900000, 'Chờ thanh toán'),
+(10, 5, NULL, '2025-12-06 23:25:31', 'Đã hủy', 770000, 'Chờ thanh toán'),
+(11, 7, NULL, '2025-12-06 23:36:50', 'Chờ xác nhận', 650000, 'Chờ thanh toán'),
+(12, 5, NULL, '2025-12-11 07:51:06', 'Đã giao', 2800000, 'Chờ thanh toán'),
+(13, 5, NULL, '2025-12-12 19:11:59', 'Đã hủy', 650000, 'Chờ thanh toán'),
+(14, 5, NULL, '2025-12-12 19:13:10', 'Đã giao', 780000, 'Chờ thanh toán'),
+(15, 5, NULL, '2025-12-12 19:22:12', 'Chờ xác nhận', 1100000, 'Chờ thanh toán'),
+(16, 5, NULL, '2025-12-12 19:24:21', 'Đã giao', 640000, 'Chờ thanh toán'),
+(17, 5, NULL, '2025-12-12 19:26:21', 'Chờ xác nhận', 310000, 'Chờ thanh toán'),
+(18, 5, NULL, '2025-12-12 19:55:17', 'Chờ xác nhận', 310000, 'Chờ thanh toán'),
+(19, 5, NULL, '2025-12-13 21:28:16', 'Chờ xác nhận', 2030000, 'Chờ thanh toán'),
+(20, 10, NULL, '2025-12-13 21:35:13', 'pending', 1320000, 'Chờ thanh toán'),
+(21, 10, NULL, '2025-12-13 21:38:21', 'pending', 42000, 'Chờ thanh toán'),
+(22, 10, NULL, '2025-12-13 21:39:03', 'pending', 440000, 'Chờ thanh toán'),
+(23, 10, NULL, '2025-12-13 21:45:04', 'pending', 390000, 'Chờ thanh toán'),
+(24, 10, NULL, '2025-12-13 21:45:55', 'pending', 460000, 'Chờ thanh toán'),
+(25, 10, NULL, '2025-12-13 21:47:00', 'pending', 1210000, 'Chờ thanh toán'),
+(26, 10, NULL, '2025-12-13 21:47:35', 'pending', 420000, 'Chờ thanh toán'),
+(27, 7, NULL, '2025-12-13 21:49:02', 'pending', 320000, 'Chờ thanh toán'),
+(28, 7, NULL, '2025-12-13 21:51:00', 'pending', 920000, 'Chờ thanh toán'),
+(29, 7, NULL, '2025-12-13 21:55:50', 'pending', 320000, 'Chờ thanh toán'),
+(30, 7, NULL, '2025-12-13 21:57:22', 'pending', 440000, 'Chờ thanh toán'),
+(31, 7, NULL, '2025-12-13 21:58:18', 'pending', 600000, 'Chờ thanh toán'),
+(32, 5, NULL, '2025-12-17 22:59:07', 'Đã giao', 440000, 'Chờ thanh toán'),
+(33, 5, NULL, '2025-12-17 23:03:42', 'Đã giao', 780000, 'Đã thanh toán'),
+(34, 5, NULL, '2025-12-18 22:26:28', 'Đã hủy', 42000, 'Chờ thanh toán'),
+(35, 5, NULL, '2025-12-19 17:13:05', 'Đã xác nhận', 2372000, 'Chờ thanh toán');
 
 -- --------------------------------------------------------
 
@@ -110,7 +135,48 @@ INSERT INTO `billdetail` (`id`, `productVariant_id`, `quantity`, `current_price`
 (24, 215, 1, 0, 8),
 (25, 229, 1, 0, 9),
 (26, 197, 1, 0, 10),
-(27, 679, 1, 0, 11);
+(27, 679, 1, 0, 11),
+(28, 526, 1, 0, 12),
+(29, 511, 1, 0, 12),
+(30, 676, 1, 0, 12),
+(31, 625, 1, 0, 12),
+(32, 229, 1, 0, 12),
+(33, 682, 1, 0, 13),
+(34, 454, 1, 0, 14),
+(35, 635, 1, 0, 14),
+(36, 497, 1, 0, 15),
+(37, 679, 1, 0, 15),
+(38, 634, 2, 0, 16),
+(39, 649, 1, 0, 17),
+(40, 653, 1, 0, 19),
+(41, 502, 1, 0, 19),
+(42, 625, 1, 0, 19),
+(43, 560, 1, 0, 19),
+(44, 907, 1, 0, 19),
+(45, 514, 1, 0, 20),
+(46, 37, 1, 0, 20),
+(47, 169, 1, 0, 20),
+(48, 754, 1, 0, 21),
+(49, 440, 1, 0, 22),
+(50, 20, 1, 0, 23),
+(51, 457, 1, 0, 24),
+(52, 206, 1, 0, 25),
+(53, 211, 1, 0, 25),
+(54, 407, 1, 0, 26),
+(55, 634, 1, 0, 27),
+(56, 451, 2, 0, 28),
+(57, 637, 1, 0, 29),
+(58, 214, 1, 0, 30),
+(59, 842, 1, 0, 31),
+(60, 215, 1, 0, 32),
+(61, 16, 2, 0, 33),
+(62, 751, 1, 0, 34),
+(63, 214, 1, 0, 35),
+(64, 212, 1, 0, 35),
+(65, 215, 1, 0, 35),
+(66, 1, 2, 0, 35),
+(67, 751, 1, 0, 35),
+(68, 649, 1, 0, 35);
 
 -- --------------------------------------------------------
 
@@ -135,7 +201,8 @@ INSERT INTO `cart` (`id`, `user_id`, `date_create`) VALUES
 (5, 7, '2025-12-02 09:04:15'),
 (6, 4, '2025-12-04 09:26:20'),
 (7, 3, '2025-12-04 09:26:24'),
-(8, 0, '2025-12-05 12:35:28');
+(8, 0, '2025-12-05 12:35:28'),
+(9, 10, '2025-12-13 21:34:43');
 
 -- --------------------------------------------------------
 
@@ -158,11 +225,7 @@ INSERT INTO `cartdetail` (`id`, `cart_id`, `productVariant_id`, `quantity`) VALU
 (22, 2, 211, 1),
 (25, 2, 514, 1),
 (26, 2, 529, 1),
-(56, 2, 676, 1),
-(63, 4, 526, 1),
-(64, 4, 511, 1),
-(65, 4, 676, 1),
-(66, 4, 625, 1);
+(56, 2, 676, 1);
 
 -- --------------------------------------------------------
 
@@ -346,7 +409,6 @@ INSERT INTO `products` (`id`, `name`, `price`, `description`, `img`, `img_child`
 (61, 'Mắt Kính FWSG23SS03G', 350000, 'Mắt kính FWSG23SS03G sở hữu gọng kính thanh mảnh, mang lại vẻ ngoài nhẹ nhàng và tinh tế cho phái đẹp. Tròng kính được tráng lớp chống tia UV400, bảo vệ mắt tối đa dưới ánh nắng.', 'kinh-nu1-Mắt Kính FWSG23SS03G.jpg', 'kinh-nu1.1-Mắt Kính FWSG23SS03G.jpg', 4, 2),
 (62, 'Mắt Kính FWSG23SS02G', 320000, 'Phong cách thời thượng với mẫu kính FWSG23SS02G. Gọng kính được làm từ nhựa Acetate cao cấp, bền bỉ và an toàn cho da. Màu sắc tròng kính dịu nhẹ, giúp quan sát rõ ràng.', 'kinh-nu2-Mắt Kính FWSG23SS02G.jpg', 'kinh-nu2.1-Mắt Kính FWSG23SS02G.jpg', 4, 2),
 (63, 'Mắt Kính FWSG23SS01G', 310000, 'Mẫu kính FWSG23SS01G mang hơi hướng Retro cổ điển nhưng không kém phần hiện đại. Thiết kế Oversize giúp che chắn bụi bẩn hiệu quả và tạo hiệu ứng khuôn mặt thon gọn hơn.', 'kinh-nu3-Mắt Kính FWSG23SS01G.jpg', 'kinh-nu3.1-Mắt Kính FWSG23SS01G.jpg', 4, 2),
-(64, 'Mắt Kính Nữ FWSG23SS02G', 330000, 'Phiên bản đặc biệt FWSG23SS02G dành riêng cho nữ giới với các đường bo cong mềm mại. Gọng kim loại mạ vàng sáng bóng kết hợp cùng tròng kính Gradient chuyển màu thời trang.', 'kinh-nu4-Mắt Kính Nữ FWSG23SS02G.jpg', 'kinh-nu4.1-Mắt Kính Nữ FWSG23SS02G.jpg', 4, 2),
 (65, 'Túi Xách Nữ Tiện Dụng FWBA24SS02', 650000, 'Túi xách nữ FWBA24SS02 là sự kết hợp hoàn hảo giữa tính tiện dụng và thời trang. Kích thước túi rộng rãi, chia nhiều ngăn thông minh giúp nàng thoải mái mang theo cả thế giới.', 'tui-nu1-Túi Xách Nữ Tiện Dụng FWBA24SS02.jpg', 'tui-nu1.1-Túi Xách Nữ Tiện Dụng FWBA24SS02.jpg', 5, 2);
 
 -- --------------------------------------------------------
@@ -1030,21 +1092,6 @@ INSERT INTO `product_variant` (`id`, `product_id`, `color_id`, `category_id`, `g
 (658, 63, 4, 1, 1, 5, 87),
 (659, 63, 5, 1, 1, 5, 91),
 (660, 63, 9, 1, 1, 5, 93),
-(661, 64, 4, 1, 1, 1, 92),
-(662, 64, 5, 1, 1, 1, 79),
-(663, 64, 9, 1, 1, 1, 21),
-(664, 64, 4, 1, 1, 2, 39),
-(665, 64, 5, 1, 1, 2, 32),
-(666, 64, 9, 1, 1, 2, 34),
-(667, 64, 4, 1, 1, 3, 66),
-(668, 64, 5, 1, 1, 3, 35),
-(669, 64, 9, 1, 1, 3, 60),
-(670, 64, 4, 1, 1, 4, 93),
-(671, 64, 5, 1, 1, 4, 92),
-(672, 64, 9, 1, 1, 4, 81),
-(673, 64, 4, 1, 1, 5, 31),
-(674, 64, 5, 1, 1, 5, 81),
-(675, 64, 9, 1, 1, 5, 33),
 (676, 65, 4, 1, 1, 1, 91),
 (677, 65, 5, 1, 1, 1, 76),
 (678, 65, 9, 1, 1, 1, 97),
@@ -1337,7 +1384,8 @@ INSERT INTO `user` (`id`, `name`, `email`, `password`, `role`, `phone`, `dob`, `
 (3, 'Liêm Trần', 'liemtran3107@gmail.com', '123', 'user', '', NULL, NULL, '2025-12-01 16:53:27'),
 (5, 'Hứa Minh Thiên', 'thien@gmail.com', '123456', 'user', '0906761390', '2006-12-04', 1, '2025-12-01 23:19:15'),
 (7, 'tuan', 'tuan@gmail.com', '123456', 'user', '0906761390', '2006-12-22', 1, '2025-12-02 09:03:14'),
-(8, 'name', 'email@gmail.com', '000000', 'user', '0000000000', NULL, 1, '2025-12-05 06:35:40');
+(8, 'name', 'email@gmail.com', '000000', 'user', '0000000000', NULL, 1, '2025-12-05 06:35:40'),
+(10, 'Thien day ne', 'thien1@gmaill.com', '123456', 'user', '0906761390', '2006-12-04', 1, '2025-12-13 21:33:30');
 
 -- --------------------------------------------------------
 
@@ -1490,25 +1538,25 @@ ALTER TABLE `address`
 -- AUTO_INCREMENT cho bảng `bill`
 --
 ALTER TABLE `bill`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT cho bảng `billdetail`
 --
 ALTER TABLE `billdetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT cho bảng `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT cho bảng `cartdetail`
 --
 ALTER TABLE `cartdetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- AUTO_INCREMENT cho bảng `category`
@@ -1562,7 +1610,7 @@ ALTER TABLE `size`
 -- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT cho bảng `voucher`
