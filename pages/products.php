@@ -457,6 +457,7 @@ if (rangeSlider) {
         applyPriceRangeFilter(); 
     });
 }
+
 function setupPagination() {
     const products = document.querySelectorAll('.pro-section-2-boxSP');
     const totalItems = products.length;
