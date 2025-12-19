@@ -179,14 +179,33 @@ class ProductModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Featured products on homepage - hide [ẨN]
-    public function getFeaturedProductsRandom($limit = 10) {
+    // Get newest products (highest ID) - hide [ẨN]
+    public function getNewestProducts($limit = 10) {
         $sql = "SELECT p.id, p.name, p.price, p.img AS image, p.category_id
                  FROM products p
                  JOIN category c ON p.category_id = c.id
                  WHERE p.name NOT LIKE '[ẨN] %'
                    AND c.name NOT LIKE '[ẨN] %'
-                 ORDER BY RAND() 
+                 ORDER BY p.id DESC 
+                 LIMIT ?";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(1, $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Get products with highest stock - hide [ẨN]
+    public function getHighestStockProducts($limit = 10) {
+        $sql = "SELECT p.id, p.name, p.price, p.img AS image, p.category_id,
+                 COALESCE(SUM(pv.quantity), 0) AS total_stock
+                 FROM products p
+                 JOIN category c ON p.category_id = c.id
+                 LEFT JOIN product_variant pv ON pv.product_id = p.id
+                 WHERE p.name NOT LIKE '[ẨN] %'
+                   AND c.name NOT LIKE '[ẨN] %'
+                 GROUP BY p.id
+                 ORDER BY total_stock DESC 
                  LIMIT ?";
 
         $stmt = $this->db->prepare($sql);
@@ -271,5 +290,22 @@ class ProductModel {
         $name = $stmt->fetchColumn();
         return $name ? $name : null;
     }
+
+    public function getFeaturedProductsRandom($limit = 4) {
+        $sql = "SELECT 
+                    p.id, 
+                    p.name, 
+                    p.img AS image, 
+                    p.price
+                FROM products p
+                ORDER BY RAND() 
+                LIMIT :limit";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 ?>

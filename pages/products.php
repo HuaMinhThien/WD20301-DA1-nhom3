@@ -6,25 +6,19 @@
 require_once __DIR__ . '/../config/Database.php';
 $pdo = (new Database())->getConnection();
 
-// === LẤY USER_ID VÀ CÁC BỘ LỌC HIỆN TẠI (ĐÃ ĐƯỢC CONTROLLER XỬ LÝ SẴN) ===
 $uid = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 0;
 
-// Các biến này sẽ được controller truyền vào (bắt buộc phải có)
 $current_category_id = $current_category_id ?? null;
 $current_gender_id   = $current_gender_id   ?? null;
 $current_price_range = $current_price_range ?? null;
 $current_color_id    = $current_color_id    ?? null;
 $current_size_id     = $current_size_id     ?? null;
 
-// Lấy giá trị min/max hiện tại từ URL để hiển thị trên thanh trượt
-$current_price_min = $_GET['price_min'] ?? 0; // Giả sử min mặc định là 0
-$current_price_max = $_GET['price_max'] ?? 1000000; // Giả sử max mặc định là 1.000.000 (hoặc một mức giá cao nhất)
-
-// Giới hạn giá trị của thanh trượt (Tùy chỉnh theo dữ liệu thực tế của bạn)
+$current_price_min = $_GET['price_min'] ?? 0;
+$current_price_max = $_GET['price_max'] ?? 1000000;
 $PRICE_RANGE_MIN = 0;
-$PRICE_RANGE_MAX = 1000000; // 1.000.000₫ (hoặc cao hơn nếu sản phẩm đắt hơn)
+$PRICE_RANGE_MAX = 1000000;
 
-// Cập nhật giá trị hiển thị nếu đã có trong URL
 if (isset($_GET['price_min']) && is_numeric($_GET['price_min'])) {
     $current_price_min = (int)$_GET['price_min'];
 }
@@ -32,164 +26,70 @@ if (isset($_GET['price_max']) && is_numeric($_GET['price_max'])) {
     $current_price_max = (int)$_GET['price_max'];
 }
 
-// Đảm bảo giá trị hiển thị không vượt quá giới hạn tổng
 $current_price_min = max($PRICE_RANGE_MIN, $current_price_min);
 $current_price_max = min($PRICE_RANGE_MAX, $current_price_max);
-
-// Nếu không có giá trị nào từ URL, đặt về mặc định của range
-if (!isset($_GET['price_min']) && !isset($_GET['price_max']) && empty($current_price_range)) {
-    $current_price_min = $PRICE_RANGE_MIN;
-    $current_price_max = $PRICE_RANGE_MAX;
-}
-
-
 ?>
 
 <main>
-    <div class="sale-bannerfull" style="padding-top: 100px;">
-        <img src="assets/images/img-banner/banner-chinh-4.jpg" alt="">
+    <div class="banner-content-hero">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>AURA CLOTHES</h1>
+                <p>Nâng tầm phong cách cùng Aura. Khẳng định dấu ấn cá nhân khác biệt qua những mẫu đồ mới.</p>
+            </div>
+        </section>
     </div>
 
-    <div class="products-container-1 container-center" style="padding-top: 100px;">
+    <div class="products-container-1 container-center" >
         <div class="pro-section-1">            
-
             <div class="pro-sec1-box1">
                 <h2>Danh mục</h2>
                 <div class="pro-sec1-box-checkbox">
-
                     <h3>Giới tính</h3>
                     <?php foreach ($genders as $gender): 
                         $checked = $current_gender_id && in_array($gender['id'], explode(',', $current_gender_id));
                     ?>
                     <div class="pro-sec1-box-check-label" style="cursor: pointer;">
                         <label class="container-prod-checkbox">
-                            <input type="checkbox"
-                                   id="gender-<?php echo $gender['id']; ?>"
-                                   data-filter="gender_id"
-                                   value="<?php echo $gender['id']; ?>"
-                                   <?php echo $checked ? 'checked' : ''; ?>>
-                            <svg viewBox="0 0 64 64" height="2em" width="2em">
-                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path-prod-checkbox"></path>
-                            </svg>
+                            <input type="checkbox" id="gender-<?php echo $gender['id']; ?>" data-filter="gender_id" value="<?php echo $gender['id']; ?>" <?php echo $checked ? 'checked' : ''; ?>>
+                            <svg viewBox="0 0 64 64" height="2em" width="2em"><path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path-prod-checkbox"></path></svg>
                             <label style="cursor: pointer;" for="gender-<?php echo $gender['id']; ?>"><?php echo $gender['name']; ?></label>
                         </label>
-                        </div>
+                    </div>
                     <?php endforeach; ?>
-
                     <hr>
-
                     <h3>Loại sản phẩm</h3>
                     <?php foreach ($categories as $category): 
                         $checked = $current_category_id && in_array($category['id'], explode(',', $current_category_id));
                     ?>
                     <div class="pro-sec1-box-check-label" style="cursor: pointer;">
                         <label class="container-prod-checkbox">
-                            <input type="checkbox"
-                                   id="category-<?php echo $category['id']; ?>"
-                                   data-filter="category_id"
-                                   value="<?php echo $category['id']; ?>"
-                                   <?php echo $checked ? 'checked' : ''; ?>>
-                            <svg viewBox="0 0 64 64" height="2em" width="2em">
-                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path-prod-checkbox"></path>
-                            </svg>
+                            <input type="checkbox" id="category-<?php echo $category['id']; ?>" data-filter="category_id" value="<?php echo $category['id']; ?>" <?php echo $checked ? 'checked' : ''; ?>>
+                            <svg viewBox="0 0 64 64" height="2em" width="2em"><path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path-prod-checkbox"></path></svg>
                             <label for="category-<?php echo $category['id']; ?>"><?php echo $category['name']; ?></label>
                         </label>
-                        </div>
+                    </div>
                     <?php endforeach; ?>
-                    
-                </div>
-            </div>
-
-            <div class="pro-sec1-box1">
-                <h2>Màu sắc</h2>
-                <div class="pro-sec1-box-checkbox">
-                    <?php
-                    $sql_colors = "SELECT id, name FROM color ORDER BY name";
-                    $stmt_colors = $pdo->query($sql_colors);
-                    $colors = $stmt_colors->fetchAll(PDO::FETCH_ASSOC);
-                    foreach ($colors as $color): 
-                        $checked = $current_color_id && in_array($color['id'], explode(',', $current_color_id));
-                    ?>
-                    <div class="pro-sec1-box-check-label" style="cursor: pointer;">
-                        <label class="container-prod-checkbox">
-                            <input type="checkbox"
-                                   id="color-<?php echo $color['id']; ?>"
-                                   data-filter="color_id"
-                                   value="<?php echo $color['id']; ?>"
-                                   <?php echo $checked ? 'checked' : ''; ?>>
-                            <svg viewBox="0 0 64 64" height="2em" width="2em">
-                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path-prod-checkbox"></path>
-                            </svg>
-                            <label style="cursor: pointer;" for="color-<?php echo $color['id']; ?>">
-                                <?php echo $color['name']; ?>
-                            </label>
-                        </label>
-                        </div>
-                    <?php endforeach; ?>
-                    
                 </div>
             </div>
 
             <div class="pro-sec1-box1">
                 <h2>Giá thành</h2>
                 <div class="pro-sec1-box-checkbox">
-                    <?php
-                    $price_ranges = [
-                        ['label' => 'Dưới 500.000đ',        'value' => '0_500000'],
-                        ['label' => '500.000đ - 600.000đ',  'value' => '500000_600000'],
-                        ['label' => '600.000đ - 700.000đ',  'value' => '600000_700000'],
-                        ['label' => 'Trên 700.000đ',        'value' => '700000_999999999'],
-                    ];
-                    foreach ($price_ranges as $range):
-                        $checked = $current_price_range && in_array($range['value'], explode(',', $current_price_range));
-                    ?>
-                    <div class="pro-sec1-box-check-label price-range-checkbox" style="cursor: pointer;">
-                        <label class="container-prod-checkbox">
-                            <input type="checkbox"
-                                   id="price-<?php echo $range['value']; ?>"
-                                   data-filter="price_range"
-                                   value="<?php echo $range['value']; ?>"
-                                   <?php echo $checked ? 'checked' : ''; ?>>
-                            <svg viewBox="0 0 64 64" height="2em" width="2em">
-                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path-prod-checkbox"></path>
-                            </svg>
-                            <label style="cursor: pointer;" for="price-<?php echo $range['value']; ?>"><?php echo $range['label']; ?></label>
-                        </label>
-                        </div>
-                    <?php endforeach; ?>
-                    
-                    <div class="price-range-slider-container" style="margin-top: 10px; ">
+                    <div class="price-range-slider-container">
                         <div class="price-input-display">
-                            <label for="min-price-display">Từ:</label>
                             <span id="min-price-display"><?php echo number_format($current_price_min, 0, ',', '.'); ?> ₫</span>
-                            <label for="max-price-display">-</label>
+                            <span>-</span>
                             <span id="max-price-display"><?php echo number_format($current_price_max, 0, ',', '.'); ?> ₫</span>
                         </div>
-
-                        <div class="range-slider" style="cursor: pointer;">
-                            <input type="range" 
-                                id="min-price-slider" 
-                                min="<?php echo $PRICE_RANGE_MIN; ?>" 
-                                max="<?php echo $PRICE_RANGE_MAX; ?>" 
-                                step="10000" 
-                                value="<?php echo $current_price_min; ?>">
-                            <input type="range" 
-                                id="max-price-slider" 
-                                min="<?php echo $PRICE_RANGE_MIN; ?>" 
-                                max="<?php echo $PRICE_RANGE_MAX; ?>" 
-                                step="10000" 
-                                value="<?php echo $current_price_max; ?>">
+                        <div class="range-slider">
+                            <input type="range" id="min-price-slider" min="0" max="1000000" step="10000" value="<?php echo $current_price_min; ?>">
+                            <input type="range" id="max-price-slider" min="0" max="1000000" step="10000" value="<?php echo $current_price_max; ?>">
                         </div>
-
-                        <button id="apply-price-range" class="btn2" style="margin-top: 20px; width: 100%;">
-                            <span class="spn2" style="font-size: 16px;">Áp dụng lọc giá</span>
-                        </button>
-                        
+                        <button id="apply-price-range" class="btn2" style="margin-top: 20px; width: 100%;"><span class="spn2">Áp dụng giá</span></button>
                     </div>
                 </div>
             </div>
-
-            
             <div class="pro-sec1-box1">
                 <h2>Kích cỡ</h2>
                 <div class="pro-sec1-box-checkbox">
@@ -218,69 +118,31 @@ if (!isset($_GET['price_min']) && !isset($_GET['price_max']) && empty($current_p
                     
                 </div>
             </div>
-            <button id="clear-all-checkboxes" class="btn2" style="margin-top: 10px;">
-                <span class="spn2" style="font-size: 16px;">Bỏ chọn tất cả</span>
-            </button>
-            
+
+            <button id="clear-all-checkboxes" class="btn2" style="margin-top: 10px;"><span class="spn2">Bỏ chọn tất cả</span></button>
         </div>
 
         <div class="pro-section-2">
             <div class="pro-section-2-box1">
-                <p>Có <?php echo isset($products) && is_array($products) ? count($products) : 0; ?> sản phẩm</p>
+                <p>Có <?php echo isset($products) ? count($products) : 0; ?> sản phẩm</p>
             </div>
 
             <div class="pro-section-2-box2">
-                <?php if (!empty($products) && is_array($products)): ?>
-                    <?php foreach ($products as $product):
-                        $productImagePath = 'assets/images/sanpham/';
-                    ?>
+                <?php if (!empty($products)): ?>
+                    <?php foreach ($products as $product): ?>
                     <div class="pro-section-2-boxSP">
                         <a href="?page=products_Details&id=<?php echo $product['id']; ?>">
-                            <img src="<?php echo htmlspecialchars($productImagePath . $product['image']); ?>" 
-                                 alt="<?php echo htmlspecialchars($product['name']); ?>">
+                            <img src="assets/images/sanpham/<?php echo htmlspecialchars($product['image']); ?>" alt="">
                             <p class="pro-sec2-boxSP-name"><?php echo htmlspecialchars($product['name']); ?></p>
                         </a>
                         <div class="pro-sec2-boxSP-miniBox">
                             <h3><?php echo number_format($product['price'], 0, ',', '.'); ?> ₫</h3>
-
-                            
                             <div title="Like" class="heart-container">
-                                <input id="Give-It-An-Id" class="checkbox" type="checkbox" />
+                                <input class="checkbox" type="checkbox" />
                                 <div class="svg-container">
-                                    <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="svg-outline"
-                                    viewBox="0 0 24 24"
-                                    >
-                                    <path
-                                        d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"
-                                    ></path>
-                                    </svg>
-                                    <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="svg-filled"
-                                    viewBox="0 0 24 24"
-                                    >
-                                    <path
-                                        d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"
-                                    ></path>
-                                    </svg>
-                                    <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    height="100"
-                                    width="100"
-                                    class="svg-celebrate"
-                                    >
-                                    <polygon points="10,10 20,20"></polygon>
-                                    <polygon points="10,50 20,50"></polygon>
-                                    <polygon points="20,80 30,70"></polygon>
-                                    <polygon points="90,10 80,20"></polygon>
-                                    <polygon points="90,50 80,50"></polygon>
-                                    <polygon points="80,80 70,70"></polygon>
-                                    </svg>
+                                    <svg class="svg-outline" viewBox="0 0 24 24"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path></svg>
                                 </div>
-                                </div>
-
+                            </div>
                         </div>
                     </div>
                     <?php endforeach; ?>
@@ -288,16 +150,16 @@ if (!isset($_GET['price_min']) && !isset($_GET['price_max']) && empty($current_p
                     <p>Xin lỗi, hiện tại không có sản phẩm nào phù hợp.</p>
                 <?php endif; ?>
             </div>
+
+            <div id="pagination-container" class="pagination-flex"></div>
         </div>
     </div>
-
-    <div class="products-container-2">
-        <img src="assets/images/img-logo/aura clothes xoa nen 1.png" alt="">
-    </div>
-    
 </main>
-
 <script>
+
+const itemsPerPage = 12;
+let currentPage = 1;
+
 function formatCurrency(number) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number).replace('₫', '').trim() + ' ₫';
 }
@@ -595,5 +457,138 @@ if (rangeSlider) {
         applyPriceRangeFilter(); 
     });
 }
+
+function setupPagination() {
+    const products = document.querySelectorAll('.pro-section-2-boxSP');
+    const totalItems = products.length;
+    const pageCount = Math.ceil(totalItems / itemsPerPage);
+    const container = document.getElementById('pagination-container');
+    
+    container.innerHTML = '';
+
+    if (pageCount <= 1) {
+        showPage(1);
+        return;
+    }
+
+    for (let i = 1; i <= pageCount; i++) {
+        const btn = document.createElement('button');
+        btn.innerText = i;
+        btn.classList.add('pg-btn');
+        if (i === currentPage) btn.classList.add('active');
+
+        btn.addEventListener('click', () => {
+            currentPage = i;
+            showPage(i);
+            window.scrollTo({ top: document.querySelector('.pro-section-2').offsetTop - 100, behavior: 'smooth' });
+        });
+        container.appendChild(btn);
+    }
+    showPage(currentPage);
+}
+
+function showPage(page) {
+    const products = document.querySelectorAll('.pro-section-2-boxSP');
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+
+    products.forEach((prod, index) => {
+        prod.style.display = (index >= start && index < end) ? 'flex' : 'none';
+    });
+
+    document.querySelectorAll('.pg-btn').forEach((btn, idx) => {
+        btn.classList.toggle('active', (idx + 1) === page);
+    });
+}
+
+// === CÁC HÀM CŨ ĐƯỢC CẬP NHẬT ĐỂ TÍCH HỢP PHÂN TRANG ===
+function updatePriceDisplay() {
+    const minSlider = document.getElementById('min-price-slider');
+    const maxSlider = document.getElementById('max-price-slider');
+    let minVal = parseInt(minSlider.value);
+    let maxVal = parseInt(maxSlider.value);
+
+    if (minVal > maxVal) {
+        [minVal, maxVal] = [maxVal, minVal];
+        minSlider.value = minVal;
+        maxSlider.value = maxVal;
+    }
+
+    document.getElementById('min-price-display').textContent = formatCurrency(minVal);
+    document.getElementById('max-price-display').textContent = formatCurrency(maxVal);
+}
+
+function fetchAndRender(url) {
+    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+    .then(r => r.text())
+    .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        const newProductCount = doc.querySelector('.pro-section-2-box1 p')?.innerHTML || 'Có 0 sản phẩm';
+        document.querySelector('.pro-section-2-box1 p').innerHTML = newProductCount;
+
+        const newProductList = doc.querySelector('.pro-section-2-box2')?.innerHTML || '<p>Không có sản phẩm nào phù hợp.</p>';
+        document.querySelector('.pro-section-2-box2').innerHTML = newProductList;
+
+        // Reset về trang 1 và tính toán lại phân trang
+        currentPage = 1;
+        setupPagination();
+        updatePriceDisplay();
+    });
+}
+
+function updateFilters() {
+    const params = new URLSearchParams();
+    document.querySelectorAll('input[data-filter]:checked').forEach(cb => {
+        params.append(cb.dataset.filter + '[]', cb.value);
+    });
+    
+    const currentParams = new URLSearchParams(window.location.search);
+    const urlMin = currentParams.get('price_min');
+    const urlMax = currentParams.get('price_max');
+    if (urlMin) params.append('price_min', urlMin);
+    if (urlMax) params.append('price_max', urlMax);
+
+    params.append('user_id', '<?php echo $uid; ?>'); 
+    params.append('page', 'products');
+
+    const newUrl = '?' + params.toString();
+    history.pushState({}, '', newUrl);
+    fetchAndRender(newUrl);
+}
+
+// === KHỞI TẠO EVENT LISTENERS ===
+document.addEventListener('DOMContentLoaded', () => {
+    setupPagination(); // Khởi tạo phân trang lần đầu
+
+    document.getElementById('clear-all-checkboxes').addEventListener('click', () => {
+        document.querySelectorAll('input[data-filter]').forEach(cb => cb.checked = false);
+        const minSlider = document.getElementById('min-price-slider');
+        const maxSlider = document.getElementById('max-price-slider');
+        minSlider.value = minSlider.min;
+        maxSlider.value = maxSlider.max;
+        updateFilters();
+    });
+
+    document.addEventListener('change', e => {
+        if (e.target.matches('input[type="checkbox"][data-filter]')) updateFilters();
+    });
+
+    const minSlider = document.getElementById('min-price-slider');
+    const maxSlider = document.getElementById('max-price-slider');
+    minSlider.addEventListener('input', updatePriceDisplay);
+    maxSlider.addEventListener('input', updatePriceDisplay);
+
+    document.getElementById('apply-price-range').addEventListener('click', () => {
+        const params = new URLSearchParams(window.location.search);
+        params.set('price_min', minSlider.value);
+        params.set('price_max', maxSlider.value);
+        params.set('page', 'products');
+        const newUrl = '?' + params.toString();
+        history.pushState({}, '', newUrl);
+        fetchAndRender(newUrl);
+    });
+});
 
 </script>

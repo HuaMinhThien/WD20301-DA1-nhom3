@@ -476,3 +476,82 @@
     border-radius: 25px;
     cursor: pointer;
 }
+
+
+.hero {
+    margin-top: 100px;
+    height: 80vh;
+    /* Sử dụng background-image riêng để dễ kiểm soát hiệu ứng nếu muốn, 
+       nhưng ở đây mình áp dụng lên cả section cho mượt */
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+                url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2000') no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+
+    /* Thêm các dòng dưới đây */
+    overflow: hidden; /* Đảm bảo khi phóng to không tràn ra ngoài */
+}
+
+/* Định nghĩa hiệu ứng */
+
+
+.hero-content {
+    /* Đảm bảo nội dung chữ không bị mờ khi section scale */
+    will-change: transform;
+}
+
+.hero-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    max-width: 600px;
+}
+
+.pagination-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+.pg-btn {
+    min-width: 40px;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #000000;
+    background-color: #ffffff;
+    color: #000000;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pg-btn:hover:not(.active) {
+    background-color: #f0f0f0;
+}
+
+.pg-btn.active {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.pg-btn-nav {
+    font-size: 14px;
+    text-transform: uppercase;
+    padding: 0 15px;
+}

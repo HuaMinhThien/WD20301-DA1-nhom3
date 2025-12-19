@@ -138,3 +138,29 @@ if (isset($_GET['show'])) {
     exit;
 }
 ?>
+
+<style>
+    .card-body button {
+    padding: 6px 10px; 
+    border-radius: 4px; 
+    border: none; 
+    cursor: pointer; 
+    margin-right: 5px; 
+    margin-left: 180px;
+    margin-top: 2%;e
+    font-size: 0.9rem;
+}
+
+.card-body .btn-primary { 
+    background-color: var(--main-color); 
+    color: var(--accent-color); 
+} 
+.card-body .btn-secondary { 
+    background-color: #001F3E; 
+    color: var(--white); 
+} 
+.card-body .btn-danger { 
+    background-color: var(--danger); 
+    color: var(--white); 
+}
+</style>

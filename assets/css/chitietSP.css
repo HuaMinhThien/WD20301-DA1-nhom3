@@ -179,10 +179,13 @@
 .description-images {
     text-align: center;
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .description-images img {
-    max-width: 100%;
+    width: 600px;
     margin-bottom: 15px;
 }
 

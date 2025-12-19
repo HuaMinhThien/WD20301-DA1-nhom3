@@ -28,8 +28,7 @@ class HomeController {
         $categories = $this->productModel->getAllCategories();
         $genders    = $this->productModel->getAllGenders();
 
-        // === PHẦN QUAN TRỌNG NHẤT – BẮT BUỘC PHẢI DÙNG CÁCH NÀY KHI DÙNG CHECKBOX ===
-        $uid = $_SESSION['user_id'] ?? 0;  // Chỉ dùng session, fallback 2
+        $uid = $_SESSION['user_id'] ?? 0; 
 
         // 1. Danh mục – hỗ trợ nhiều (1,2,3 hoặc 1&category_id=2&category_id=3)
         $category_ids = [];
@@ -41,7 +40,6 @@ class HomeController {
             }
         }
 
-        // Xử lý đặc biệt: nếu chọn Phụ kiện (id=0)
         if (in_array(0, $category_ids)) {
             $category_ids = [3,4,5,6,7,8];
         }
@@ -131,8 +129,12 @@ class HomeController {
     }
             
     public function home() {
-        // Lấy 20 sản phẩm ngẫu nhiên để hiển thị ở View home
-        $random_products = $this->productModel->getFeaturedProductsRandom(20); 
+        // Lấy 10 sản phẩm mới nhất (ID cao nhất)
+        $newest_products = $this->productModel->getNewestProducts(10);
+        // Lấy 10 sản phẩm có tồn kho cao nhất
+        $highest_stock_products = $this->productModel->getHighestStockProducts(10);
+        // Kết hợp thành mảng 20 sản phẩm để giữ nguyên logic View
+        $random_products = array_merge($newest_products, $highest_stock_products);
 
         // Truyền $random_products sang View
         include_once 'pages/home.php';
