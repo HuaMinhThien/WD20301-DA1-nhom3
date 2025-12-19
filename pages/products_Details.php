@@ -1,5 +1,7 @@
 <link rel="stylesheet" href="assets/css/chitietSP.css">
 
+
+
 <?php
 if (empty($product)) {
     echo "<div style='text-align: center; padding: 50px;'>Không tìm thấy sản phẩm.</div>";
@@ -13,6 +15,25 @@ $full_description    = $product['description_full'] ?? $product['description'] ?
 
 <div class="product-detail-container">
 
+    <?php
+    // Thêm đoạn này vào đầu file products_Details.php (sau phần kiểm tra $product)
+    $success_message = $_SESSION['success_message'] ?? null;
+    $error_message   = $_SESSION['error_message'] ?? null;
+    unset($_SESSION['success_message'], $_SESSION['error_message']);
+    ?>
+
+    <?php if ($success_message): ?>
+        <div class="alert alert-success" style="padding: 15px; background: #d4edda; color: #155724; border-radius: 5px; margin: 20px 0;">
+            <?php echo htmlspecialchars($success_message); ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($error_message): ?>
+        <div class="alert alert-error" style="padding: 15px; background: #f8d7da; color: #721c24; border-radius: 5px; margin: 20px 0;">
+            <?php echo htmlspecialchars($error_message); ?>
+        </div>
+    <?php endif; ?>
+    
     <div class="product-detail-main-content">
         
         <div class="product-thumbnails">
@@ -116,11 +137,10 @@ $full_description    = $product['description_full'] ?? $product['description'] ?
             <?php 
             $count = 0;
             if (!empty($related_products) && is_array($related_products)):
-                foreach ($related_products as $related_item): // Đổi tên biến tránh xung đột
+                foreach ($related_products as $related_item): 
                     if ($count >= 4) break; 
                     
-                    // 🚨 ĐÃ SỬA: LOẠI BỎ TOÀN BỘ LOGIC XÁC ĐỊNH ĐƯỜNG DẪN THEO CATEGORY/ITEM
-                    // Chỉ sử dụng $imagePath cố định từ Controller.
+                    
             ?>
             
             <a href="?page=products_Details&id=<?php echo htmlspecialchars($related_item['id']); ?>" class="pro-section-2-boxSP" style="width: 23%; height: auto;">

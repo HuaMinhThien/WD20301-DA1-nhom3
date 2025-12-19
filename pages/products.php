@@ -6,7 +6,6 @@
 require_once __DIR__ . '/../config/Database.php';
 $pdo = (new Database())->getConnection();
 
-// === LẤY USER_ID VÀ CÁC BỘ LỌC HIỆN TẠI (ĐÃ ĐƯỢC CONTROLLER XỬ LÝ SẴN) ===
 $uid = $_GET['user_id'] ?? $_SESSION['user_id'] ?? 0;
 
 // Các biến này sẽ được controller truyền vào (bắt buộc phải có)
@@ -55,7 +54,7 @@ if (!isset($_GET['price_min']) && !isset($_GET['price_max']) && empty($current_p
         </section>
     </div>
 
-    <div class="products-container-1 container-center" style="padding-top: 100px;">
+    <div class="products-container-1 container-center" >
         <div class="pro-section-1">            
 
             <div class="pro-sec1-box1">

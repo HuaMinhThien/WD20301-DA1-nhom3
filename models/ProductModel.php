@@ -290,5 +290,22 @@ class ProductModel {
         $name = $stmt->fetchColumn();
         return $name ? $name : null;
     }
+
+    public function getFeaturedProductsRandom($limit = 4) {
+        $sql = "SELECT 
+                    p.id, 
+                    p.name, 
+                    p.img AS image, 
+                    p.price
+                FROM products p
+                ORDER BY RAND() 
+                LIMIT :limit";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 ?>

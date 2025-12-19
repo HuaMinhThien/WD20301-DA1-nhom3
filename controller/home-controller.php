@@ -28,8 +28,7 @@ class HomeController {
         $categories = $this->productModel->getAllCategories();
         $genders    = $this->productModel->getAllGenders();
 
-        // === PHẦN QUAN TRỌNG NHẤT – BẮT BUỘC PHẢI DÙNG CÁCH NÀY KHI DÙNG CHECKBOX ===
-        $uid = $_SESSION['user_id'] ?? 0;  // Chỉ dùng session, fallback 2
+        $uid = $_SESSION['user_id'] ?? 0; 
 
         // 1. Danh mục – hỗ trợ nhiều (1,2,3 hoặc 1&category_id=2&category_id=3)
         $category_ids = [];
@@ -41,7 +40,6 @@ class HomeController {
             }
         }
 
-        // Xử lý đặc biệt: nếu chọn Phụ kiện (id=0)
         if (in_array(0, $category_ids)) {
             $category_ids = [3,4,5,6,7,8];
         }

@@ -198,7 +198,8 @@ input, button, textarea {
     text-align: center;
 }
 .btn-checkout:hover {
-    background: #1c3d5e;
+    background: #0d1b2a;
+    color: #FDFACF;
 }
 .btn-continue {
     display: block;

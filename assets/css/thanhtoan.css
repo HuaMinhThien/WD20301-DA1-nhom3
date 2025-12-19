@@ -290,7 +290,7 @@ body {
 .checkout-btn {
     width: 100%;
     padding: 15px;
-    background-color: #333;
+    background-color: #0d1b2a;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -301,7 +301,8 @@ body {
 }
 
 .checkout-btn:hover {
-    background-color: #555;
+    background-color: #17385b;
+    color: #FDFACF;
 }
 
 /* Media Queries cho thiết bị nhỏ hơn (tùy chọn) */
