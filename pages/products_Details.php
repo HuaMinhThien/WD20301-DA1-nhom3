@@ -16,7 +16,6 @@ $full_description    = $product['description_full'] ?? $product['description'] ?
 <div class="product-detail-container">
 
     <?php
-    // Thêm đoạn này vào đầu file products_Details.php (sau phần kiểm tra $product)
     $success_message = $_SESSION['success_message'] ?? null;
     $error_message   = $_SESSION['error_message'] ?? null;
     unset($_SESSION['success_message'], $_SESSION['error_message']);

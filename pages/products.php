@@ -15,9 +15,9 @@ $current_color_id    = $current_color_id    ?? null;
 $current_size_id     = $current_size_id     ?? null;
 
 $current_price_min = $_GET['price_min'] ?? 0;
-$current_price_max = $_GET['price_max'] ?? 1000000;
+$current_price_max = $_GET['price_max'] ?? 10000000;
 $PRICE_RANGE_MIN = 0;
-$PRICE_RANGE_MAX = 1000000;
+$PRICE_RANGE_MAX = 10000000;
 
 if (isset($_GET['price_min']) && is_numeric($_GET['price_min'])) {
     $current_price_min = (int)$_GET['price_min'];
@@ -83,8 +83,8 @@ $current_price_max = min($PRICE_RANGE_MAX, $current_price_max);
                             <span id="max-price-display"><?php echo number_format($current_price_max, 0, ',', '.'); ?> ₫</span>
                         </div>
                         <div class="range-slider">
-                            <input type="range" id="min-price-slider" min="0" max="1000000" step="10000" value="<?php echo $current_price_min; ?>">
-                            <input type="range" id="max-price-slider" min="0" max="1000000" step="10000" value="<?php echo $current_price_max; ?>">
+                            <input type="range" id="min-price-slider" min="0" max="10000000" step="10000" value="<?php echo $current_price_min; ?>">
+                            <input type="range" id="max-price-slider" min="0" max="10000000" step="10000" value="<?php echo $current_price_max; ?>">
                         </div>
                         <button id="apply-price-range" class="btn2" style="margin-top: 20px; width: 100%;"><span class="spn2">Áp dụng giá</span></button>
                     </div>
