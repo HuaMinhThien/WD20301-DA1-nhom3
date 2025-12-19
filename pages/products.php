@@ -90,6 +90,34 @@ $current_price_max = min($PRICE_RANGE_MAX, $current_price_max);
                     </div>
                 </div>
             </div>
+            <div class="pro-sec1-box1">
+                <h2>Kích cỡ</h2>
+                <div class="pro-sec1-box-checkbox">
+                    <?php
+                    $sql_sizes = "SELECT id, name FROM size ORDER BY 
+                                  CASE name WHEN 'XS' THEN 1 WHEN 'S' THEN 2 WHEN 'M' THEN 3 WHEN 'L' THEN 4 WHEN 'XL' THEN 5 WHEN 'XXL' THEN 6 ELSE 99 END";
+                    $stmt_sizes = $pdo->query($sql_sizes);
+                    $sizes = $stmt_sizes->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($sizes as $size):
+                        $checked = $current_size_id && in_array($size['id'], explode(',', $current_size_id));
+                    ?>
+                    <div class="pro-sec1-box-check-label" style="cursor: pointer;">
+                        <label class="container-prod-checkbox">
+                            <input type="checkbox"
+                                   id="size-<?php echo $size['id']; ?>"
+                                   data-filter="size_id"
+                                   value="<?php echo $size['id']; ?>"
+                                   <?php echo $checked ? 'checked' : ''; ?>>
+                            <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path-prod-checkbox"></path>
+                            </svg>
+                            <label style="cursor: pointer;" for="size-<?php echo $size['id']; ?>"><?php echo $size['name']; ?></label>
+                        </label>
+                        </div>
+                    <?php endforeach; ?>
+                    
+                </div>
+            </div>
 
             <button id="clear-all-checkboxes" class="btn2" style="margin-top: 10px;"><span class="spn2">Bỏ chọn tất cả</span></button>
         </div>
