@@ -158,7 +158,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <div class="main-content">
-    <header><h1>Quản lý sản phẩm</h1></header>
+    <header>
+        <h1>Quản lý sản phẩm</h1><div class="user-wrapper">
+            <img src="https://via.placeholder.com/40" alt="Admin">
+            <div><h4>Admin</h4><small>Super Admin</small></div>
+        </div>
+    </header>
+    
 
     <main>
         <div class="recent-grid">
