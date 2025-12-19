@@ -74,20 +74,33 @@ $current_price_max = min($PRICE_RANGE_MAX, $current_price_max);
             </div>
 
             <div class="pro-sec1-box1">
-                <h2>Giá thành</h2>
+                <h2>Giá</h2>
                 <div class="pro-sec1-box-checkbox">
-                    <div class="price-range-slider-container">
-                        <div class="price-input-display">
-                            <span id="min-price-display"><?php echo number_format($current_price_min, 0, ',', '.'); ?> ₫</span>
-                            <span>-</span>
-                            <span id="max-price-display"><?php echo number_format($current_price_max, 0, ',', '.'); ?> ₫</span>
+                    <?php
+                    $price_ranges = [
+                        ['label' => 'Dưới 500.000đ',        'value' => '0_500000'],
+                        ['label' => '500.000đ - 600.000đ',  'value' => '500000_600000'],
+                        ['label' => '600.000đ - 700.000đ',  'value' => '600000_700000'],
+                        ['label' => 'Trên 700.000đ',        'value' => '700000_999999999'],
+                    ];
+                    foreach ($price_ranges as $range):
+                        $checked = $current_price_range && in_array($range['value'], explode(',', $current_price_range));
+                    ?>
+                    <div class="pro-sec1-box-check-label" style="cursor: pointer;">
+                        <label class="container-prod-checkbox">
+                            <input type="checkbox"
+                                   id="price-<?php echo $range['value']; ?>"
+                                   data-filter="price_range"
+                                   value="<?php echo $range['value']; ?>"
+                                   <?php echo $checked ? 'checked' : ''; ?>>
+                            <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path-prod-checkbox"></path>
+                            </svg>
+                            <label style="cursor: pointer;" for="price-<?php echo $range['value']; ?>"><?php echo $range['label']; ?></label>
+                        </label>
                         </div>
-                        <div class="range-slider">
-                            <input type="range" id="min-price-slider" min="0" max="1000000" step="10000" value="<?php echo $current_price_min; ?>">
-                            <input type="range" id="max-price-slider" min="0" max="1000000" step="10000" value="<?php echo $current_price_max; ?>">
-                        </div>
-                        <button id="apply-price-range" class="btn2" style="margin-top: 20px; width: 100%;"><span class="spn2">Áp dụng lọc giá</span></button>
-                    </div>
+                    <?php endforeach; ?>
+                    
                 </div>
             </div>
             <div class="pro-sec1-box1">
