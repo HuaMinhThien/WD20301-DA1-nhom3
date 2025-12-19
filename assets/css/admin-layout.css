@@ -10,6 +10,7 @@
 
     /* Thêm biến màu cho trạng thái đơn hàng */
     --order-pending: #ffc107; 
+    --order-confirmed: #17a2b8; /* Màu xanh ngọc cho trạng thái Đã xác nhận */
     --order-shipped: #28a745; 
     --order-cancelled: #dc3545; 
 }
@@ -391,123 +392,371 @@ td .status {
 }
 
 /* =================================================
---- STYLE CHO TRANG QUẢN LÝ ĐƠN HÀNG (ORDER MANAGEMENT) ---
-=================================================
-*/
+--- STYLE RIÊNG CHO QUẢN LÝ ĐƠN HÀNG ---
+================================================= */
 
-/* Nút Lọc Trạng Thái */
-.btn-filter {
+/* Container lọc đơn hàng */
+.order-filter-container {
+    background: var(--white);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.order-filter-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.order-filter-group strong {
+    color: var(--main-color);
+    font-weight: 600;
+    min-width: 100px;
+}
+
+/* Nút lọc */
+.order-filter-btn {
     padding: 8px 15px; 
     border-radius: 4px; 
     text-decoration: none; 
-    margin-right: 10px; 
     border: none; 
     cursor: pointer; 
-    transition: background-color 0.2s;
+    transition: all 0.3s ease;
     display: inline-block; 
     font-weight: 500;
-}
-
-.btn-filter.btn-primary { 
-    background-color: var(--main-color); 
-    color: var(--white); 
-}
-.btn-filter.btn-secondary { 
-    background-color: #e9ecef; 
-    color: #495057; 
-}
-
-/* Badge Trạng thái Đơn hàng */
-.badge.pending { 
-    background-color: var(--order-pending); 
-    color: #333; 
-} 
-.badge.shipped { 
-    background-color: var(--order-shipped); 
-    color: var(--white); 
-} 
-.badge.cancelled { 
-    background-color: var(--order-cancelled); 
-    color: var(--white); 
-}
-
-/* Điều chỉnh lại nút Hành động trong bảng đơn hàng (Duyệt/Hủy/Chi tiết) */
-.card-body button {
-    padding: 6px 10px; 
-    border-radius: 4px; 
-    border: none; 
-    cursor: pointer; 
-    margin-right: 5px; 
+    text-align: center;
+    min-width: 80px;
     font-size: 0.9rem;
 }
 
-.card-body .btn-primary { 
+.order-filter-active { 
+    background-color: var(--main-color); 
+    color: var(--accent-color); 
+    border: 2px solid var(--main-color);
+}
+
+.order-filter-inactive { 
+    background-color: transparent; 
+    color: var(--main-color); 
+    border: 2px solid var(--main-color);
+}
+
+.order-filter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Header card đơn hàng */
+.order-card-header {
+    background: var(--main-color);
+    color: var(--accent-color);
+    border-radius: 8px 8px 0 0;
+}
+
+.order-card-body {
+    overflow-x: auto;
+}
+
+/* Bảng đơn hàng */
+.order-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.order-table thead {
+    background-color: var(--main-color);
+}
+
+.order-table thead td {
+    color: var(--accent-color);
+    font-weight: 600;
+    padding: 1rem;
+    text-align: center;
+    white-space: nowrap;
+    font-size: 0.9rem;
+}
+
+.order-table tbody tr.order-row {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+.order-table tbody tr.order-row:hover {
+    background-color: rgba(0, 31, 62, 0.03);
+}
+
+.order-table td {
+    padding: 0.75rem 1rem;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+/* Các cột cụ thể */
+.order-col-code {
+    font-weight: 600;
+    color: var(--main-color);
+}
+
+.order-col-customer {
+    font-weight: 500;
+}
+
+.order-col-date {
+    color: #666;
+}
+
+.order-col-total {
+    font-weight: 600;
+    color: #d35400;
+}
+
+.order-col-payment {
+    font-weight: 600;
+}
+
+/* Badge trạng thái */
+.order-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+    min-width: 100px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.order-badge-pending { 
+    background-color: var(--order-pending); 
+    color: #333; 
+    border: 1px solid #ffc107;
+} 
+
+.order-badge-confirmed { 
+    background-color: var(--order-confirmed); 
+    color: var(--white); 
+    border: 1px solid #17a2b8;
+} 
+
+.order-badge-shipped { 
+    background-color: var(--order-shipped); 
+    color: var(--white); 
+    border: 1px solid #28a745;
+} 
+
+.order-badge-cancelled { 
+    background-color: var(--order-cancelled); 
+    color: var(--white); 
+    border: 1px solid #dc3545;
+}
+
+/* Nút hành động */
+.order-action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.order-action-btn {
+    padding: 6px 12px; 
+    border-radius: 4px; 
+    border: none; 
+    cursor: pointer; 
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    min-width: 100px;
+}
+
+.order-action-confirm { 
     background-color: var(--success); 
     color: var(--white); 
 } 
-.card-body .btn-secondary { 
-    background-color: #001F3E; 
+
+.order-action-confirm:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
+}
+
+.order-action-ship { 
+    background-color: var(--order-confirmed); 
     color: var(--white); 
-} 
-.card-body .btn-danger { 
+}
+
+.order-action-ship:hover {
+    background-color: #138496;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(23, 162, 184, 0.2);
+}
+
+.order-action-cancel { 
     background-color: var(--danger); 
     color: var(--white); 
 }
 
-/* =================================================
---- CÁC CLASS BỔ SUNG CHO TRẠNG THÁI & THANH TOÁN ---
-================================================= */
-
-/* 1. Bổ sung màu cho trạng thái "Đang giao" (Processing) */
-:root {
-    --order-processing: #cce5ff; /* Màu xanh dương nhạt */
-}
-
-.badge.processing { 
-    background-color: var(--order-processing); 
-    color: #004085; 
-    border: 1px solid #b8daff;
-}
-
-/* 2. Style cho cột Trạng thái thanh toán */
-.payment-status-text {
-    font-weight: bold;
-    font-size: 0.9rem;
-}
-
-/* 3. Hiệu ứng cho nút Xác nhận tiền (payment-btn) */
-.payment-btn {
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.payment-btn:hover {
-    background-color: #218838 !important; /* Xanh lá đậm hơn khi hover */
+.order-action-cancel:hover {
+    background-color: #c82333;
     transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
 }
 
-/* 4. Căn chỉnh bảng để không bị tràn khi thêm cột */
-.card-body {
-    overflow-x: auto; /* Cho phép cuộn ngang trên thiết bị nhỏ */
+.order-action-detail { 
+    background-color: #001F3E; 
+    color: var(--white); 
 }
 
-table thead td {
-    white-space: nowrap; /* Giữ tiêu đề trên một dòng */
+.order-action-detail:hover {
+    background-color: #002b55;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 31, 62, 0.2);
 }
 
-/* 5. Cải thiện hiển thị cho Badge tổng quát */
-.badge {
-    text-transform: capitalize;
-    letter-spacing: 0.3px;
+/* Nút xác nhận thanh toán */
+.order-payment-btn {
+    background-color: var(--success) !important;
+    color: var(--white) !important;
+    border: none !important;
+    padding: 6px 12px !important;
+    cursor: pointer !important;
+    border-radius: 4px !important;
+    font-weight: 500 !important;
+    min-width: 100px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-size: 0.85rem !important;
 }
 
-/* 6. Trạng thái hoàn tất (Dấu tích xanh) */
-.text-success-bold {
+.order-payment-btn:hover {
+    background-color: #218838 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+/* Trạng thái hoàn thành */
+.order-completed {
     color: var(--success);
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
+    font-size: 0.9rem;
+}
+
+.order-payment-confirmed {
+    color: var(--success);
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Message không có đơn hàng */
+.order-empty-message {
+    text-align: center;
+    padding: 40px !important;
+    color: #6c757d;
+    font-size: 1rem;
+    font-style: italic;
+}
+
+/* Responsive cho quản lý đơn hàng */
+@media only screen and (max-width: 768px) {
+    .order-filter-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .order-filter-group strong {
+        margin-bottom: 5px;
+    }
+    
+    .order-filter-btn {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    
+    .order-table thead td {
+        font-size: 0.75rem;
+        padding: 0.5rem;
+    }
+    
+    .order-table td {
+        font-size: 0.75rem;
+        padding: 0.5rem;
+    }
+    
+    .order-action-btn {
+        min-width: 80px;
+        font-size: 0.75rem;
+        padding: 4px 8px;
+    }
+    
+    .order-payment-btn {
+        min-width: 80px !important;
+        font-size: 0.75rem !important;
+        padding: 4px 8px !important;
+    }
+    
+    .order-badge {
+        min-width: 80px;
+        font-size: 0.7rem;
+        padding: 3px 8px;
+    }
+    
+    .order-action-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+/* Animation cho thay đổi trạng thái */
+@keyframes orderStatusChange {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.order-badge.updated {
+    animation: orderStatusChange 0.5s ease;
+}
+
+/* Tooltip cho các nút hành động */
+.order-action-btn[data-tooltip] {
+    position: relative;
+}
+
+.order-action-btn[data-tooltip]:hover::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-bottom: 5px;
+}
+
+.order-action-btn[data-tooltip]:hover::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+    margin-bottom: -5px;
 }
